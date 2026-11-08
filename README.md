@@ -72,3 +72,6 @@ The main interface is predominantly English. About, Help and legal information a
 <img width="2560" height="747" alt="11-wide-shortcuts" src="https://github.com/user-attachments/assets/3bd7461b-c153-493d-b1bd-aae6c990322a" />
 
 <img width="2560" height="747" alt="12-web-player-visualizer" src="https://github.com/user-attachments/assets/32e9f0b3-0d3f-4811-8eaf-c5f464b7c4df" />
+
+
+<img width="2560" height="596" alt="13-wide-music-player-military" src="https://github.com/user-attachments/assets/b6e9ec31-f456-4f92-b7db-4d899e733d14" />
