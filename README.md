@@ -11,7 +11,8 @@ BlakiDeck brings everyday PC controls into a customizable Windows desktop dashbo
 - Use themed music players, stereo VU meters, spectrum displays and the BlakiHUD music visualizer.
 - Open web shortcuts in the integrated browser, with full-dashboard, compact-bar and hidden-bar views.
 - Control OBS Studio and individual Philips Hue lights, view Airthings readings and check the weather.
-- Personalize fonts, colors, icons, skins and module layouts. Optional automatic Game mode reduces visualization work while playing.
+- Personalize fonts, colors, icons, skins and module layouts.
+- Game mode automatically reduces visual effects and background activity while gaming, keeps music controls available and tracks time spent in the game.
 
 ## Installation
 
@@ -38,10 +39,6 @@ Free for personal, educational and business use. All features are free; donation
 ## Privacy
 
 No BlakiDeck account is required. Settings are stored locally. BlakiDeck does not send usage analytics or automatically upload settings and diagnostic logs to the author. Optional integrations and visited websites communicate with their respective providers. See PRIVACY.txt for details.
-
-## Current limitations
-
-VU and EQ behavior at completely muted (0%) output remains a known limitation; volume-independent visualization at 0% is not guaranteed. Music commands and hardware readings vary by source and device.
 
 ## Support and another application
 
