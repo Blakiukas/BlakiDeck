@@ -1,0 +1,20 @@
+{
+  "MusicVisualizerEnabled": true,
+  "MusicVisualizerAuto": true,
+  "MusicVisualizerHeight": 0.68,
+  "MusicVisualizerSmoothing": 0.04,
+  "MusicVisualizerScale": 0.9543064876957494,
+  "MusicVisualizerGlow": 0.48,
+  "MusicVisualizerCenterReaction": 0.72,
+  "MusicVisualizerStartBin": 0,
+  "MusicVisualizerEndBin": 41,
+  "MusicVisualizerInvert": false,
+  "MusicVisualizerProfileVersion": 1,
+  "AccentPosition": 2,
+  "TextColorPosition": 0,
+  "OverallVisualSize": 1,
+  "MirrorSpectrum": true,
+  "CenterContent": "AlbumCover",
+  "CustomAccentColor": null,
+  "CustomTextColor": null
+}

@@ -1,0 +1,377 @@
+<UserControl x:Class="Ekrano_valdymas.QuickLaunchBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Ekrano_valdymas"
+             Background="Transparent"
+             Stylus.IsPressAndHoldEnabled="False"
+             PreviewMouseRightButtonDown="QuickLaunchBar_PreviewMouseRightButtonDown">
+
+    <Grid x:Name="topBarGrid" Margin="-5,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="slotsColumn" Width="8*"/>
+            <ColumnDefinition x:Name="clockGapColumn" Width="10"/>
+            <ColumnDefinition x:Name="clockColumn" Width="2*"/>
+            <ColumnDefinition x:Name="sleepGapColumn" Width="10"/>
+            <ColumnDefinition x:Name="sleepColumn" Width="1*"/>
+            <ColumnDefinition x:Name="shutdownGapColumn" Width="10"/>
+            <ColumnDefinition x:Name="shutdownColumn" Width="1*"/>
+            <ColumnDefinition x:Name="restartGapColumn" Width="0"/><ColumnDefinition x:Name="restartColumn" Width="0"/>
+            <ColumnDefinition x:Name="compactGapColumn" Width="10"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border x:Name="tabRail" Grid.Column="0" Grid.ColumnSpan="3"
+                Margin="5,0" Padding="5,0"
+                Background="{DynamicResource PanelMetalBrush}"
+                BorderBrush="#40FFFFFF" BorderThickness="1.5" CornerRadius="18">
+            <Grid x:Name="tabRailGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border x:Name="tab1Button" Grid.Column="0" Tag="0" Margin="3,8" Cursor="Hand"
+                        Background="{DynamicResource PanelMetalBrush}" BorderBrush="{DynamicResource AccentBrush}"
+                        BorderThickness="2" CornerRadius="15" PreviewMouseLeftButtonDown="TopBarTab_PreviewMouseLeftButtonDown"
+                        PreviewMouseMove="TopBarTab_PreviewMouseMove" PreviewMouseLeftButtonUp="TopBarTab_PreviewMouseLeftButtonUp"
+                        PreviewTouchDown="TopBarTab_PreviewTouchDown" PreviewTouchMove="TopBarTab_PreviewTouchMove"
+                        PreviewTouchUp="TopBarTab_PreviewTouchUp">
+                    <local:OpticallyCenteredText x:Name="tab1Text" Text="1" TextBrush="White" TextFontFamily="{StaticResource TekoFont}"
+                               TextFontSize="54" TextFontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Border>
+                <Border x:Name="tab2Button" Grid.Column="1" Tag="1" Margin="3,8" Cursor="Hand"
+                        Background="{DynamicResource PanelMetalBrush}" BorderBrush="#40FFFFFF"
+                        BorderThickness="1.5" CornerRadius="15" PreviewMouseLeftButtonDown="TopBarTab_PreviewMouseLeftButtonDown"
+                        PreviewMouseMove="TopBarTab_PreviewMouseMove" PreviewMouseLeftButtonUp="TopBarTab_PreviewMouseLeftButtonUp"
+                        PreviewTouchDown="TopBarTab_PreviewTouchDown" PreviewTouchMove="TopBarTab_PreviewTouchMove"
+                        PreviewTouchUp="TopBarTab_PreviewTouchUp">
+                    <local:OpticallyCenteredText x:Name="tab2Text" Text="2" TextBrush="#FF696E70" TextFontFamily="{StaticResource TekoFont}"
+                               TextFontSize="54" TextFontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Border>
+                <Border x:Name="tab3Button" Grid.Column="2" Tag="2" Margin="3,8" Cursor="Hand"
+                        Background="{DynamicResource PanelMetalBrush}" BorderBrush="#40FFFFFF"
+                        BorderThickness="1.5" CornerRadius="15" PreviewMouseLeftButtonDown="TopBarTab_PreviewMouseLeftButtonDown"
+                        PreviewMouseMove="TopBarTab_PreviewMouseMove" PreviewMouseLeftButtonUp="TopBarTab_PreviewMouseLeftButtonUp"
+                        PreviewTouchDown="TopBarTab_PreviewTouchDown" PreviewTouchMove="TopBarTab_PreviewTouchMove"
+                        PreviewTouchUp="TopBarTab_PreviewTouchUp">
+                    <local:OpticallyCenteredText x:Name="tab3Text" Text="3" TextBrush="#FF696E70" TextFontFamily="{StaticResource TekoFont}"
+                               TextFontSize="54" TextFontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Border>
+            </Grid>
+        </Border>
+
+    <ItemsControl x:Name="slotsControl" Grid.Column="0">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid Columns="{Binding Items.Count, ElementName=slotsControl}"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Border x:Name="SlotBorder" Height="86" VerticalAlignment="Top"
+                        Margin="5,4,5,0"
+                        local:CommonMetal.Surface="True" local:CommonMetal.Lift="6" Background="{DynamicResource PanelMetalBrush}"
+                        BorderBrush="#40FFFFFF"
+                        BorderThickness="1.5"
+                        CornerRadius="13"
+                        AllowDrop="True" ContextMenuOpening="SensorContextMenu_Opening"
+                        Stylus.IsPressAndHoldEnabled="False"
+                        Cursor="Hand"
+                        
+                        PreviewMouseLeftButtonDown="Slot_PreviewMouseLeftButtonDown"
+                        PreviewMouseMove="Slot_PreviewMouseMove"
+                        PreviewMouseLeftButtonUp="Slot_PreviewMouseLeftButtonUp"
+                        PreviewTouchDown="Slot_PreviewTouchDown"
+                        PreviewTouchMove="Slot_PreviewTouchMove"
+                        PreviewTouchUp="Slot_PreviewTouchUp"
+                        DragEnter="Slot_DragEnter"
+                        DragOver="Slot_DragEnter"
+                        DragLeave="Slot_DragLeave"
+                        Drop="Slot_Drop">
+                    <Border.ToolTip><ToolTip Background="#171717" Foreground="#DDD3C1" BorderBrush="#414141" Padding="10,7" Content="{Binding ToolTip}"/></Border.ToolTip><Border.ContextMenu>
+                        <ContextMenu Style="{StaticResource MiniContextMenuStyle}" Opened="ShortcutContextMenu_Opened"
+                                     DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                            <MenuItem Style="{StaticResource MiniMenuItemStyle}" Header="Delete" CommandParameter="{Binding}" Click="RemoveShortcut_Click"/>
+                            <MenuItem Style="{StaticResource MiniMenuItemStyle}" Header="Edit" CommandParameter="{Binding}" Click="EditShortcut_Click"/><MenuItem Style="{StaticResource MiniMenuItemStyle}" Header="Edit macro" CommandParameter="{Binding}" Click="EditMacro_Click"/>
+                            <MenuItem Style="{StaticResource MiniMenuItemStyle}" Header="Rename" CommandParameter="{Binding}" Click="RenameShortcut_Click"/>
+                            <MenuItem Style="{StaticResource MiniMenuItemStyle}" Header="Properties" CommandParameter="{Binding}" Click="ShortcutProperties_Click"/>
+                        </ContextMenu>
+                    </Border.ContextMenu>
+
+                    <local:MicrophoneMacroFrame Target="{Binding Target}"><Grid Margin="8,5">
+                        <local:SensorTile x:Name="SensorContent" Target="{Binding Target}" Visibility="Collapsed"/>
+                        <local:AirthingsMini x:Name="AirthingsContent" Target="{Binding Target}" Visibility="Collapsed"/><local:UsageMini x:Name="UsageContent" Target="{Binding Target}" Visibility="Collapsed"/>
+                        <Grid x:Name="EmptyPlus"
+                              Width="34"
+                              Height="34"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center">
+                            <Border Width="34"
+                                    Height="3"
+                                    CornerRadius="1.5"
+                                    Background="#70FFFFFF"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
+                            <Border Width="3"
+                                    Height="34"
+                                    CornerRadius="1.5"
+                                    Background="#70FFFFFF"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Grid x:Name="ShortcutContent"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch"
+                              Visibility="Collapsed">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="{Binding TextRowHeight}"/>
+                            </Grid.RowDefinitions>
+                            <Border x:Name="ShortcutIcon" Grid.Row="0" Margin="10,5"
+                                    Background="Transparent"
+                                    CornerRadius="9"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch">
+                                <local:IconShadowHost>
+                                    <TextBlock x:Name="ShortcutFallback" Visibility="Collapsed" Text="{Binding Symbol}"
+                                               Foreground="#F2FFFFFF"
+                                               FontSize="25"
+                                               FontWeight="SemiBold"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                    <local:AdaptiveIconImage ShortcutTarget="{Binding Target}" SkinIcon="True" x:Name="ShortcutImage" Source="{Binding Icon}" local:EcoEffects.Effect="{x:Static local:QuickLaunchBar.TopBarIconShadow}"
+                                           Stretch="Uniform"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch"
+                                           UseLayoutRounding="True"
+                                           SnapsToDevicePixels="True"
+                                           RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </local:IconShadowHost>
+                            </Border>
+                            <local:OpticallyCenteredText x:Name="ShortcutTextOnly" local:EcoEffects.Effect="{x:Static local:QuickLaunchBar.TopBarTextShadow}" Grid.RowSpan="2" Visibility="Collapsed"
+                                Text="{Binding DisplayName}" TextBrush="White" TextFontFamily="{Binding TextFamily}" TextFontSize="{Binding TextSize}" TextFontWeight="{Binding TextWeight}" TextFontStyle="{Binding TextStyleMode}" local:LabelTypography.TextEffect="{Binding RenderTextEffect}" InsetMetalText="{Binding TextMetal}" DarkMetalInset="{Binding TextDark}" InsetStrength="{Binding TextEffect}" FitToBox="True" Ellipsis="True" ClipToBounds="True"/>
+                            <local:OpticallyCenteredText x:Name="ShortcutName" local:EcoEffects.Effect="{x:Static local:QuickLaunchBar.TopBarTextShadow}" Grid.Row="1" Text="{Binding DisplayName}"
+                                TextBrush="White" TextFontFamily="{Binding TextFamily}" TextFontSize="{Binding TextSize}" TextFontWeight="{Binding TextWeight}" TextFontStyle="{Binding TextStyleMode}" local:LabelTypography.TextEffect="{Binding RenderTextEffect}" InsetMetalText="{Binding TextMetal}" DarkMetalInset="{Binding TextDark}" InsetStrength="{Binding TextEffect}" FitToBox="True" Ellipsis="True" ClipToBounds="True" Margin="2,0"/>
+                        </Grid>
+                    </Grid>
+
+                    </local:MicrophoneMacroFrame>
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEmpty}" Value="False">
+                                    <Setter Property="Background" Value="#AD2C2C2C"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
+
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Icon}" Value="{x:Null}">
+                        <Setter TargetName="ShortcutFallback" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsEmpty}" Value="False">
+                        <Setter TargetName="EmptyPlus" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="ShortcutContent" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ShowIcon}" Value="False">
+                        <Setter TargetName="ShortcutIcon" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="ShortcutName" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="ShortcutTextOnly" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ShowName}" Value="False">
+                        <Setter TargetName="ShortcutName" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="ShortcutIcon" Property="Grid.RowSpan" Value="2"/>
+                        <Setter TargetName="ShortcutIcon" Property="Margin" Value="6"/>
+                    </DataTrigger>
+                <DataTrigger Binding="{Binding IsSensor}" Value="True">
+                        <Setter TargetName="ShortcutContent" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="SensorContent" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsAirthingsMini}" Value="True"><Setter TargetName="ShortcutContent" Property="Visibility" Value="Collapsed"/><Setter TargetName="AirthingsContent" Property="Visibility" Value="Visible"/></DataTrigger><DataTrigger Binding="{Binding IsUsageMini}" Value="True"><Setter TargetName="ShortcutContent" Property="Visibility" Value="Collapsed"/><Setter TargetName="UsageContent" Property="Visibility" Value="Visible"/></DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+        <Border x:Name="clockButton" Height="86" VerticalAlignment="Top" Margin="5,4,5,0" Cursor="Hand"
+                PreviewMouseLeftButtonDown="TopBarControl_PreviewMouseLeftButtonDown" PreviewMouseMove="TopBarControl_PreviewMouseMove" PreviewMouseLeftButtonUp="TopBarControl_PreviewMouseLeftButtonUp"
+                PreviewTouchDown="TopBarControl_PreviewTouchDown" PreviewTouchMove="TopBarControl_PreviewTouchMove" PreviewTouchUp="TopBarControl_PreviewTouchUp"
+                local:CommonMetal.Surface="True" local:CommonMetal.Lift="6" Background="{DynamicResource PanelMetalBrush}"
+                BorderBrush="#40FFFFFF"
+                BorderThickness="1.5"
+                CornerRadius="13">
+            <local:OpticallyCenteredText x:Name="clockText" Text="00:00" Tag="ClockText"
+                       TextBrush="{DynamicResource ClockBrush}"
+                       TextFontFamily="{StaticResource TekoFont}"
+                       TextFontSize="82.67" TextFontWeight="Bold"
+                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        </Border>
+
+        <Border x:Name="monitorSleep"
+                Grid.Column="4"
+                Margin="5,0"
+                local:CommonMetal.Surface="True" local:CommonMetal.Lift="6" Background="{DynamicResource PanelMetalBrush}"
+                BorderBrush="#40FFFFFF"
+                BorderThickness="1.5"
+                CornerRadius="13"
+                Cursor="Hand"
+                ToolTip="Turn off all monitors"
+                PreviewMouseLeftButtonDown="TopBarControl_PreviewMouseLeftButtonDown" PreviewMouseMove="TopBarControl_PreviewMouseMove" PreviewMouseLeftButtonUp="TopBarControl_PreviewMouseLeftButtonUp"
+                PreviewTouchDown="TopBarControl_PreviewTouchDown" PreviewTouchMove="TopBarControl_PreviewTouchMove" PreviewTouchUp="TopBarControl_PreviewTouchUp">
+            <local:OpticallyCenteredText Text="SLEEP&#10;MODE" Margin="5"
+                       TextBrush="#F0FFFFFF" TextFontFamily="{StaticResource TekoFont}"
+                       TextFontSize="29.33" TextFontWeight="Bold" LineAdvance="28"
+                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        </Border>
+
+        <Popup x:Name="sleepConfirmationPopup"
+               PlacementTarget="{Binding ElementName=monitorSleep}"
+               Placement="Bottom" VerticalOffset="8"
+               AllowsTransparency="True" StaysOpen="True">
+            <Grid Width="150" Height="178">
+                <Grid.RowDefinitions><RowDefinition/><RowDefinition Height="10"/><RowDefinition/></Grid.RowDefinitions>
+                <Border Grid.Row="0" Background="#E62C1618" BorderBrush="#FFFF4A50"
+                        BorderThickness="2" CornerRadius="13" Cursor="Hand"
+                        PreviewMouseLeftButtonDown="SleepYes_PreviewMouseLeftButtonDown">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="YES" Foreground="#FFFF4A50" FontFamily="{StaticResource TekoFont}" FontSize="25" FontWeight="Bold"/>
+                        <TextBlock x:Name="sleepYesCountdownText" Text="6 s" Foreground="White" FontSize="18" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Row="2" Background="#E6162C20" BorderBrush="#FF1ED760"
+                        BorderThickness="2" CornerRadius="13" Cursor="Hand"
+                        PreviewMouseLeftButtonDown="SleepNo_PreviewMouseLeftButtonDown">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="NO" Foreground="#FF1ED760" FontFamily="{StaticResource TekoFont}" FontSize="25" FontWeight="Bold"/>
+                        <TextBlock x:Name="sleepNoCountdownText" Text="6 s" Foreground="White" FontSize="18" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Popup>
+
+        <Border x:Name="shutdownButton"
+                Grid.Column="6"
+                Margin="5,0"
+                local:CommonMetal.Surface="True" local:CommonMetal.Lift="6" Background="{DynamicResource PanelMetalBrush}"
+                BorderBrush="#40FFFFFF"
+                BorderThickness="1.5"
+                CornerRadius="13"
+                Cursor="Hand"
+                ToolTip="Shut down this computer"
+                PreviewMouseLeftButtonDown="TopBarControl_PreviewMouseLeftButtonDown" PreviewMouseMove="TopBarControl_PreviewMouseMove" PreviewMouseLeftButtonUp="TopBarControl_PreviewMouseLeftButtonUp"
+                PreviewTouchDown="TopBarControl_PreviewTouchDown" PreviewTouchMove="TopBarControl_PreviewTouchMove" PreviewTouchUp="TopBarControl_PreviewTouchUp">
+            <local:OpticallyCenteredText x:Name="shutdownText" Text="SHUT&#10;DOWN" Margin="5"
+                       TextBrush="#F0FFFFFF" TextFontFamily="{StaticResource TekoFont}"
+                       TextFontSize="29.33" TextFontWeight="Bold" LineAdvance="28"
+                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        </Border>
+
+        <Popup x:Name="shutdownConfirmationPopup"
+               PlacementTarget="{Binding ElementName=shutdownButton}"
+               Placement="Bottom"
+               VerticalOffset="8"
+               AllowsTransparency="True"
+               StaysOpen="True">
+            <Grid Width="150" Height="178">
+                <Grid.RowDefinitions><RowDefinition/><RowDefinition Height="10"/><RowDefinition/></Grid.RowDefinitions>
+                <Border Grid.Row="0" Background="#E62C1618" BorderBrush="#FFFF4A50"
+                        BorderThickness="2" CornerRadius="13" Cursor="Hand"
+                        PreviewMouseLeftButtonDown="ShutdownConfirmation_PreviewMouseLeftButtonDown">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="YES" Foreground="#FFFF4A50" FontFamily="{StaticResource TekoFont}" FontSize="25" FontWeight="Bold"/>
+                        <TextBlock x:Name="shutdownCountdownText" Text="6 s" Foreground="White" FontSize="18" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Row="2" Background="#E6162C20" BorderBrush="#FF1ED760"
+                        BorderThickness="2" CornerRadius="13" Cursor="Hand"
+                        PreviewMouseLeftButtonDown="ShutdownNo_PreviewMouseLeftButtonDown">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="NO" Foreground="#FF1ED760" FontFamily="{StaticResource TekoFont}" FontSize="25" FontWeight="Bold"/>
+                        <TextBlock x:Name="shutdownNoCountdownText" Text="6 s" Foreground="White" FontSize="18" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Popup>
+
+        <!-- CatalogRailFace paints this face and its rail junction as one contour. -->
+        <Border x:Name="compactToggle"
+                Grid.Column="10"
+                Margin="5,0"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                BorderThickness="0"
+                CornerRadius="13"
+                Cursor="Hand"
+                PreviewMouseLeftButtonDown="CompactToggle_PreviewMouseLeftButtonDown"
+                PreviewStylusDown="CompactToggle_PreviewStylusDown"
+                PreviewTouchDown="CompactToggle_PreviewTouchDown"
+                PreviewTouchUp="CompactToggle_PreviewTouchUp">
+            <Grid>
+            <Path x:Name="compactToggleIcon"
+                  Data="M 4,7 L 12,15 L 20,7"
+                  Stroke="#DFFFFFFF"
+                  StrokeThickness="2.2"
+                  StrokeStartLineCap="Round"
+                  StrokeEndLineCap="Round"
+                  StrokeLineJoin="Round"
+                  Width="24"
+                  Height="22"
+                  Stretch="Uniform"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"/>
+            <StackPanel x:Name="compactGameIndicator" VerticalAlignment="Center" IsHitTestVisible="False" Visibility="Collapsed">
+            <local:IconShadowHost Height="64" IsHitTestVisible="False">
+                <Image x:Name="compactGameIcon" Width="64" Height="64" Stretch="Uniform"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True"
+                       local:EcoEffects.Effect="{x:Static local:QuickLaunchBar.TopBarIconShadow}"
+                       Visibility="Collapsed" RenderOptions.BitmapScalingMode="HighQuality"/>
+            </local:IconShadowHost>
+            <local:OpticallyCenteredText x:Name="compactGameElapsed" Height="26" Margin="0,2,0,0"
+                       TextBrush="#F0FFFFFF" TextFontFamily="{StaticResource TekoFont}"
+                       TextFontSize="25" TextFontWeight="Bold" FitToBox="True"
+                       HorizontalAlignment="Stretch" IsHitTestVisible="False" Visibility="Collapsed"/>
+            </StackPanel>
+            <Image x:Name="militaryRadiationSticker" Source="Assets/MusicConsole/Previews/militarity/radiation-sticker.png" Margin="8" Stretch="Uniform" IsHitTestVisible="False" Visibility="Collapsed" RenderOptions.BitmapScalingMode="HighQuality"/>
+            </Grid>
+        </Border>
+        <Border x:Name="restartButton" Grid.Column="8" Visibility="Collapsed" local:CommonMetal.Surface="True" local:CommonMetal.Lift="6" Background="{DynamicResource PanelMetalBrush}" BorderBrush="#40FFFFFF" BorderThickness="1.5" CornerRadius="13" Cursor="Hand" ToolTip="Restart this computer"
+                PreviewMouseLeftButtonDown="TopBarControl_PreviewMouseLeftButtonDown" PreviewMouseMove="TopBarControl_PreviewMouseMove" PreviewMouseLeftButtonUp="TopBarControl_PreviewMouseLeftButtonUp"
+                PreviewTouchDown="TopBarControl_PreviewTouchDown" PreviewTouchMove="TopBarControl_PreviewTouchMove" PreviewTouchUp="TopBarControl_PreviewTouchUp">
+            <local:OpticallyCenteredText Text="RESTART" TextBrush="#F0FFFFFF"
+                       TextFontFamily="{StaticResource TekoFont}" TextFontSize="29.33"
+                       TextFontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        </Border>
+        <Border x:Name="obsRecordButton" Tag="obs-record" Visibility="Collapsed" Margin="5,0"
+                local:CommonMetal.Surface="True" local:CommonMetal.Lift="6" Background="{DynamicResource PanelMetalBrush}" BorderBrush="#40FFFFFF"
+                BorderThickness="1.5" CornerRadius="13" Cursor="Hand" ToolTip="Start or stop OBS recording"
+                PreviewMouseLeftButtonDown="TopBarControl_PreviewMouseLeftButtonDown" PreviewMouseMove="TopBarControl_PreviewMouseMove" PreviewMouseLeftButtonUp="TopBarControl_PreviewMouseLeftButtonUp"
+                PreviewTouchDown="TopBarControl_PreviewTouchDown" PreviewTouchMove="TopBarControl_PreviewTouchMove" PreviewTouchUp="TopBarControl_PreviewTouchUp">
+            <local:ObsTopBarControl x:Name="obsRecordContent" Mode="record"/>
+        </Border>
+        <Border x:Name="obsBufferButton" Tag="obs-buffer" Visibility="Collapsed" Margin="5,0"
+                local:CommonMetal.Surface="True" local:CommonMetal.Lift="6" Background="{DynamicResource PanelMetalBrush}" BorderBrush="#40FFFFFF"
+                BorderThickness="1.5" CornerRadius="13" Cursor="Hand" ToolTip="Start or stop OBS replay buffer"
+                PreviewMouseLeftButtonDown="TopBarControl_PreviewMouseLeftButtonDown" PreviewMouseMove="TopBarControl_PreviewMouseMove" PreviewMouseLeftButtonUp="TopBarControl_PreviewMouseLeftButtonUp"
+                PreviewTouchDown="TopBarControl_PreviewTouchDown" PreviewTouchMove="TopBarControl_PreviewTouchMove" PreviewTouchUp="TopBarControl_PreviewTouchUp">
+            <local:ObsTopBarControl x:Name="obsBufferContent" Mode="buffer"/>
+        </Border>
+        <Popup x:Name="restartConfirmationPopup" PlacementTarget="{Binding ElementName=restartButton}" Placement="Bottom" VerticalOffset="8" AllowsTransparency="True" StaysOpen="True"><Grid Width="150" Height="178"><Grid.RowDefinitions><RowDefinition/><RowDefinition Height="10"/><RowDefinition/></Grid.RowDefinitions><Border Grid.Row="0" Background="#E62C1618" BorderBrush="#FFFF4A50" BorderThickness="2" CornerRadius="13" Cursor="Hand" PreviewMouseLeftButtonDown="RestartYes_PreviewMouseLeftButtonDown"><StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"><TextBlock Text="YES" Foreground="#FFFF4A50" FontSize="25" FontWeight="Bold"/><TextBlock x:Name="restartYesCountdownText" Text="6 s" Foreground="White" FontSize="18"/></StackPanel></Border><Border Grid.Row="2" Background="#E6162C20" BorderBrush="#FF1ED760" BorderThickness="2" CornerRadius="13" Cursor="Hand" PreviewMouseLeftButtonDown="RestartNo_PreviewMouseLeftButtonDown"><StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"><TextBlock Text="NO" Foreground="#FF1ED760" FontSize="25" FontWeight="Bold"/><TextBlock x:Name="restartNoCountdownText" Text="6 s" Foreground="White" FontSize="18"/></StackPanel></Border></Grid></Popup>
+        <Border x:Name="topBarDropOverlay"
+                Panel.ZIndex="100"
+                Margin="5,0"
+                Background="#381ED760"
+                BorderBrush="#FF1ED760"
+                BorderThickness="3"
+                CornerRadius="13"
+                IsHitTestVisible="False"
+                Visibility="Collapsed"/>
+    </Grid>
+</UserControl>
+
+
+

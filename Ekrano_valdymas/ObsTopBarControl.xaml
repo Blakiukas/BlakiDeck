@@ -1,0 +1,52 @@
+<UserControl x:Class="Ekrano_valdymas.ObsTopBarControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Ekrano_valdymas"
+             IsHitTestVisible="False">
+    <Grid Margin="10,7,10,8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="27"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <local:OpticallyCenteredText x:Name="headerText" Text="OBS"
+                       Margin="0,0,38,0"
+                       TextBrush="#E8FFFFFF" TextFontFamily="{StaticResource TekoFont}"
+                       TextFontSize="22" TextFontWeight="Bold"
+                       HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <local:OpticallyCenteredText Width="34" HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                       TextFontFamily="{StaticResource TekoFont}" TextFontSize="18" TextFontWeight="Bold">
+                <local:OpticallyCenteredText.Style>
+                    <Style TargetType="{x:Type local:OpticallyCenteredText}">
+                        <Setter Property="Text" Value="OFF"/>
+                        <Setter Property="TextBrush" Value="#FF777C7E"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding StatusActive, RelativeSource={RelativeSource AncestorType={x:Type local:ObsTopBarControl}}}" Value="True">
+                                <Setter Property="Text" Value="ON"/>
+                                <Setter Property="TextBrush" Value="#FF1ED760"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </local:OpticallyCenteredText.Style>
+            </local:OpticallyCenteredText>
+        </Grid>
+        <Grid Grid.Row="1" VerticalAlignment="Center">
+            <StackPanel x:Name="recordContent" Orientation="Horizontal"
+                        HorizontalAlignment="Center" VerticalAlignment="Center">
+                <local:OpticallyCenteredText Text="REC" Margin="0,0,7,0"
+                           TextBrush="{Binding RecordBrush, RelativeSource={RelativeSource AncestorType={x:Type local:ObsTopBarControl}}}"
+                           TextFontFamily="{StaticResource TekoFont}" TextFontSize="25"
+                           TextFontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding ElapsedText, RelativeSource={RelativeSource AncestorType={x:Type local:ObsTopBarControl}}}"
+                           Foreground="{Binding RecordBrush, RelativeSource={RelativeSource AncestorType={x:Type local:ObsTopBarControl}}}"
+                           FontFamily="Segoe UI Semibold" FontSize="15.5"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+            <local:OpticallyCenteredText x:Name="bufferContent" Text="SAVE&#10;BUFFER"
+                       TextBrush="#E8FFFFFF" TextFontFamily="{StaticResource TekoFont}"
+                       TextFontSize="24" TextFontWeight="Bold" LineAdvance="22"
+                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                       Visibility="Collapsed"/>
+        </Grid>
+    </Grid>
+</UserControl>

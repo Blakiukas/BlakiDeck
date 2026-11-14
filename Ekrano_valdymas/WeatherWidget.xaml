@@ -1,0 +1,399 @@
+<UserControl x:Class="Ekrano_valdymas.WeatherWidget"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Ekrano_valdymas"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignWidth="500" d:DesignHeight="370"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             Background="#01000000">
+
+    <UserControl.Resources>
+        <Style x:Key="MetricValue" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource PanelTextBrush}"/>
+            <Setter Property="FontFamily" Value="{StaticResource TekoFont}"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>
+            <Setter Property="LineHeight" Value="34"/>
+            <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TranslateTransform Y="2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="WeatherNavButton" TargetType="Button">
+            <Setter Property="Width" Value="52"/><Setter Property="Height" Value="92"/>
+            <Setter Property="Foreground" Value="{DynamicResource PanelTextBrush}"/><Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/><Setter Property="FontSize" Value="28"/>
+            <Setter Property="Cursor" Value="Hand"/><Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+                <Border x:Name="navSurface" Background="{TemplateBinding Background}" CornerRadius="8">
+                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="navSurface" Property="Background" Value="#1CFFFFFF"/><Setter Property="Foreground" Value="#DFFFFFFF"/></Trigger>
+                    <Trigger Property="IsPressed" Value="True"><Setter TargetName="navSurface" Property="Background" Value="#4AFFFFFF"/></Trigger>
+                    <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.22"/></Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate></Setter.Value></Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Border local:CommonMetal.Surface="True" Background="{DynamicResource PanelMetalBrush}" BorderBrush="#35FFFFFF" BorderThickness="1.5"
+            CornerRadius="18" Padding="22">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="1"/>
+                <RowDefinition Height="38"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="1"/>
+                <RowDefinition Height="72"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="46"/></Grid.ColumnDefinitions>
+                <local:ModuleOptionsButton Grid.Column="1"/>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Tag="WindowDrag"
+                            Background="Transparent"
+                            PreviewMouseLeftButtonDown="Header_PreviewMouseLeftButtonDown">
+                    <Grid Width="36" Height="36">
+                        <local:WeatherIcon WeatherCode="2" Width="32" Height="32"
+                                           Opacity="{DynamicResource PrimaryTextOpacity}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <local:OpticallyCenteredText x:Name="txtWeatherHeading" Tag="ModuleTitle" Text="WEATHER"
+                               TextBrush="{DynamicResource ModuleTitleBrush}" TextFontWeight="SemiBold"
+                               TextFontFamily="{StaticResource TekoFont}"
+                               TextFontSize="27" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button x:Name="locationButton" Width="160" Height="32" Tag="NoWindowDrag"
+                            Background="#1CFFFFFF" BorderThickness="0" Padding="8,4" Cursor="Hand"
+                            Click="LocationButton_Click">
+                        <Button.Template><ControlTemplate TargetType="Button"><Border Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}"><ContentPresenter/></Border></ControlTemplate></Button.Template>
+                        <Grid>
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="14"/></Grid.ColumnDefinitions>
+                            <local:OpticallyCenteredText x:Name="locationOriginIcon" Visibility="Collapsed" Width="16" Height="24" Margin="0,0,4,0" TextFontFamily="Segoe MDL2 Assets" TextFontSize="14" TextBrush="{DynamicResource PrimaryTextBrush}"/>
+                            <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly">
+                                <local:OpticallyCenteredText x:Name="txtCitySearch" TextBrush="{DynamicResource PrimaryTextBrush}"
+                                           TextFontFamily="Segoe UI" TextFontSize="18" Height="24"/>
+                            </Viewbox>
+                            <local:OpticallyCenteredText Grid.Column="2" Text="&#xE70D;" TextFontFamily="Segoe MDL2 Assets" TextFontSize="10" TextBrush="{DynamicResource PrimaryTextBrush}"/>
+                        </Grid>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <Border Grid.Row="1" Background="{DynamicResource PanelDividerBrush}"/>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border x:Name="dateBadge" Background="#1CFFFFFF" CornerRadius="8" Padding="8,4" Margin="0,0,12,0">
+                        <local:OpticallyCenteredText x:Name="txtSelectedDate" TextBrush="{DynamicResource PrimaryTextBrush}"
+                                                     TextFontFamily="Segoe UI" TextFontSize="16" Height="24"/>
+                    </Border>
+                    <Border x:Name="returnCountdownBadge" Visibility="Collapsed" IsHitTestVisible="False"
+                            Background="#1CFFFFFF" CornerRadius="8" Padding="9,4" Margin="0,0,12,0">
+                        <TextBlock x:Name="returnCountdownText" Text="TODAY IN 45s"
+                                   Foreground="{DynamicResource PrimaryTextBrush}" FontSize="14" VerticalAlignment="Center"/>
+                    </Border>
+            </StackPanel>
+
+            <Grid x:Name="daySwipeArea" Grid.Row="3" Margin="0,8,0,8" Tag="NoWindowDrag"
+                  IsManipulationEnabled="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1"/>
+                    <ColumnDefinition Width="210"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid x:Name="daySummaryContent" Grid.Column="0"
+                      Margin="8,0,4,0"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" Margin="0,0,10,0">
+                    <local:WeatherIcon x:Name="currentWeatherIcon" WeatherCode="2"
+                                       Width="158" Height="158"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                    </Viewbox>
+
+                    <StackPanel x:Name="weatherSummaryTextStack" Grid.Column="1"
+                                Margin="0"
+                                VerticalAlignment="Center">
+                        <TextBlock x:Name="txtCurrentTemp" Text="--°" Foreground="{DynamicResource PanelTextBrush}"
+                                   FontFamily="{StaticResource TekoFont}"
+                                   FontSize="68" FontWeight="Bold"
+                                   Tag="CappedWeatherText"
+                                   Margin="0" Padding="0,0,4,0"/>
+                        <Viewbox x:Name="conditionViewbox" Height="31"
+                                 Margin="2,0,0,0"
+                                 HorizontalAlignment="Left"
+                                 Stretch="Uniform"
+                                 StretchDirection="DownOnly">
+                            <TextBlock x:Name="txtCondition" Text="Loading..."
+                                       ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
+                                       Foreground="{DynamicResource PanelTextBrush}"
+                                       FontFamily="{StaticResource TekoFont}"
+                                       FontSize="31" FontWeight="Bold"
+                                       Tag="CappedWeatherText"/>
+                        </Viewbox>
+                        <TextBlock x:Name="txtFeelsLike" Text="--°"
+                                   Foreground="{DynamicResource PanelTextBrush}"
+                                   FontWeight="SemiBold"
+                                   FontSize="20" Margin="2,1,0,0"
+                                   Tag="CappedWeatherText"/>
+                    </StackPanel>
+                </Grid>
+
+                <Border Grid.Column="1"
+                        Width="1"
+                        Height="180"
+                        Background="#45FFFFFF"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                <Grid x:Name="dayMetricsContent" Grid.Column="2"
+                      Height="174"
+                      Margin="16,0,42,0"
+                      VerticalAlignment="Center"
+                      UseLayoutRounding="True"
+                      SnapsToDevicePixels="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" BorderBrush="#45FFFFFF"
+                            BorderThickness="0,0,0,1" SnapsToDevicePixels="True">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="48"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Width="29" Height="29" Opacity="{DynamicResource PrimaryTextOpacity}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Stretch="Uniform">
+                                <Grid Width="24" Height="24">
+                                    <Path Data="M2,7 H14 C18,7 18,2 14,2 C12,2 11,3 10,4"
+                                          Stroke="#E8FFFFFF" StrokeThickness="2"
+                                          Fill="Transparent"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"/>
+                                    <Path Data="M2,12 H19 C23,12 23,7 20,6"
+                                          Stroke="#E8FFFFFF" StrokeThickness="2"
+                                          Fill="Transparent"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"/>
+                                    <Path Data="M2,17 H14 C18,17 18,22 14,22 C12,22 11,21 10,20"
+                                          Stroke="#E8FFFFFF" StrokeThickness="2"
+                                          Fill="Transparent"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"/>
+                                </Grid>
+                            </Viewbox>
+                            <TextBlock Grid.Column="1" x:Name="txtWind" Text="0 km/h"
+                                       Style="{StaticResource MetricValue}"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="1" BorderBrush="#45FFFFFF"
+                            BorderThickness="0,0,0,1" SnapsToDevicePixels="True">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="48"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Width="29" Height="29" Opacity="{DynamicResource PrimaryTextOpacity}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Stretch="Uniform">
+                                <Path Width="24" Height="24"
+                                      Data="M12,1 C12,1 5,9 5,15 A7,7 0 0 0 19,15 C19,9 12,1 12,1 Z"
+                                      Fill="#E8FFFFFF"
+                                      Stretch="Uniform"/>
+                            </Viewbox>
+                            <TextBlock Grid.Column="1" x:Name="txtHumidity" Text="0%"
+                                       Style="{StaticResource MetricValue}"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="2" BorderBrush="#45FFFFFF"
+                            BorderThickness="0,0,0,1" SnapsToDevicePixels="True">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="48"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Width="29" Height="29" Opacity="{DynamicResource PrimaryTextOpacity}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Stretch="Uniform">
+                                <Grid Width="24" Height="24">
+                                    <Path Data="M2,12 A10,10 0 0 1 22,12 C19,10 17,10 14,12 C12,10 10,10 8,12 C6,10 4,10 2,12 Z"
+                                          Fill="#E8FFFFFF"/>
+                                    <Path Data="M12,12 V19 C12,22 17,22 17,18"
+                                          Stroke="#E8FFFFFF" StrokeThickness="2"
+                                          Fill="Transparent"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"/>
+                                </Grid>
+                            </Viewbox>
+                            <TextBlock Grid.Column="1" x:Name="txtRainChance" Text="0%"
+                                       Style="{StaticResource MetricValue}"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="3" BorderBrush="#45FFFFFF"
+                            BorderThickness="0,0,0,1" SnapsToDevicePixels="True">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="48"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Width="29" Height="29" Opacity="{DynamicResource PrimaryTextOpacity}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Stretch="Uniform">
+                                <Grid Width="24" Height="24">
+                                    <Ellipse Width="11" Height="11"
+                                             Fill="#FFD43B"/>
+                                    <Path Data="M12,1 V4 M12,20 V23 M1,12 H4 M20,12 H23 M4.2,4.2 L6.3,6.3 M17.7,17.7 L19.8,19.8 M19.8,4.2 L17.7,6.3 M6.3,17.7 L4.2,19.8"
+                                          Stroke="#FFD43B" StrokeThickness="2"
+                                          Fill="Transparent"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"/>
+                                </Grid>
+                            </Viewbox>
+                            <TextBlock Grid.Column="1" x:Name="txtSunrise" Text="--:--"
+                                       Style="{StaticResource MetricValue}"/>
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="48"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Viewbox Width="29" Height="29" Opacity="{DynamicResource PrimaryTextOpacity}"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Stretch="Uniform">
+                            <Grid Width="24" Height="24">
+                                <Path Data="M4,15 A8,8 0 0 1 20,15 Z"
+                                      Fill="#FFD43B"/>
+                                <Path Data="M2,16 H22"
+                                      Stroke="#FFD43B" StrokeThickness="2"
+                                      Fill="Transparent"
+                                      StrokeStartLineCap="Round"
+                                      StrokeEndLineCap="Round"/>
+                            </Grid>
+                        </Viewbox>
+                        <TextBlock Grid.Column="1" x:Name="txtSunset" Text="--:--"
+                                   Style="{StaticResource MetricValue}"/>
+                    </Grid>
+                </Grid>
+                <Button x:Name="previousDayButton" Grid.ColumnSpan="3"
+                        Style="{StaticResource WeatherNavButton}" HorizontalAlignment="Left" Margin="-16,0,0,0"
+                        Click="PreviousDayButton_Click">
+                    <Path Data="M 19,2 L 7,14 L 19,26" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="3.2"
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                </Button>
+                <Button x:Name="nextDayButton" Grid.ColumnSpan="3"
+                        Style="{StaticResource WeatherNavButton}" HorizontalAlignment="Right" Margin="0"
+                        Click="NextDayButton_Click">
+                    <Path Data="M 7,2 L 19,14 L 7,26" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="3.2"
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                </Button>
+            </Grid>
+
+            <Border Grid.Row="4" Background="{DynamicResource PanelDividerBrush}"/>
+
+            <Grid x:Name="hourlySwipeArea" Grid.Row="5" Tag="NoWindowDrag"
+                  Background="Transparent" IsManipulationEnabled="True">
+            <ItemsControl x:Name="hourlyForecast" Margin="24,4,24,0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="5"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="#16FFFFFF"
+                                BorderThickness="0,0,1,0"
+                                Margin="0,6,0,-6"
+                                Padding="2,0">
+                            <Grid HorizontalAlignment="Center"
+                                  VerticalAlignment="Center">
+                                <Grid.RenderTransform>
+                                    <TranslateTransform Y="6"/>
+                                </Grid.RenderTransform>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <local:WeatherIcon WeatherCode="{Binding WeatherCode}"
+                                                   Width="40" Height="40"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="1"
+                                            Margin="6,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Time}"
+                                               Foreground="{DynamicResource PrimaryTextBrush}"
+                                               FontSize="15"
+                                               HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Temperature}"
+                                               Foreground="{DynamicResource PrimaryTextBrush}"
+                                               FontSize="18"
+                                               FontWeight="SemiBold"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,1,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+                <Button x:Name="previousHoursButton" Width="42" Height="64"
+                        Style="{StaticResource WeatherNavButton}" HorizontalAlignment="Left"
+                        Margin="-18,0,0,0"
+                        VerticalAlignment="Center"
+                        Click="PreviousHoursButton_Click">
+                    <Button.RenderTransform>
+                        <TranslateTransform Y="10"/>
+                    </Button.RenderTransform>
+                    <Path Data="M 16,2 L 6,12 L 16,22" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="3"
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                </Button>
+                <Button x:Name="nextHoursButton" Width="42" Height="64"
+                        Style="{StaticResource WeatherNavButton}" HorizontalAlignment="Right"
+                        Margin="0,0,-18,0"
+                        VerticalAlignment="Center"
+                        Click="NextHoursButton_Click">
+                    <Button.RenderTransform>
+                        <TranslateTransform Y="10"/>
+                    </Button.RenderTransform>
+                    <Path Data="M 6,2 L 16,12 L 6,22" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="3"
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                </Button>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

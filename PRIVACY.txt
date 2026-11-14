@@ -1,0 +1,53 @@
+BlakiDeck privacy information
+Updated: 6 November 2026
+
+BlakiDeck is a free desktop dashboard by Blakiukas. No BlakiDeck account is required. Its application code does not include advertising, author-operated usage analytics or automatic uploading of your settings and diagnostic logs to the author. “Program usage” and “Show telemetry” describe local resource readings, not reporting to the author.
+
+Local processing and storage
+The dashboard processes hardware readings, application resource usage, display configuration, audio/media information, shortcuts and the macros you configure. Settings can contain file paths, website addresses, room/device names, weather locations and coordinates, layout and appearance preferences. Local histories and diagnostic files can contain readings, timestamps, process information and errors with local paths. Macro actions may contain the command or text you explicitly configured. Do not put passwords in macros or share configuration files without reviewing them.
+
+BlakiDeck settings and local application data are stored on your computer in your Windows user profile.
+
+Connections you use
+- Weather: place searches and coordinates are sent to Open-Meteo; coordinate reverse lookup may use Photon by komoot. Forecast requests contain the selected location. These services also receive normal connection information such as your IP address.
+- Airthings: when connected, credentials are sent to the Airthings authentication service and an access token is used to retrieve your account's device readings. Selected readings/history are stored locally. Stored credentials are protected for your Windows account.
+- Philips Hue: Bridge discovery can contact discovery.meethue.com. Pairing, state retrieval and light commands communicate with your Hue Bridge on the local network. The saved Bridge key is protected for your Windows account.
+- OBS: the application connects to your configured OBS WebSocket endpoint for status and commands. Do not expose an unprotected OBS endpoint to the internet.
+- Music: Windows media sessions and local files provide track information. Streaming artwork is read from the selected music application through Windows media sessions; local-file artwork is read locally. BlakiDeck does not send track titles or artists to an external artwork search service. Playback through other services follows their accounts and policies. Audio visualization processes audio locally.
+- Web: websites opened in the embedded Microsoft WebView2 browser receive ordinary browser requests and may store cookies, sign-in sessions and other site data in the local browser profile. Microsoft WebView2/Windows and the visited websites have their own policies. BlakiDeck cannot promise that third-party pages contain no analytics.
+- Website icons: to retrieve an icon for a saved web shortcut, BlakiDeck can request the website and its icon files, including files hosted by another provider. These requests can occur without opening the embedded browser and include ordinary connection information such as your IP address. Downloaded icons are cached locally.
+- Codex reading: if you use this optional reading, BlakiDeck requests account-limit information through a locally installed, signed-in Codex application. That application may contact its provider using its own account connection. BlakiDeck does not require you to enter Codex credentials into its settings.
+- Links and donations: external links open the selected destination. Distribution platforms (Microsoft Store, itch.io and GitHub), email and donation providers process data under their own policies. A donation is optional and does not unlock features.
+
+Deletion and support
+The desktop uninstaller offers “Also delete my BlakiDeck Release user data”. It is unchecked by default. Selecting it removes this installation's profile, including saved connections, locations, histories and browser data; it does not delete original music, documents or other files referenced by shortcuts. Browser cache clearing is not the same as deleting all site data or the full profile. Close BlakiDeck before manually removing its profile. Save anything you want to keep first.
+
+If you contact blaki.support@gmail.com, the author receives your email address, message and attachments you choose to send. This information is used to handle your support request. Contact the same address about access or deletion. Diagnostics are not emailed automatically; review them before sharing and omit credentials or unrelated personal information.
+
+LIETUVIŲ
+
+BlakiDeck privatumo informacija
+Atnaujinta: 2026 m. lapkričio 6 d.
+
+BlakiDeck yra nemokama Blakiuko darbalaukio programa. BlakiDeck paskyros nereikia. Programos kode nėra reklamos, autoriaus vykdomos naudojimo analitikos, automatinio jūsų nustatymų ir diagnostikos žurnalų siuntimo autoriui. „Program usage“ ir „Show telemetry“ reiškia vietinius išteklių rodmenis, o ne duomenų teikimą autoriui.
+
+Vietinis apdorojimas ir saugojimas
+Programa apdoroja aparatūros rodmenis, programų išteklių naudojimą, ekranų konfigūraciją, garso ir medijos informaciją, nuorodas ir jūsų sukonfigūruotus makrosus. Nustatymuose gali būti failų keliai, svetainių adresai, kambarių ir įrenginių pavadinimai, orų vietovės ir koordinatės, išdėstymo bei išvaizdos nuostatos. Vietinėse istorijose ir diagnostikos failuose gali būti rodmenys, laiko žymos, procesų informacija ir klaidos su vietiniais keliais. Makrosų veiksmuose gali būti jūsų aiškiai sukonfigūruota komanda ar tekstas. Nerašykite slaptažodžių į makrosus ir nesidalykite konfigūracijos failais neperžiūrėję jų turinio.
+
+BlakiDeck nustatymai ir vietiniai programos duomenys saugomi jūsų kompiuteryje, jūsų Windows naudotojo profilyje.
+
+Jūsų naudojami ryšiai
+- Orai: vietovės paieškos ir koordinatės siunčiamos Open-Meteo; atvirkštinei koordinačių paieškai gali būti naudojamas komoot Photon. Prognozės užklausose pateikiama pasirinkta vietovė. Šios paslaugos taip pat gauna įprastą ryšio informaciją, pvz., jūsų IP adresą.
+- Airthings: prisijungiant prisijungimo duomenys siunčiami Airthings autentifikavimo paslaugai, o prieigos raktas naudojamas jūsų paskyros įrenginių rodmenims gauti. Pasirinkti rodmenys ir istorija saugomi vietoje. Išsaugoti prisijungimo duomenys apsaugomi jūsų Windows paskyrai.
+- Philips Hue: Bridge paieška gali kreiptis į discovery.meethue.com. Susiejimas, būsenų gavimas ir šviesų komandos vykdomos bendraujant su jūsų Hue Bridge vietiniame tinkle. Išsaugotas Bridge raktas apsaugomas jūsų Windows paskyrai.
+- OBS: programa jungiasi prie jūsų sukonfigūruoto OBS WebSocket adreso, kad gautų būseną ir siųstų komandas. Neatidarykite neapsaugotos OBS prieigos internetui.
+- Muzika: kūrinio informaciją pateikia Windows medijos seansai ir vietiniai failai. Srautinės muzikos viršelis gaunamas iš pasirinktos muzikos programos per Windows medijos seansus; vietinių failų viršeliai skaitomi vietoje. BlakiDeck nesiunčia kūrinių pavadinimų ar atlikėjų į išorinę viršelių paieškos paslaugą. Atkūrimui per kitas paslaugas taikomos jų paskyrų ir privatumo taisyklės. Garso vizualizacija apdoroja garsą vietoje.
+- Naršyklė: įterptoje Microsoft WebView2 naršyklėje atvertos svetainės gauna įprastas naršyklės užklausas ir gali saugoti slapukus, prisijungimo seansus bei kitus svetainių duomenis vietiniame naršyklės profilyje. Microsoft WebView2, Windows ir lankomoms svetainėms taikomos jų pačių taisyklės. BlakiDeck negali garantuoti, kad trečiųjų šalių puslapiuose nėra analitikos.
+- Svetainių ikonos: gaudama išsaugotos web nuorodos ikoną, BlakiDeck gali užklausti svetainę ir jos ikonų failus, įskaitant kito teikėjo saugomus failus. Šios užklausos gali vykti neatidarius įterptos naršyklės; jos pateikia įprastą ryšio informaciją, pvz., jūsų IP adresą. Atsisiųstos ikonos saugomos vietiniame podėlyje.
+- Codex rodmuo: jei naudojate šį pasirenkamą rodmenį, BlakiDeck užklausia paskyros limitų informaciją per kompiuteryje įdiegtą Codex programą su prisijungta paskyra. Ši programa gali kreiptis į savo paslaugų teikėją naudodama savo paskyros ryšį. BlakiDeck nereikalauja įrašyti Codex prisijungimo duomenų į savo nustatymus.
+- Nuorodos ir parama: išorinės nuorodos atidaro pasirinktą paskirties vietą. Platinimo platformos (Microsoft Store, itch.io ir GitHub), el. pašto ir paramos paslaugų teikėjai duomenis tvarko pagal savo taisykles. Parama savanoriška ir neatrakina funkcijų.
+
+Ištrynimas ir pagalba
+Darbalaukio pašalinimo programa siūlo „Also delete my BlakiDeck Release user data“ (taip pat ištrinti mano BlakiDeck Release naudotojo duomenis). Pagal nutylėjimą šis pasirinkimas nepažymėtas. Jį pažymėjus pašalinamas šio diegimo profilis, įskaitant išsaugotus prisijungimus, vietoves, istorijas ir naršyklės duomenis; originalūs muzikos, dokumentų ar kiti nuorodomis nurodyti failai netrinami. Naršyklės podėlio išvalymas nėra tas pats, kas visų svetainių duomenų ar viso profilio ištrynimas. Prieš rankiniu būdu šalindami profilį uždarykite BlakiDeck. Pirmiausia išsisaugokite tai, ką norite pasilikti.
+
+Susisiekus adresu blaki.support@gmail.com, autorius gauna jūsų el. pašto adresą, žinutę ir priedus, kuriuos nusprendžiate siųsti. Ši informacija naudojama jūsų pagalbos užklausai nagrinėti. Dėl prieigos prie duomenų ar jų ištrynimo kreipkitės tuo pačiu adresu. Diagnostika automatiškai el. paštu nesiunčiama; prieš dalydamiesi ją peržiūrėkite ir pašalinkite prisijungimo duomenis bei nesusijusią asmeninę informaciją.

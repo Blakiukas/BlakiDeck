@@ -16,7 +16,7 @@ BlakiDeck brings everyday PC controls into a customizable Windows desktop dashbo
 
 ## Installation
 
-1. Download BlakiDeck-1.0.0-Clean-Setup-x64.exe. SHA256SUMS.txt is provided for file verification.
+1. Download the latest BlakiDeck installer from Releases. SHA256SUMS.txt is provided for file verification.
 2. Close BlakiDeck and run the installer. Review the license, choose the installation folder and components, and select shortcut/start-with-Windows options as desired.
 3. Approve installation of any selected missing component when Windows asks. The included prerequisites do not require a separate download.
 4. Launch BlakiDeck. Configure only the optional integrations you want to use.
@@ -34,7 +34,7 @@ BlakiDeck brings everyday PC controls into a customizable Windows desktop dashbo
 
 ## License
 
-Free for personal, educational and business use. All features are free; donations are optional. BlakiDeck is closed-source. You may share unmodified official distributions free of charge with their license and notices; selling or distributing modified versions is not permitted by the BlakiDeck Freeware License. Third-party components retain their own licenses. See the included LICENSE.txt and third-party notices for the full terms.
+BlakiDeck is free and open source under the MIT License. You may use, modify and redistribute it, including commercially, while retaining the copyright and license notice. All features are free; donations are optional. Third-party components retain their own licenses. Source code: https://github.com/Blakiukas/BlakiDeck. See LICENSE.txt and THIRD-PARTY-NOTICES.txt.
 
 ## Privacy
 
@@ -70,5 +70,25 @@ The main interface is predominantly English. About, Help and legal information a
 
 <img width="2560" height="747" alt="12-web-player-visualizer" src="https://github.com/user-attachments/assets/32e9f0b3-0d3f-4811-8eaf-c5f464b7c4df" />
 
-
 <img width="2560" height="596" alt="13-wide-music-player-military" src="https://github.com/user-attachments/assets/b6e9ec31-f456-4f92-b7db-4d899e733d14" />
+
+## Build from source
+
+Requires Windows x64 and the .NET 10 SDK. From the repository root:
+
+```powershell
+dotnet restore Ekrano_valdymas/Ekrano_valdymas.csproj
+dotnet build Ekrano_valdymas/Ekrano_valdymas.csproj -c Release
+```
+
+Run `Ekrano_valdymas/bin/Release/net10.0-windows10.0.19041.0/BlakiDeck.exe`.
+The source distribution contains production C#/XAML sources and assets required to build them. Local accounts, tokens, browser profiles, user settings, diagnostics and development history are excluded. Configure optional integrations with your own credentials. Prototype and diagnostic-only code is not included in this production source distribution.
+
+Application source is MIT licensed; third-party components retain their own licenses. See THIRD-PARTY-NOTICES.txt.
+
+## Recent changes
+
+- Assign global trigger keys to any macro, including microphone controls.
+- Web shortcut context menus offer Edit, Move and Remove again.
+- Web shortcut icons default to original colors independently of the shared icon effect; individual choices are preserved.
+- Weather settings can show one decimal place for current, feels-like and forecast temperatures.

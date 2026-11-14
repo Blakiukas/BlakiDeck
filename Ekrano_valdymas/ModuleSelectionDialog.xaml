@@ -1,0 +1,100 @@
+<local:SettingsWindow xmlns:local="clr-namespace:Ekrano_valdymas" x:Class="Ekrano_valdymas.ModuleSelectionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Modules" Width="1060" Height="570"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent">
+    <Border Background="#FF191919" CornerRadius="16" Padding="22"
+            PreviewMouseLeftButtonDown="DialogSurface_PreviewMouseLeftButtonDown">
+        <Grid>
+            <Grid.Resources>
+                <Style x:Key="ModuleChoice" TargetType="RadioButton">
+                    <Setter Property="Foreground" Value="#F4FFFFFF"/>
+                    <Setter Property="Background" Value="#16FFFFFF"/>
+                    <Setter Property="FontFamily" Value="{StaticResource TekoFont}"/>
+                    <Setter Property="FontSize" Value="23"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Height" Value="40"/>
+                    <Setter Property="Margin" Value="0,3"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="RadioButton">
+                                <Border x:Name="surface" Background="{TemplateBinding Background}" BorderBrush="#28FFFFFF"
+                                        BorderThickness="1" CornerRadius="8" Padding="12,2">
+                                    <Grid>
+                                        <local:OpticallyCenteredText Text="{TemplateBinding Content}" TextBrush="{TemplateBinding Foreground}" TextFontFamily="{TemplateBinding FontFamily}" TextFontSize="{TemplateBinding FontSize}" TextFontWeight="{TemplateBinding FontWeight}" InkAlignment="Left" CompactLineBox="True" Ellipsis="True" Margin="0,0,18,0"/>
+                                        <Ellipse x:Name="dot" Width="12" Height="12" HorizontalAlignment="Right"
+                                                 Fill="{DynamicResource ActionAccentBrush}" Visibility="Collapsed"/>
+                                    </Grid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="surface" Property="BorderBrush" Value="#68FFFFFF"/>
+                                        <Setter TargetName="dot" Property="Visibility" Value="Visible"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="surface" Property="BorderBrush" Value="#AFFFFFFF"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="52"/><RowDefinition Height="1"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <DockPanel MouseLeftButtonDown="Header_MouseLeftButtonDown" Cursor="SizeAll">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="CANCEL" Style="{StaticResource DashboardDialogButton}" Margin="0,0,8,0" Click="Cancel_Click"/>
+                    <Button Content="APPLY" Style="{StaticResource DashboardDialogButton}"
+                            Background="{DynamicResource ActionFillBrush}" BorderBrush="{DynamicResource ActionAccentBrush}" Click="Apply_Click"/>
+                </StackPanel>
+                <TextBlock x:Name="layoutTitle" Text="LAYOUT" Foreground="White" FontFamily="{StaticResource TekoFont}"
+                           FontSize="31" FontWeight="Bold" VerticalAlignment="Center"/>
+            </DockPanel>
+            <Border Grid.Row="1" Background="#28FFFFFF"/>
+            <Grid x:Name="moduleChoicesGrid" Grid.Row="2" Margin="0,16,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/><ColumnDefinition Width="14"/><ColumnDefinition/>
+                    <ColumnDefinition Width="14"/><ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Background="#10202020" BorderBrush="#30FFFFFF" BorderThickness="1" CornerRadius="12" Padding="14">
+                    <Grid><Grid.RowDefinitions><RowDefinition Height="42"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                        <TextBlock Text="LEFT" Foreground="White" FontFamily="{StaticResource TekoFont}" FontSize="27" FontWeight="Bold"/>
+                        <Grid Grid.Row="1">
+                            <ScrollViewer x:Name="leftScroll" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled"
+                                          PanningMode="VerticalOnly" ScrollChanged="ChoicesScroll_ScrollChanged"><StackPanel x:Name="leftChoices"/></ScrollViewer>
+                            <Border x:Name="leftTopMore" Height="24" VerticalAlignment="Top" IsHitTestVisible="False" Visibility="Collapsed" Background="#D9262626"><TextBlock Text="▲" Foreground="#E8FFFFFF" FontFamily="Segoe UI Symbol" FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
+                            <Border x:Name="leftBottomMore" Height="24" VerticalAlignment="Bottom" IsHitTestVisible="False" Visibility="Collapsed" Background="#D9262626"><Path Data="M1,1 L8,8 L15,1" Width="16" Height="9" Stroke="#E8FFFFFF" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
+                        </Grid>
+                    </Grid>
+                </Border>
+                <Border Grid.Column="2" Background="#10202020" BorderBrush="#30FFFFFF" BorderThickness="1" CornerRadius="12" Padding="14">
+                    <Grid><Grid.RowDefinitions><RowDefinition Height="42"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                        <TextBlock Text="CENTER" Foreground="White" FontFamily="{StaticResource TekoFont}" FontSize="27" FontWeight="Bold"/>
+                        <Grid Grid.Row="1">
+                            <ScrollViewer x:Name="centerScroll" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled"
+                                          PanningMode="VerticalOnly" ScrollChanged="ChoicesScroll_ScrollChanged"><StackPanel x:Name="centerChoices"/></ScrollViewer>
+                            <Border x:Name="centerTopMore" Height="24" VerticalAlignment="Top" IsHitTestVisible="False" Visibility="Collapsed" Background="#D9262626"><TextBlock Text="▲" Foreground="#E8FFFFFF" FontFamily="Segoe UI Symbol" FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
+                            <Border x:Name="centerBottomMore" Height="24" VerticalAlignment="Bottom" IsHitTestVisible="False" Visibility="Collapsed" Background="#D9262626"><Path Data="M1,1 L8,8 L15,1" Width="16" Height="9" Stroke="#E8FFFFFF" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
+                        </Grid>
+                    </Grid>
+                </Border>
+                <Border Grid.Column="4" Background="#10202020" BorderBrush="#30FFFFFF" BorderThickness="1" CornerRadius="12" Padding="14">
+                    <Grid><Grid.RowDefinitions><RowDefinition Height="42"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                        <TextBlock Text="RIGHT" Foreground="White" FontFamily="{StaticResource TekoFont}" FontSize="27" FontWeight="Bold"/>
+                        <Grid Grid.Row="1">
+                            <ScrollViewer x:Name="rightScroll" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled"
+                                          PanningMode="VerticalOnly" ScrollChanged="ChoicesScroll_ScrollChanged"><StackPanel x:Name="rightChoices"/></ScrollViewer>
+                            <Border x:Name="rightTopMore" Height="24" VerticalAlignment="Top" IsHitTestVisible="False" Visibility="Collapsed" Background="#D9262626"><TextBlock Text="▲" Foreground="#E8FFFFFF" FontFamily="Segoe UI Symbol" FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
+                            <Border x:Name="rightBottomMore" Height="24" VerticalAlignment="Bottom" IsHitTestVisible="False" Visibility="Collapsed" Background="#D9262626"><Path Data="M1,1 L8,8 L15,1" Width="16" Height="9" Stroke="#E8FFFFFF" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</local:SettingsWindow>

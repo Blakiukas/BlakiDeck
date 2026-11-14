@@ -1,0 +1,583 @@
+<Window x:Class="Ekrano_valdymas.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Ekrano_valdymas"
+        Title="BlakiDeck"
+        Icon="Assets/AppIcon.ico"
+        Height="560"
+        Width="1920"
+        MinHeight="280"
+        MinWidth="960"
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        AllowsTransparency="True"
+        Background="Transparent"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        SourceInitialized="Window_SourceInitialized"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+<Window.ContextMenu>
+        <ContextMenu Opened="ContextMenu_Opened" Closed="ContextMenu_Closed" FontSize="18" FontFamily="Segoe UI Semibold" Background="#FF191919" Foreground="#F4FFFFFF" BorderThickness="0" Padding="7">
+            <ContextMenu.Template>
+                <ControlTemplate TargetType="ContextMenu">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="#68645E" BorderThickness="1" CornerRadius="8" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True" LayoutTransform="{DynamicResource MainMenuScale}">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" CanContentScroll="True"><ItemsPresenter/></ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </ContextMenu.Template>
+            <ContextMenu.Resources>
+                <local:MenuTextTemplateSelector x:Key="MenuTextTemplateSelector"/>
+                <Style TargetType="MenuItem">
+                    <Setter Property="HeaderTemplateSelector" Value="{StaticResource MenuTextTemplateSelector}"/>
+                    <EventSetter Event="SubmenuOpened" Handler="GroupedMenu_SubmenuOpened"/>
+                    <EventSetter Event="SubmenuOpened" Handler="SettingsMenuLayerChanged"/>
+                    <EventSetter Event="SubmenuClosed" Handler="SettingsMenuLayerChanged"/>
+                    <Setter Property="Foreground" Value="#F4FFFFFF"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Padding" Value="6,0"/>
+                    <Setter Property="Margin" Value="0"/>
+                    <Setter Property="MinHeight" Value="30"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="MenuItem">
+                                <Grid>
+                                    <Border x:Name="itemBackground" Background="{TemplateBinding Background}" CornerRadius="5" Padding="{TemplateBinding Padding}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="32"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="32"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border x:Name="checkBoxFrame" Grid.Column="0" Width="22" Height="22" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#20101012" BorderBrush="#78FFFFFF" BorderThickness="1.5" CornerRadius="3" Visibility="Collapsed">
+                                                <Border.RenderTransform>
+                                                    <TranslateTransform X="0"/>
+                                                </Border.RenderTransform>
+                                                <Path x:Name="checkMark" Width="13" Height="10" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="#F4FFFFFF" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="M 1,4 L 4,7 L 10,1" Visibility="Collapsed"/>
+                                            </Border>
+                                            <ContentPresenter Grid.Column="0" ContentSource="Icon" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <ContentPresenter Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True" Margin="16,0,0,0" VerticalAlignment="Center"/>
+                                            <TextBlock x:Name="submenuArrow" Grid.Column="2" Text="▶" FontSize="18" Margin="8,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                        </Grid>
+                                    </Border>
+                                    <Popup x:Name="PART_Popup" Placement="Right" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" AllowsTransparency="True" Focusable="False" PopupAnimation="Fade">
+                                        <Border Background="#FF191919" BorderBrush="#68645E" BorderThickness="1" CornerRadius="7" Padding="7">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                                        </Border>
+                                    </Popup>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsHighlighted" Value="True">
+                                        <Setter TargetName="itemBackground" Property="Background" Value="#32FFFFFF"/>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="checkMark" Property="Visibility" Value="Visible"/>
+                                        <Setter TargetName="checkBoxFrame" Property="Background" Value="#805A3B00"/>
+                                        <Setter TargetName="checkBoxFrame" Property="BorderBrush" Value="#FFFF8A00"/>
+                                    </Trigger>
+                                    <Trigger Property="IsCheckable" Value="True">
+                                        <Setter TargetName="checkBoxFrame" Property="Visibility" Value="Visible"/>
+                                    </Trigger>
+                                    <Trigger Property="HasItems" Value="True">
+                                        <Setter TargetName="submenuArrow" Property="Visibility" Value="Visible"/>
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Opacity" Value="0.62"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Foreground" Value="#F5FFFFFF"/>
+                    <Setter Property="Background" Value="#FF191919"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="CaretBrush" Value="White"/>
+                    <Setter Property="SelectionBrush" Value="#80629CD8"/>
+                </Style>
+                <Style TargetType="Button">
+                    <Setter Property="Foreground" Value="#F5FFFFFF"/>
+                    <Setter Property="Background" Value="#3AFFFFFF"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                </Style>
+                <Style x:Key="MenuActionButton" TargetType="Button"><Setter Property="ContentTemplateSelector" Value="{StaticResource ButtonTextTemplateSelector}"/>
+                    <Setter Property="Foreground" Value="#F5FFFFFF"/>
+                    <Setter Property="Background" Value="#4AFFFFFF"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Padding" Value="9,2"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="surface" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="surface" Property="Background" Value="#68FFFFFF"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="surface" Property="Background" Value="#82FFFFFF"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style x:Key="MenuHeaderLinkButton" TargetType="Button">
+                    <Setter Property="Foreground" Value="#F4FFFFFF"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Padding" Value="0,2"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="surface" Background="{TemplateBinding Background}" CornerRadius="5" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="surface" Property="Background" Value="#28FFFFFF"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="surface" Property="Background" Value="#42FFFFFF"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style x:Key="MenuSectionSeparator" TargetType="Separator">
+                    <Setter Property="Width" Value="468"/>
+                    <Setter Property="Height" Value="9"/>
+                    <Setter Property="Margin" Value="42,1,0,1"/>
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Separator">
+                                <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                                    <Border Height="1" VerticalAlignment="Center" Background="#48FFFFFF"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style x:Key="MenuIcon" TargetType="TextBlock">
+                    <Setter Property="Width" Value="30"/>
+                    <Setter Property="Margin" Value="0,0,9,0"/>
+                    <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+                    <Setter Property="FontSize" Value="{DynamicResource MenuActionFontSize}"/>
+                    <Setter Property="Foreground" Value="#E7E5DF"/>
+                    <Setter Property="TextAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style x:Key="BareMenuRow" TargetType="MenuItem">
+                    <Setter Property="StaysOpenOnClick" Value="True"/>
+                    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="MenuItem"><ContentPresenter ContentSource="Header"/></ControlTemplate></Setter.Value></Setter>
+                </Style>
+                <Style x:Key="InvisibleActionTarget" TargetType="Button">
+                    <Setter Property="Focusable" Value="False"/>
+                    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border Background="Transparent"/></ControlTemplate></Setter.Value></Setter>
+                </Style>
+                <Style x:Key="PositionActionButton" TargetType="Button">
+                    <Setter Property="Foreground" Value="White"/><Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Padding" Value="8,3"/><Setter Property="ContentTemplateSelector" Value="{StaticResource ButtonTextTemplateSelector}"/>
+                    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+                        <Border x:Name="face" CornerRadius="4" Background="{TemplateBinding Background}" BorderBrush="#50FFFFFF" BorderThickness="1" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
+                        <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="face" Property="Background" Value="#32FFFFFF"/><Setter TargetName="face" Property="BorderBrush" Value="{StaticResource ActionAccentBrush}"/></Trigger><Trigger Property="IsPressed" Value="True"><Setter TargetName="face" Property="Opacity" Value="0.7"/></Trigger></ControlTemplate.Triggers>
+                    </ControlTemplate></Setter.Value></Setter>
+                </Style>
+            </ContextMenu.Resources>
+
+            <MenuItem Style="{StaticResource BareMenuRow}" Margin="0,2,0,18">
+                <MenuItem.Header><Grid x:Name="menuHeaderGrid" Width="800"><Grid.ColumnDefinitions><ColumnDefinition Width="560"/><ColumnDefinition Width="240"/></Grid.ColumnDefinitions>
+                    <Grid x:Name="fitMonitorButtonsGrid" Width="560"><Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="120"/><ColumnDefinition Width="140"/><ColumnDefinition Width="140"/></Grid.ColumnDefinitions>
+                        <Button Content="Fit monitor" Margin="0,0,8,0" Height="40" Style="{StaticResource PositionActionButton}" Click="FitMonitorButton_Click"/>
+                        <Button Grid.Column="1" Content="Top" Margin="0,0,8,0" Height="40" Style="{StaticResource PositionActionButton}" Click="AlignTopButton_Click"/>
+                        <Button Grid.Column="2" Content="Bottom" Margin="0,0,8,0" Height="40" Style="{StaticResource PositionActionButton}" Click="AlignBottomButton_Click"/>
+                        <Button Grid.Column="3" Content="Restore" Margin="0,0,8,0" Height="40" Style="{StaticResource PositionActionButton}" Click="RestorePositionButton_Click"/>
+                    </Grid>
+                    <Button Grid.Column="1" x:Name="closeMenuItem" Content="Close program" Margin="10,0,0,0" Height="40" Background="#3E3E3E" Style="{StaticResource PositionActionButton}" Click="CloseMenuItem_Click"/>
+                </Grid></MenuItem.Header>
+            </MenuItem>
+                <MenuItem Click="ChooseModulesMenuItem_Click" Header="Modules layout…" x:Name="layoutMenuItem">
+                    <MenuItem.Icon>
+                        <TextBlock Text="" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="#E7E5DF"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            <MenuItem x:Name="musicModuleMenu" Header="Music">
+                <MenuItem Header="Wide player skin">
+            <MenuItem x:Name="powderBlackMusicFinishMenuItem" Header="Powder coated black" IsCheckable="True" IsChecked="True" StaysOpenOnClick="True" Tag="powder-black" Click="MusicFinish_Click"/>
+                    <MenuItem x:Name="darkMusicFinishMenuItem" Header="Dark metal" StaysOpenOnClick="True" IsCheckable="True" Tag="dark" Click="MusicFinish_Click"/>
+            <MenuItem x:Name="rustIronMusicFinishMenuItem" Header="Rust Iron" IsCheckable="True" StaysOpenOnClick="True" Tag="rust-iron" Click="MusicFinish_Click"/>
+            <MenuItem x:Name="brushedLightMusicFinishMenuItem" Header="Grey metal" IsCheckable="True" StaysOpenOnClick="True" Tag="brushed-light" Click="MusicFinish_Click"/>
+            <MenuItem x:Name="carbonMusicFinishMenuItem" Header="Carbon" IsCheckable="True" StaysOpenOnClick="True" Tag="carbon-fiber" Click="MusicFinish_Click"/>
+            <MenuItem x:Name="militarityMusicFinishMenuItem" Header="Militarity" IsCheckable="True" StaysOpenOnClick="True" Tag="militarity" Click="MusicFinish_Click"/>
+                    <MenuItem x:Name="lightMusicFinishMenuItem" Header="Light metal" StaysOpenOnClick="True" IsCheckable="True" Tag="light" Click="MusicFinish_Click"/>
+                </MenuItem>
+                <MenuItem x:Name="musicConsoleMenuItem" Header="BlakiDeck music console (this tab)" IsCheckable="True" IsChecked="True" Click="MusicConsoleMenuItem_Click"/>
+                <MenuItem Header="Source">
+                    <MenuItem.Icon>
+                        <TextBlock Text="" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="#E7E5DF"/>
+                    </MenuItem.Icon>
+                    <MenuItem x:Name="localServiceMenuItem" Header="Local player — requires Playlist" Tag="Local" IsCheckable="True" Click="MusicServiceMenuItem_Click"/>
+                    <MenuItem x:Name="spotifyServiceMenuItem" Header="Spotify" Tag="Spotify" IsCheckable="True" IsChecked="True" Click="MusicServiceMenuItem_Click"/>
+                    <MenuItem x:Name="tidalServiceMenuItem" Header="TIDAL" Tag="Tidal" IsCheckable="True" Click="MusicServiceMenuItem_Click"/>
+                    <MenuItem x:Name="deezerServiceMenuItem" Header="Deezer" Tag="Deezer" IsCheckable="True" Click="MusicServiceMenuItem_Click"/>
+                    <MenuItem x:Name="appleMusicServiceMenuItem" Header="Apple Music" Tag="AppleMusic" IsCheckable="True" Click="MusicServiceMenuItem_Click"/>
+                    <MenuItem x:Name="amazonMusicServiceMenuItem" Header="Amazon Music" Tag="AmazonMusic" IsCheckable="True" Click="MusicServiceMenuItem_Click"/>
+                    <MenuItem x:Name="musicBeeServiceMenuItem" Header="MusicBee" Tag="MusicBee" Visibility="Collapsed" IsCheckable="True" Click="MusicServiceMenuItem_Click"/>
+                </MenuItem>
+                <MenuItem Header="Auto dimming after playback stops" IsEnabled="False"/>
+                <MenuItem Header="10 s" Tag="10" IsCheckable="True" StaysOpenOnClick="True" Click="MusicDimDelay_Click"/>
+                <MenuItem Header="30 s" Tag="30" IsCheckable="True" StaysOpenOnClick="True" Click="MusicDimDelay_Click"/>
+                <MenuItem Header="2 min" Tag="120" IsCheckable="True" StaysOpenOnClick="True" Click="MusicDimDelay_Click"/>
+                <MenuItem Header="5 min" Tag="300" IsCheckable="True" StaysOpenOnClick="True" Click="MusicDimDelay_Click"/>
+            </MenuItem>
+            <MenuItem x:Name="applicationSettingsMenuItem" Header="Settings">
+                <Separator/>
+                <MenuItem Header="Reset layout…" Click="ResetLayout_Click"/>
+                <MenuItem Header="Full factory reset…" Click="FactoryReset_Click"/>
+            </MenuItem>
+            <MenuItem Header="Modules &amp; tabs">
+                <MenuItem x:Name="layoutTabCountMenuItem" Header="Tab count" SubmenuOpened="LayoutTabCountMenu_SubmenuOpened">
+                    <MenuItem.Icon><Path Stroke="White" StrokeThickness="1.4" StrokeLineJoin="Round" Data="M1,5 V18 H16 V5 Z M1,9 H16 M6,5 V9 M11,5 V9 M4,5 V2 H19 V15 H16"/></MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="showModuleTitlesMenuItem" Header="Show module titles" IsCheckable="True" IsChecked="True" StaysOpenOnClick="True" Click="ShowModuleTitlesMenuItem_Click"/>
+                <MenuItem x:Name="sensorsMenuItem" SubmenuOpened="SystemMonitorMenu_SubmenuOpened">
+                    <MenuItem.Icon>
+                        <TextBlock Text="" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="#E7E5DF"/>
+                    </MenuItem.Icon>
+                    <MenuItem.Header>
+                        <Grid x:Name="sensorsHeaderGrid" Width="412" Margin="4,0,0,0" HorizontalAlignment="Left">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Sensors" VerticalAlignment="Center"/>
+                                <TextBlock Text="SYS. MON." FontSize="11" FontWeight="Normal" Foreground="#88FFFFFF" Margin="9,3,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock x:Name="sensorsCountText" Grid.Column="1" Text="—/9" Foreground="#BFFFFFFF" Margin="12,0,0,0" VerticalAlignment="Center" TextAlignment="Right"/>
+                        </Grid>
+                    </MenuItem.Header>
+                    <MenuItem Header="Loading sensors…" IsEnabled="False"/>
+                </MenuItem>
+                <MenuItem Header="Shortcuts">
+                    <MenuItem x:Name="showShortcutNamesMenuItem" Header="Show shortcut names" IsCheckable="True" IsChecked="True" StaysOpenOnClick="True" Click="ShowShortcutNamesMenuItem_Click"/>
+                </MenuItem>
+                <MenuItem Header="Weather">
+                    <MenuItem x:Name="cityLocationMenuItem" StaysOpenOnClick="True">
+                        <MenuItem.Header>
+                            <Grid x:Name="cityRowGrid" Width="468">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="170"/>
+                                    <ColumnDefinition Width="220"/>
+                                    <ColumnDefinition Width="78"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="cityMenuLabel" Text="City" VerticalAlignment="Center"/>
+                                <TextBox x:Name="cityTextBox" Grid.Column="1" Height="32" Padding="10,2" FontSize="17" VerticalContentAlignment="Center" Background="#1CFFFFFF" BorderBrush="#60FFFFFF" BorderThickness="1" ToolTip="Enter a city, then choose Apply" KeyDown="CityTextBox_KeyDown"/>
+                                <Button x:Name="cityApplyButton" Content="Add" Grid.Column="2" Margin="8,1,0,1" Height="30" Style="{StaticResource MenuActionButton}" MinWidth="68" Padding="10,2" Click="ApplyCityButton_Click"/>
+                            </Grid>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem x:Name="coordinatesLocationMenuItem" StaysOpenOnClick="True">
+                        <MenuItem.Header>
+                            <Grid x:Name="coordinatesRowGrid" Width="468">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="170"/>
+                                    <ColumnDefinition Width="220"/>
+                                    <ColumnDefinition Width="78"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="coordinatesMenuLabel" Text="Coordinates" VerticalAlignment="Center"/>
+                                <TextBox x:Name="coordinatesTextBox" Grid.Column="1" Height="32" Padding="10,2" FontSize="17" VerticalContentAlignment="Center" Background="#1CFFFFFF" BorderBrush="#60FFFFFF" BorderThickness="1" ToolTip="Latitude, longitude" KeyDown="CoordinatesTextBox_KeyDown"/>
+                                <Button x:Name="coordinatesApplyButton" Content="Add" Grid.Column="2" Margin="8,1,0,1" Height="30" Style="{StaticResource MenuActionButton}" MinWidth="68" Padding="10,2" Click="ApplyCoordinatesButton_Click"/>
+                            </Grid>
+                        </MenuItem.Header>
+                    </MenuItem>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem x:Name="appearanceMenuItem" Header="Appearance">
+                <MenuItem StaysOpenOnClick="True" ToolTip="Only the background around the cards; 100% is fully transparent">
+                    <MenuItem.Header>
+                        <Grid x:Name="backgroundTransparencyRowGrid" Width="468">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="230"/><ColumnDefinition Width="170"/><ColumnDefinition Width="68"/></Grid.ColumnDefinitions>
+                            <local:OpticallyCenteredText InkAlignment="Left" TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" Text="Background transparency" VerticalAlignment="Stretch"/>
+                            <Slider x:Name="backgroundTransparencySlider" Grid.Column="1" Style="{StaticResource DashboardSlider}" Minimum="0" Maximum="100" TickFrequency="5" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" VerticalAlignment="Center" ValueChanged="BackgroundTransparency_Changed"/>
+                            <local:OpticallyCenteredText TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" x:Name="backgroundTransparencyValue" Grid.Column="2" Text="0%" Margin="8,0,0,0" InkAlignment="Right" VerticalAlignment="Stretch"/>
+                        </Grid>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem x:Name="opacityMenuItem" Margin="0,7,0,1" StaysOpenOnClick="True" ToolTip="UI opacity does not affect the music console">
+                    <MenuItem.Header>
+                        <Grid x:Name="opacityRowGrid" Width="468">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="78"/>
+                            </Grid.ColumnDefinitions>
+                            <local:OpticallyCenteredText InkAlignment="Left" TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" x:Name="txtOpacityMenuLabel" Text="UI opacity" VerticalAlignment="Stretch"/>
+                            <Slider x:Name="opacitySlider" Grid.Column="1" Style="{StaticResource DashboardSlider}" VerticalAlignment="Center" Minimum="60" Maximum="100" Value="100" TickFrequency="5" IsSnapToTickEnabled="True" ValueChanged="OpacitySlider_ValueChanged"/>
+                            <local:OpticallyCenteredText TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" x:Name="txtOpacityValue" Grid.Column="2" Text="100%" Margin="8,0,0,0" InkAlignment="Right" VerticalAlignment="Stretch"/>
+                        </Grid>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem StaysOpenOnClick="True">
+                    <MenuItem.Header>
+                        <Grid x:Name="menuSizeRowGrid" Width="468">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="78"/>
+                            </Grid.ColumnDefinitions>
+                            <local:OpticallyCenteredText InkAlignment="Left" TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" x:Name="menuSizeLabel" Text="Menu size" VerticalAlignment="Stretch"/>
+                            <Slider x:Name="menuSizeSlider" Grid.Column="1" local:SliderDefaults.Value="100" ToolTip="Default: 100%" Style="{StaticResource DashboardSlider}" VerticalAlignment="Center" Minimum="70" Maximum="150" Value="100" IsSnapToTickEnabled="False" IsMoveToPointEnabled="True" ValueChanged="MenuSizeSlider_ValueChanged"><Slider.Resources><SolidColorBrush x:Key="SliderRemainingTrackBrush" Color="#999999"/></Slider.Resources></Slider>
+                            <local:OpticallyCenteredText TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" x:Name="menuSizeValueText" Grid.Column="2" Text="100%" Margin="8,0,0,0" InkAlignment="Right" VerticalAlignment="Stretch"/>
+                        </Grid>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem StaysOpenOnClick="True"><MenuItem.Header>
+                    <Grid x:Name="menuTextRow" Width="367.2"><Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="142"/><ColumnDefinition Width="65"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Menu text size" VerticalAlignment="Center"/>
+                        <Slider x:Name="menuTextSlider" Grid.Column="1" Minimum="80" Maximum="200" Value="100" TickFrequency="1" IsSnapToTickEnabled="True" local:SliderDefaults.Value="100" Style="{StaticResource DashboardSlider}" ValueChanged="MenuTextSizeChanged"/>
+                        <TextBlock x:Name="menuTextValue" Grid.Column="2" Text="100%" Margin="8,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    </Grid>
+                </MenuItem.Header></MenuItem>                <MenuItem StaysOpenOnClick="True"><MenuItem.Header>
+                    <Grid x:Name="usageTextRow" Width="367.2"><Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="142"/><ColumnDefinition Width="65"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Usage text size" VerticalAlignment="Center"/>
+                        <Slider x:Name="usageTextSlider" Grid.Column="1" Minimum="80" Maximum="200" Value="100" TickFrequency="1" IsSnapToTickEnabled="True" local:SliderDefaults.Value="100" Style="{StaticResource DashboardSlider}" ValueChanged="MenuTextSizeChanged"/>
+                        <TextBlock x:Name="usageTextValue" Grid.Column="2" Text="100%" Margin="8,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    </Grid>
+                </MenuItem.Header></MenuItem>                <MenuItem x:Name="menuTextDefaultItem" StaysOpenOnClick="True"><MenuItem.Header><Button Content="Default" ToolTip="Reset menu and usage text sizes; keep Menu size" Style="{StaticResource PositionActionButton}" HorizontalAlignment="Left" Padding="12,3" Click="ResetMenuTextSizes"/></MenuItem.Header></MenuItem>
+                <Separator x:Name="appearanceSectionSeparator" Style="{StaticResource MenuSectionSeparator}"/>
+                <MenuItem x:Name="autoDimMenuItem" Header="Dim after 10 s of inactivity" IsCheckable="True" StaysOpenOnClick="True" Click="AutoDimMenuItem_Click"/>
+                <MenuItem StaysOpenOnClick="True" ToolTip="Brightness level while dimmed after inactivity">
+                    <MenuItem.Header>
+                        <Grid x:Name="dimLevelRowGrid" Width="468">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="68"/>
+                            </Grid.ColumnDefinitions>
+                            <local:OpticallyCenteredText InkAlignment="Left" TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" Text="Dimmed level" VerticalAlignment="Stretch"/>
+                            <Slider x:Name="autoDimLevelSlider" Style="{StaticResource DashboardSlider}" VerticalAlignment="Center" Minimum="20" Maximum="70" Value="70" IsMoveToPointEnabled="True" IsSnapToTickEnabled="False" ValueChanged="AutoDimLevelSlider_ValueChanged" Grid.Column="1"/>
+                            <local:OpticallyCenteredText TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" x:Name="autoDimLevelValueText" Grid.Column="2" Text="70%" Margin="8,0,0,0" InkAlignment="Right" VerticalAlignment="Stretch"/>
+                        </Grid>
+                    </MenuItem.Header>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem x:Name="powderBlackPanelMetalMenu" Header="Powder coated black" IsCheckable="True" StaysOpenOnClick="True" Tag="powder-black" Click="PanelMetal_Click"/>
+            <MenuItem x:Name="darkPanelMetalMenu" Header="Dark metal" IsCheckable="True" StaysOpenOnClick="True" Tag="dark" Click="PanelMetal_Click"/>
+            <MenuItem x:Name="rustIronPanelMetalMenu" Header="Rust Iron" IsCheckable="True" StaysOpenOnClick="True" Tag="rust-iron" Click="PanelMetal_Click"/>
+            <MenuItem x:Name="brushedLightPanelMetalMenu" Header="Grey metal" IsCheckable="True" StaysOpenOnClick="True" Tag="brushed-light" Click="PanelMetal_Click"/>
+            <MenuItem x:Name="carbonPanelMetalMenu" Header="Carbon" IsCheckable="True" StaysOpenOnClick="True" Tag="carbon-fiber" Click="PanelMetal_Click"/>
+            <MenuItem x:Name="militarityPanelMetalMenu" Header="Militarity" IsCheckable="True" StaysOpenOnClick="True" Tag="militarity" Click="PanelMetal_Click"/>
+            <MenuItem x:Name="lightPanelMetalMenu" Header="Light metal" IsCheckable="True" StaysOpenOnClick="True" Tag="light" Click="PanelMetal_Click"/>
+            <MenuItem Header="Window">
+                <MenuItem x:Name="alwaysOnTopMenuItem" Header="Always on top" IsCheckable="True" StaysOpenOnClick="True" Click="AlwaysOnTopMenuItem_Click"/>
+                <MenuItem Header="System controls">
+                    <MenuItem x:Name="showClockMenuItem" Header="Clock" IsCheckable="True" StaysOpenOnClick="True" Click="TopBarControlVisibility_Click"/>
+                    <MenuItem x:Name="showSleepMenuItem" Header="Sleep" IsCheckable="True" StaysOpenOnClick="True" Click="TopBarControlVisibility_Click"/>
+                    <MenuItem x:Name="showShutdownMenuItem" Header="Shut down" IsCheckable="True" StaysOpenOnClick="True" Click="TopBarControlVisibility_Click"/>
+                    <MenuItem x:Name="showRestartMenuItem" Header="Restart" IsCheckable="True" StaysOpenOnClick="True" Click="TopBarControlVisibility_Click"/>
+                    <Separator/>
+                    <MenuItem Header="Sleep action">
+                        <MenuItem x:Name="sleepMonitorMenuItem" Header="Sleep monitor" IsCheckable="True" StaysOpenOnClick="True" Click="SleepModeMenuItem_Click"/>
+                        <MenuItem x:Name="sleepPcMenuItem" Header="Sleep PC" IsCheckable="True" StaysOpenOnClick="True" Click="SleepModeMenuItem_Click"/>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="OBS controls">
+                    <MenuItem x:Name="showObsRecordMenuItem" Header="OBS REC" IsCheckable="True" StaysOpenOnClick="True" Click="ObsControlVisibility_Click"/>
+                    <MenuItem x:Name="showObsBufferMenuItem" Header="OBS BUFFER" IsCheckable="True" StaysOpenOnClick="True" Click="ObsControlVisibility_Click"/>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Web">
+                <MenuItem x:Name="webImagesOnlyMenuItem" Header="Show images only" ToolTip="Web shortcut cards" IsCheckable="True" StaysOpenOnClick="True" Click="WebImagesOnlyMenuItem_Click"/>
+                <MenuItem x:Name="autoDashHideMenuItem" Header="Auto-hide all bars" ToolTip="Only for active Web. Tap the page to show both bars." IsCheckable="True" StaysOpenOnClick="True" Click="AutoDashHideMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem x:Name="monitorControlsMenuItem" Header="Display" SubmenuOpened="MonitorControlsMenuItem_SubmenuOpened" SubmenuClosed="MonitorControlsMenuItem_SubmenuClosed" ToolTip="Hardware monitor controls">
+                <MenuItem x:Name="monitorBrightnessMenuItem" IsEnabled="False" StaysOpenOnClick="True">
+                    <MenuItem.Header>
+                        <Grid Width="420" Height="38">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="105"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="84"/>
+                            </Grid.ColumnDefinitions>
+                            <local:OpticallyCenteredText InkAlignment="Left" TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" Text="Brightness" VerticalAlignment="Stretch"/>
+                            <Slider x:Name="monitorBrightnessSlider" Grid.Column="1" Minimum="0" Maximum="100" Value="50" Margin="8,0" VerticalAlignment="Center" IsMoveToPointEnabled="True" ValueChanged="MonitorBrightnessSlider_ValueChanged"/>
+                            <local:OpticallyCenteredText TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" x:Name="monitorBrightnessValue" Grid.Column="2" Text="N/A" InkAlignment="Right" VerticalAlignment="Stretch"/>
+                        </Grid>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem x:Name="monitorContrastMenuItem" IsEnabled="False" StaysOpenOnClick="True">
+                    <MenuItem.Header>
+                        <Grid Width="420" Height="38">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="105"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="84"/>
+                            </Grid.ColumnDefinitions>
+                            <local:OpticallyCenteredText InkAlignment="Left" TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" Text="Contrast" VerticalAlignment="Stretch"/>
+                            <Slider x:Name="monitorContrastSlider" Grid.Column="1" Minimum="0" Maximum="100" Value="50" Margin="8,0" VerticalAlignment="Center" IsMoveToPointEnabled="True" ValueChanged="MonitorContrastSlider_ValueChanged"/>
+                            <local:OpticallyCenteredText TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" x:Name="monitorContrastValue" Grid.Column="2" Text="N/A" InkAlignment="Right" VerticalAlignment="Stretch"/>
+                        </Grid>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem x:Name="monitorColorTemperatureMenuItem" IsEnabled="False" StaysOpenOnClick="True">
+                    <MenuItem.Header>
+                        <Grid Width="420" Height="38">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="105"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="84"/>
+                            </Grid.ColumnDefinitions>
+                            <local:OpticallyCenteredText InkAlignment="Left" TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" Text="Color temp." VerticalAlignment="Stretch"/>
+                            <Slider x:Name="monitorColorTemperatureSlider" Grid.Column="1" Minimum="1" Maximum="8" Value="3" TickFrequency="1" IsSnapToTickEnabled="True" Margin="8,0" VerticalAlignment="Center" IsMoveToPointEnabled="True" ValueChanged="MonitorColorTemperatureSlider_ValueChanged"/>
+                            <local:OpticallyCenteredText TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" x:Name="monitorColorTemperatureValue" Grid.Column="2" Text="N/A" InkAlignment="Right" VerticalAlignment="Stretch"/>
+                        </Grid>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem x:Name="monitorHueMenuItem" IsEnabled="False" StaysOpenOnClick="True">
+                    <MenuItem.Header>
+                        <Grid Width="420" Height="38">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="105"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="84"/>
+                            </Grid.ColumnDefinitions>
+                            <local:OpticallyCenteredText InkAlignment="Left" TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" Text="Hue" VerticalAlignment="Stretch"/>
+                            <Slider x:Name="monitorHueSlider" Grid.Column="1" Minimum="0" Maximum="100" Value="50" Margin="8,0" VerticalAlignment="Center" IsMoveToPointEnabled="True" ValueChanged="MonitorHueSlider_ValueChanged"/>
+                            <local:OpticallyCenteredText TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" x:Name="monitorHueValue" Grid.Column="2" Text="N/A" InkAlignment="Right" VerticalAlignment="Stretch"/>
+                        </Grid>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem x:Name="monitorSaturationMenuItem" IsEnabled="False" StaysOpenOnClick="True">
+                    <MenuItem.Header>
+                        <Grid Width="420" Height="38">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="105"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="84"/>
+                            </Grid.ColumnDefinitions>
+                            <local:OpticallyCenteredText InkAlignment="Left" TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" Text="Saturation" VerticalAlignment="Stretch"/>
+                            <Slider x:Name="monitorSaturationSlider" Grid.Column="1" Minimum="0" Maximum="100" Value="50" Margin="8,0" VerticalAlignment="Center" IsMoveToPointEnabled="True" ValueChanged="MonitorSaturationSlider_ValueChanged"/>
+                            <local:OpticallyCenteredText TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextFontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=MenuItem}}" TextBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" x:Name="monitorSaturationValue" Grid.Column="2" Text="N/A" InkAlignment="Right" VerticalAlignment="Stretch"/>
+                        </Grid>
+                    </MenuItem.Header>
+                </MenuItem>
+                    <MenuItem Header="Change wallpaper" ToolTip="Only for the monitor containing BlakiDeck." Click="ChangeWallpaperMenuItem_Click"><MenuItem.Icon><TextBlock Text="&#xEB9F;" FontFamily="Segoe MDL2 Assets" FontSize="20"/></MenuItem.Icon></MenuItem>
+            </MenuItem>
+            <MenuItem Header="About" Click="AboutMenuItem_Click"><MenuItem.Icon><TextBlock Text="&#xE946;" FontFamily="Segoe MDL2 Assets" FontSize="20"/></MenuItem.Icon></MenuItem>
+            <MenuItem x:Name="helpMenuRow" Style="{StaticResource BareMenuRow}">
+                <MenuItem.Header>
+                    <Grid Width="{Binding ActualWidth, ElementName=menuHeaderGrid}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Height="40" Margin="0,0,8,0" Style="{StaticResource MenuHeaderLinkButton}" Click="HelpMenuItem_Click">
+                            <Grid Margin="6,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="32"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="&#xE897;" FontFamily="Segoe MDL2 Assets" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/><local:OpticallyCenteredText Grid.Column="1" Text="Help" Margin="16,0,0,0" TextFontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=Button}}" TextFontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=Button}}" TextFontWeight="SemiBold" TextBrush="White"/></Grid>
+                        </Button>
+                        <Button x:Name="uninstallMenuButton" Grid.Column="1" Content="Uninstall" Height="40" MinWidth="140" Margin="0" Padding="8,3" Style="{StaticResource PositionActionButton}" Click="UninstallMenuItem_Click"/>
+                    </Grid>
+                </MenuItem.Header>
+            </MenuItem>
+            <Separator x:Name="weatherSectionSeparator" Visibility="Collapsed" Style="{StaticResource MenuSectionSeparator}"/>
+
+            <Separator x:Name="systemSectionSeparator" Visibility="Collapsed" Style="{StaticResource MenuSectionSeparator}"/>
+                <MenuItem x:Name="telemetryDetailsMenuItem" Style="{StaticResource BareMenuRow}" Margin="0,18,0,0">
+                    <MenuItem.Header>
+                        <Grid x:Name="telemetryDetailsGrid" Width="800">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="590*"/><ColumnDefinition Width="210*"/></Grid.ColumnDefinitions>
+                            <StackPanel Margin="0,0,16,0">
+                                <TextBlock x:Name="programUsageTitle" Text="Program usage" FontSize="12" FontWeight="Normal" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                                <TextBlock x:Name="telemetryDetailsText" Visibility="Collapsed"/>
+                                <Viewbox x:Name="menuUsageViewport" HorizontalAlignment="Left" Stretch="Uniform" StretchDirection="Both"><local:UsageTelemetryView x:Name="menuUsageView" SingleRow="True" MinHeight="24"/></Viewbox>
+                            </StackPanel>
+                            <Button Grid.Column="1" Content="&#x2615;  Buy me a coffee" FontSize="{DynamicResource MenuCoffeeFontSize}" Margin="0,18,0,0" Height="38" Style="{StaticResource PositionActionButton}" Click="BuyMeACoffeeMenuItem_Click"/>
+                        </Grid>
+                    </MenuItem.Header>
+                </MenuItem>
+        </ContextMenu>
+    </Window.ContextMenu>
+
+
+    
+
+
+    <Grid ClipToBounds="True" Background="#01000000">
+        <ContentControl x:Name="dashboardHost">
+        <Viewbox x:Name="dashboardViewbox"
+             PreviewMouseRightButtonDown="DashboardViewbox_PreviewMouseRightButtonDown"
+             PreviewMouseRightButtonUp="DashboardViewbox_PreviewMouseRightButtonUp"
+             Stretch="Uniform"
+             StretchDirection="Both"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch">
+        <Grid x:Name="dashboardCanvas"
+              Width="1920"
+              Height="560">
+            <Border x:Name="dashboardBackdrop" Margin="10" CornerRadius="20"
+                    Background="{DynamicResource DashboardBackdropBrush}"/>
+            <Border x:Name="dashboardContentFrame" Margin="10"
+                    Background="#01000000"
+                    CornerRadius="20">
+
+                <Grid LayoutUpdated="DashboardGrid_LayoutUpdated">
+                    <Grid.RowDefinitions>
+                        <RowDefinition x:Name="musicTopBarRow" Height="104"/>
+                        <RowDefinition x:Name="moduleGapRow" Height="9"/>
+                        <RowDefinition x:Name="widgetsRow" Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <local:QuickLaunchBar x:Name="quickLaunchBar" Grid.Row="0"
+                                          CompactModeRequested="QuickLaunchBar_CompactModeRequested"/>
+
+                    <Grid x:Name="widgetsGrid" Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ContentControl x:Name="leftModuleHost" Grid.Column="0">
+                            <local:SpotifyWidget x:Name="spotifyWidget"/>
+                        </ContentControl>
+
+                        <ContentControl x:Name="centerModuleHost" Grid.Column="2">
+                            <local:OBSWidget x:Name="obsWidget"/>
+                        </ContentControl>
+
+                        <ContentControl x:Name="rightModuleHost" Grid.Column="4">
+                            <local:WeatherWidget x:Name="weatherWidget"/>
+                        </ContentControl>
+                        <ContentControl x:Name="musicConsoleHost" Grid.Column="0" Grid.ColumnSpan="5"
+                                        Panel.ZIndex="20" Visibility="Collapsed"/>
+                        <ContentControl x:Name="wideShortcutsHost" Grid.Column="0" Grid.ColumnSpan="3"
+                                        Visibility="Collapsed"/>
+                    </Grid>
+
+                </Grid>
+            </Border>
+            <Border x:Name="autoDimOverlay"
+                    Panel.ZIndex="10000"
+                    Background="Black"
+                    Opacity="0"
+                    IsHitTestVisible="False"/>
+        </Grid>
+    </Viewbox>
+        </ContentControl>
+    </Grid>
+</Window>
+
+
+
+
+
+
+

@@ -1,0 +1,76 @@
+BlakiDeck — trečiųjų šalių komponentai
+
+Bibliotekos nepakeistos. Licencijų tekstai pateikti aplankuose Licenses ir Assets/Fonts. MPL licencijomis saugomą pirminį kodą galima gauti toliau nurodytomis tikslių versijų nuorodomis (saugykloje pasirinkite Download ZIP). Originalūs licencijų tekstai palikti jų originalo kalba.
+
+BlackSharp.Core/1.1.3 | BlackSharp.Core | MPL-2.0
+Pirminis kodas: https://github.com/Blacktempel/BlackSharp/tree/36163ef6eecef78e9392f07c21c4bf543963b3f7
+
+DiskInfoToolkit/2.1.2 | DiskInfoToolkit | MPL-2.0
+Pirminis kodas: https://github.com/Blacktempel/DiskInfoToolkit/tree/611afafbfe9535ed5380ad6a195ed6c633270297
+
+HidSharp/2.6.4 | James F. Bellinger | LICENSE.txt
+
+LibreHardwareMonitorLib/0.9.7-pre709 | LibreHardwareMonitorLib | MPL-2.0
+Pirminis kodas: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/tree/0ee5fec89915454c8cc68c571f2c54cdced08ad9
+
+Microsoft.Web.WebView2/1.0.4078.44 | Microsoft | LICENSE.txt
+
+PawnIO/2.2.0 | namazso | atskirai įdiegiama sensorių tvarkyklė
+Darbalaukio diegiklyje pateikiamas nepakeistas, pasirašytas oficialus PawnIO diegiklis. Jo platinimo sąlygos: Licenses/PawnIO-2.2.0-INSTALLER-NOTICE.txt. Tvarkyklės pirminio kodo licencija yra GPL-2.0-or-later su bendravimo per įrenginio IO valdymo sąsają išimtimi; žr. Licenses/PawnIO-2.2.0-SOURCE-LICENSE.txt ir PawnIO-2.2.0-COPYING.txt.
+Oficialus diegiklis: https://github.com/namazso/PawnIO.Setup/releases/tag/2.2.0
+Pirminis kodas: https://github.com/namazso/PawnIO/tree/5cdf470831fdfff3f7f1d06363ca6b230f3bf35a
+
+Mono.Posix.NETStandard/1.0.0 | Microsoft | Licenses/Mono-Posix.txt
+
+NAudio/3.0.0-preview.19 | Mark Heath & Contributors | MIT
+Pirminis kodas: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.Asio/3.0.0-preview.19 | Mark Heath | MIT
+Pirminis kodas: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.Core/3.0.0-preview.19 | Mark Heath | MIT
+Pirminis kodas: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.Dmo/3.0.0-preview.19 | Mark Heath | MIT
+Pirminis kodas: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.Midi/3.0.0-preview.19 | Mark Heath | MIT
+Pirminis kodas: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.Wasapi/3.0.0-preview.19 | Mark Heath | MIT
+Pirminis kodas: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.WinForms/3.0.0-preview.19 | Mark Heath | MIT
+Pirminis kodas: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.WinMM/3.0.0-preview.19 | Mark Heath | MIT
+Pirminis kodas: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+RAMSPDToolkit-NDD/1.5.0 | RAMSPDToolkit-NDD | MPL-2.0
+Pirminis kodas: https://github.com/Blacktempel/RAMSPDToolkit/tree/713038f919d85397214e17644d78534dc15a2fd2
+
+System.IO.FileSystem.AccessControl/5.0.0 | Microsoft | MIT
+Pirminis kodas: https://github.com/dotnet/runtime/tree/cf258a14b70ad9069470a108f13765e0e5988f51
+
+System.IO.Ports/10.0.9 | Microsoft | MIT
+Pirminis kodas: https://github.com/dotnet/dotnet/tree/901ca941248413c79832d2fdbd709da0c4386353
+
+System.Management/10.0.9 | Microsoft | MIT
+Pirminis kodas: https://github.com/dotnet/dotnet/tree/901ca941248413c79832d2fdbd709da0c4386353
+
+System.Numerics.Tensors/9.0.0 | Microsoft | MIT
+Pirminis kodas: https://github.com/dotnet/runtime/tree/9d5a6a9aa463d6d10b0b0ba6d5982cc82f363dc3
+
+.NET ir Windows Desktop vykdymo aplinkos 10.0.10: Microsoft ir .NET kūrėjai, MIT licencija su pridėtais trečiųjų šalių pranešimais.
+Mono.Posix.NETStandard 1.0.0: Microsoft/Mono kūrėjai, žr. Mono-Posix.txt (paketo licencijos adresas https://go.microsoft.com/fwlink/?linkid=869050).
+Šriftai: žr. Assets/Fonts/*OFL.txt.
+WebView2 Runtime: Microsoft platinamas komponentas; oficialus atskiras diegiklis įtrauktas į diegimo paketą. https://developer.microsoft.com/microsoft-edge/webview2/
+
+Duomenys, atvaizdai ir paslaugų pavadinimai
+Orų duomenys: Open-Meteo, https://open-meteo.com/ — CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ . BlakiDeck parenka, formatuoja ir apvalina rodmenis. Vietovių paieška: GeoNames, https://www.geonames.org/ , per Open-Meteo. Atvirkštinė koordinačių paieška: Photon by komoot, https://photon.komoot.io/ , naudojant OpenStreetMap bendradarbių duomenis, https://www.openstreetmap.org/copyright . Tai nereiškia partnerystės ar rekomendavimo.
+Nemokamai Open-Meteo API taikomos atskiros nekomercinio naudojimo ir užklausų dažnio sąlygos: https://open-meteo.com/en/terms . BlakiDeck licencija nesuteikia teisių į trečiųjų šalių paslaugas. Teikėjas leidžia savanorišką paramą; komerciniam API naudojimui reikia atitinkamo susitarimo su teikėju.
+
+Skinų paveikslėliai yra galutiniai atvaizdai, o ne platinama redaguojama BlenderKit medžiagų biblioteka. BlenderKit / Blendkit CC0 ir Royalty Free sąlygos: https://www.blenderkit.com/docs/licenses/ . Užfiksuotos medžiagos: Carbon Fiber Shader, autorius Heydar Moheiseni (244f5609-0b92-4992-8099-aaa47181c837), Dirty glass, autorius ydd 3D (f12184d0-483a-4dd3-8415-d862a4cc3552), Metal Engraved Dark Demon Skull (5066d87e-f914-4e83-8e1b-8444512d3436) ir Scratched glass (43667c25-d111-4c24-94b9-86cda4094af1).
+Įtrauktas numatytąsias ikonas Blakiukas sukūrė paveikslėlių generatoriumi. Produktų bei paslaugų pavadinimai ir logotipai priklauso atitinkamiems savininkams ir nurodo integracijas; jie nereiškia rėmimo. Šis pranešimas nesuteikia teisių į trečiųjų šalių prekių ženklus.
+
+Windows Desktop pranešimai WPF ir Windows Forms 10.0.10 pateikti atskirai aplanke Licenses. Pirminis kodas: https://github.com/dotnet/wpf/tree/v10.0.10 ir https://github.com/dotnet/winforms/tree/v10.0.10 .

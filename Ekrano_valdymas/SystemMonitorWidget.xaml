@@ -1,0 +1,66 @@
+<UserControl x:Class="Ekrano_valdymas.SystemMonitorWidget"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Ekrano_valdymas">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+    </UserControl.Resources>
+    <Border local:CommonMetal.Surface="True" Background="{DynamicResource PanelMetalBrush}"
+            BorderBrush="#40FFFFFF" BorderThickness="1.5" CornerRadius="18" Padding="22">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="1"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Grid Width="36" Height="36" Margin="0,0,12,0">
+                        <local:OpticallyCenteredText Text="&#xE8B2;" TextFontFamily="Segoe MDL2 Assets" TextFontSize="25" TextFontWeight="Normal"
+                                   TextBrush="{DynamicResource SystemMonitorBrush}"/>
+                    </Grid>
+                    <local:OpticallyCenteredText Tag="ModuleTitle" Text="SYSTEM MONITOR" TextBrush="{DynamicResource ModuleTitleBrush}"
+                               TextFontFamily="{StaticResource TekoFont}" TextFontSize="27"
+                               TextFontWeight="Bold" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <StackPanel x:Name="presetButtons" Orientation="Horizontal" Margin="8,0,8,0"/>
+                    <TextBlock x:Name="monitorDragHint" Text="DRAG TO REORDER" Foreground="{DynamicResource PanelTextBrush}" FontSize="10" FontWeight="SemiBold" VerticalAlignment="Center" Margin="6,0,10,0" Visibility="Collapsed"/>
+                    <Button x:Name="pcInformationButton" Width="38" Height="36" Padding="0" Margin="0,0,6,0"
+                            Style="{StaticResource ModuleOptionsButtonStyle}" VerticalAlignment="Center"
+                            Tag="NoWindowDrag" ToolTip="PC specifications" AutomationProperties.Name="PC specifications"
+                            Click="PcInformation_Click">
+                        <local:OpticallyCenteredText Text="&#xE946;" TextFontFamily="Segoe MDL2 Assets" TextFontSize="20"
+                            Width="20" Height="20" TextBrush="{DynamicResource PanelTextBrush}" IsHitTestVisible="False"/>
+                    </Button>
+                    <local:ModuleOptionsButton/>
+                </StackPanel>
+            </Grid>
+            <Border Grid.Row="1" Background="{DynamicResource PanelDividerBrush}"/>
+            <ItemsControl x:Name="monitorCells" Grid.Row="2" Background="Transparent" AllowDrop="True" DragOver="FreeSpace_DragOver" Drop="FreeSpace_Drop" ItemsSource="{Binding ActiveSlots, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                          Margin="0,12,0,0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate><local:MonitorSlotsPanel Custom="{Binding GridLayout, RelativeSource={RelativeSource AncestorType={x:Type local:SystemMonitorWidget}}}" Sections="{Binding SectionLayout, RelativeSource={RelativeSource AncestorType={x:Type local:SystemMonitorWidget}}}" Wide="{Binding WideLayout, RelativeSource={RelativeSource AncestorType={x:Type local:SystemMonitorWidget}}}"/></ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="5" Background="{DynamicResource ModuleCardSurfaceBrush}" CornerRadius="12"
+                                BorderBrush="#28FFFFFF" BorderThickness="1" Cursor="Hand"
+                                AllowDrop="True" ToolTip="Drag to exchange; right-click for sensor and graph options; wheel to zoom; double-click to reset"
+                                LostTouchCapture="Metric_LostTouchCapture" PreviewTouchDown="Metric_TouchDown" PreviewTouchMove="Metric_TouchMove" PreviewTouchUp="Metric_TouchUp"
+                                PreviewMouseLeftButtonDown="Metric_PreviewMouseLeftButtonDown"
+                                LostMouseCapture="Metric_LostMouseCapture" PreviewMouseMove="Metric_PreviewMouseMove" PreviewMouseLeftButtonUp="Metric_PreviewMouseLeftButtonUp"
+                                DragEnter="Metric_DragEnter" DragOver="Metric_DragEnter" DragLeave="Metric_DragLeave" Drop="Metric_Drop"
+                                MouseRightButtonUp="Metric_MouseRightButtonUp">
+                            <local:SensorTile Slot="{Binding}"/>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </Border>
+</UserControl>

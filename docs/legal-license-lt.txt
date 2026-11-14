@@ -1,0 +1,13 @@
+MIT licencija
+
+Autorių teisės (c) 2026 Blakiukas
+
+Šis lietuviškas tekstas skirtas paaiškinimui. Taikomas originalus MIT licencijos tekstas anglų kalba, pateiktas LICENSE.txt.
+
+Kiekvienam asmeniui, gavusiam šios programinės įrangos ir susijusių dokumentų („Programinės įrangos“) kopiją, nemokamai suteikiamas leidimas be apribojimų naudoti Programinę įrangą, įskaitant teises naudoti, kopijuoti, keisti, sujungti, skelbti, platinti, sublicencijuoti ir (arba) parduoti Programinės įrangos kopijas bei leisti tai daryti asmenims, kuriems Programinė įranga pateikiama, laikantis šios sąlygos:
+
+Pirmiau pateiktas autorių teisių pranešimas ir šis leidimo pranešimas turi būti įtraukti į visas Programinės įrangos kopijas arba esmines jos dalis.
+
+PROGRAMINĖ ĮRANGA PATEIKIAMA „TOKIA, KOKIA YRA“, BE JOKIŲ AIŠKIŲ AR NUMANOMŲ GARANTIJŲ, ĮSKAITANT GARANTIJAS DĖL TINKAMUMO PREKYBAI, TINKAMUMO KONKREČIAM TIKSLUI IR TEISIŲ NEPAŽEIDIMO. AUTORIAI AR AUTORIŲ TEISIŲ TURĖTOJAI JOKIU ATVEJU NEATSAKO UŽ REIKALAVIMUS, ŽALĄ AR KITĄ ATSAKOMYBĘ, KYLANČIĄ IŠ SUTARTIES, DELIKTO AR KITAIP, SUSIJUSIĄ SU PROGRAMINE ĮRANGA, JOS NAUDOJIMU AR KITAIS VEIKSMAIS SU JA.
+
+Trečiųjų šalių komponentams taikomos jų pačių licencijos; žr. THIRD-PARTY-NOTICES.txt.

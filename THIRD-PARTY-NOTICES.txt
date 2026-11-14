@@ -1,0 +1,75 @@
+BlakiDeck - third-party components. Libraries are unmodified. License texts are in Licenses and Assets/Fonts. MPL-covered source can be obtained at the exact commit URLs below (use the repository Download ZIP option).
+
+BlackSharp.Core/1.1.3 | BlackSharp.Core | MPL-2.0
+Source: https://github.com/Blacktempel/BlackSharp/tree/36163ef6eecef78e9392f07c21c4bf543963b3f7
+
+DiskInfoToolkit/2.1.2 | DiskInfoToolkit | MPL-2.0
+Source: https://github.com/Blacktempel/DiskInfoToolkit/tree/611afafbfe9535ed5380ad6a195ed6c633270297
+
+HidSharp/2.6.4 | James F. Bellinger | LICENSE.txt
+
+LibreHardwareMonitorLib/0.9.7-pre709 | LibreHardwareMonitorLib | MPL-2.0
+Source: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/tree/0ee5fec89915454c8cc68c571f2c54cdced08ad9
+
+Microsoft.Web.WebView2/1.0.4078.44 | Microsoft | LICENSE.txt
+
+PawnIO/2.2.0 | namazso | separately installed sensor driver
+The desktop installer includes the unmodified, signed official PawnIO installer. Its redistribution notice is in Licenses/PawnIO-2.2.0-INSTALLER-NOTICE.txt. The driver source license is GPL-2.0-or-later with the device-IO-control exception; see Licenses/PawnIO-2.2.0-SOURCE-LICENSE.txt and PawnIO-2.2.0-COPYING.txt.
+Official installer: https://github.com/namazso/PawnIO.Setup/releases/tag/2.2.0
+Source: https://github.com/namazso/PawnIO/tree/5cdf470831fdfff3f7f1d06363ca6b230f3bf35a
+
+Mono.Posix.NETStandard/1.0.0 | Microsoft | Licenses/Mono-Posix.txt
+
+NAudio/3.0.0-preview.19 | Mark Heath & Contributors | MIT
+Source: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.Asio/3.0.0-preview.19 | Mark Heath | MIT
+Source: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.Core/3.0.0-preview.19 | Mark Heath | MIT
+Source: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.Dmo/3.0.0-preview.19 | Mark Heath | MIT
+Source: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.Midi/3.0.0-preview.19 | Mark Heath | MIT
+Source: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.Wasapi/3.0.0-preview.19 | Mark Heath | MIT
+Source: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.WinForms/3.0.0-preview.19 | Mark Heath | MIT
+Source: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+NAudio.WinMM/3.0.0-preview.19 | Mark Heath | MIT
+Source: https://github.com/naudio/NAudio/tree/6def00b5a41a7904f3b104eda8f92a1c59be7e5a
+
+RAMSPDToolkit-NDD/1.5.0 | RAMSPDToolkit-NDD | MPL-2.0
+Source: https://github.com/Blacktempel/RAMSPDToolkit/tree/713038f919d85397214e17644d78534dc15a2fd2
+
+System.IO.FileSystem.AccessControl/5.0.0 | Microsoft | MIT
+Source: https://github.com/dotnet/runtime/tree/cf258a14b70ad9069470a108f13765e0e5988f51
+
+System.IO.Ports/10.0.9 | Microsoft | MIT
+Source: https://github.com/dotnet/dotnet/tree/901ca941248413c79832d2fdbd709da0c4386353
+
+System.Management/10.0.9 | Microsoft | MIT
+Source: https://github.com/dotnet/dotnet/tree/901ca941248413c79832d2fdbd709da0c4386353
+
+System.Numerics.Tensors/9.0.0 | Microsoft | MIT
+Source: https://github.com/dotnet/runtime/tree/9d5a6a9aa463d6d10b0b0ba6d5982cc82f363dc3
+
+.NET runtime and Windows Desktop runtime 10.0.10: Microsoft and .NET contributors, MIT with included third-party notices.
+Mono.Posix.NETStandard 1.0.0: Microsoft/Mono contributors, see Mono-Posix.txt (package license URL https://go.microsoft.com/fwlink/?linkid=869050).
+Fonts: see Assets/Fonts/*OFL.txt.
+WebView2 Runtime: Microsoft redistributable, official standalone installer bundled with setup. https://developer.microsoft.com/microsoft-edge/webview2/
+
+
+Data, rendered artwork and service names
+Weather data: Open-Meteo, https://open-meteo.com/ — CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ . BlakiDeck selects, formats and rounds readings. Location search: GeoNames, https://www.geonames.org/ , through Open-Meteo. Reverse geocoding: Photon by komoot, https://photon.komoot.io/ , using OpenStreetMap contributors' data, https://www.openstreetmap.org/copyright . No affiliation or endorsement is implied.
+The Open-Meteo free API has separate non-commercial-use and rate-limit conditions: https://open-meteo.com/en/terms . A BlakiDeck license does not grant rights to third-party services. Voluntary donations are permitted by the provider; commercial API use requires an appropriate provider arrangement.
+
+Skin images are finished renders, not a redistribution of the editable BlenderKit material library. BlenderKit / Blendkit CC0 and Royalty Free terms: https://www.blenderkit.com/docs/licenses/ . Recorded materials include Carbon Fiber Shader by Heydar Moheiseni (244f5609-0b92-4992-8099-aaa47181c837), Dirty glass by ydd 3D (f12184d0-483a-4dd3-8415-d862a4cc3552), Metal Engraved Dark Demon Skull (5066d87e-f914-4e83-8e1b-8444512d3436), and Scratched glass (43667c25-d111-4c24-94b9-86cda4094af1).
+The bundled default icons were created by Blakiukas with an image generator. Product and service names and logos belong to their respective owners and identify integrations; they do not imply sponsorship. This statement does not grant rights to third-party marks.
+
+Windows Desktop notices are included separately for WPF and Windows Forms 10.0.10 in Licenses. Source: https://github.com/dotnet/wpf/tree/v10.0.10 and https://github.com/dotnet/winforms/tree/v10.0.10 .

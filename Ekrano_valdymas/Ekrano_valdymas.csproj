@@ -1,0 +1,100 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
+		<AssemblyName>BlakiDeck</AssemblyName>
+		<Version>1.0.2</Version>
+		<Product>BlakiDeck</Product>
+		<Title>BlakiDeck</Title>
+		<Company>Blakiukas</Company>
+		<Description>Touchscreen desktop control dashboard</Description>
+        <EnableProductDiagnostics Condition="'$(EnableProductDiagnostics)' == ''">false</EnableProductDiagnostics>
+        <StorePackage Condition="'$(StorePackage)' == ''">false</StorePackage>
+        <PrivacyDocumentSource Condition="'$(StorePackage)' != 'true'">..\PRIVACY.txt</PrivacyDocumentSource>
+        <PrivacyDocumentSource Condition="'$(StorePackage)' == 'true'">..\packaging\msix\privacy-en-lt.txt</PrivacyDocumentSource>
+        <PrivacyLithuanianSource Condition="'$(StorePackage)' != 'true'">..\docs\legal-privacy-lt.txt</PrivacyLithuanianSource>
+        <PrivacyLithuanianSource Condition="'$(StorePackage)' == 'true'">..\packaging\msix\privacy-lt.txt</PrivacyLithuanianSource>
+	</PropertyGroup>
+    <PropertyGroup Condition="'$(EnableProductDiagnostics)' == 'true'">
+        <DefineConstants>$(DefineConstants);PRODUCT_DIAGNOSTICS</DefineConstants>
+    </PropertyGroup>
+
+	<ItemGroup>
+        <EmbeddedResource Include="Assets\FactoryDefaults.json" LogicalName="BlakiDeck.FactoryDefaults.json" />
+		<PackageReference Include="LibreHardwareMonitorLib" Version="0.9.7-pre709" />
+		<PackageReference Include="NAudio" Version="3.0.0-preview.19" />
+		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4078.44" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="BlakiHud\imported-profile.json;BlakiHud\Fonts\*.ttf" />
+		<Resource Include="Assets\AppIcon.ico" />
+        <EmbeddedResource Include="..\docs\help-lt-draft.txt" LogicalName="BlakiDeck.Help.lt" />
+        <EmbeddedResource Include="..\docs\help-en.txt" LogicalName="BlakiDeck.Help.en" />
+        <EmbeddedResource Include="..\LICENSE.txt" LogicalName="BlakiDeck.Legal.License" />
+        <EmbeddedResource Include="$(PrivacyDocumentSource)" LogicalName="BlakiDeck.Legal.Privacy" />
+        <EmbeddedResource Include="..\THIRD-PARTY-NOTICES.txt" LogicalName="BlakiDeck.Legal.Notices" />
+        <EmbeddedResource Include="..\docs\legal-license-lt.txt" LogicalName="BlakiDeck.Legal.License.lt" />
+        <EmbeddedResource Include="$(PrivacyLithuanianSource)" LogicalName="BlakiDeck.Legal.Privacy.lt" />
+        <EmbeddedResource Include="..\docs\legal-notices-lt.txt" LogicalName="BlakiDeck.Legal.Notices.lt" />
+        <Content Include="..\LICENSE.txt;..\THIRD-PARTY-NOTICES.txt" Link="%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+        <Content Include="$(PrivacyDocumentSource)" Link="PRIVACY.txt" TargetPath="PRIVACY.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+        <Content Include="..\packaging\licenses\*.txt" Link="Licenses\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+		<Resource Include="Assets\ObsIcon.png" />
+		<Content Include="Assets\DefaultIcons\*.png" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+		<Resource Include="Assets\SpotifyStandby.jpg" />
+		<Resource Include="Assets\SpotifyStandbyTransparent.png" />
+		<Resource Include="Assets\MusicModuleBrushedBlackMetal.png" />
+		<Resource Include="Assets\MusicConsole\*.png" />
+        <Resource Include="Assets\MusicConsole\Wide\**\*.png" />
+        <Resource Include="Assets\MusicConsole\Previews\carbon-fiber\*.png;Assets\MusicConsole\Previews\militarity\*.png" Exclude="Assets\MusicConsole\Previews\**\base-texture.png" />
+        <Resource Include="Assets\MusicConsole\Themes\**\*.png" Exclude="Assets\MusicConsole\Themes\black-leather\**\*.png" />
+		<Resource Include="..\docs\design-references\music-module-mini-baseline-v1.png" Link="Assets\DesignReferences\music-module-mini-baseline-v1.png" />
+		<Resource Include="..\docs\design-references\album-frame-photoreal-v1.png" Link="Assets\DesignReferences\album-frame-photoreal-v1.png" />
+		<Resource Include="..\docs\design-references\music-module-vu-appearance-reference-v1.png" Link="Assets\DesignReferences\music-module-vu-appearance-reference-v1.png" />
+		<Resource Include="..\docs\design-references\music-module-chassis-baseline-v1\music-console-chassis-textured-baseline-1900x437.png" Link="Assets\DesignReferences\music-console-chassis-textured-baseline-1900x437.png" />
+		<Resource Include="Assets\Fonts\Teko.ttf" />
+		<Resource Include="Assets\Fonts\Michroma-Regular.ttf" />
+		<Content Include="Assets\Fonts\Michroma-Regular.ttf" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+		<Content Include="Assets\Fonts\Michroma-OFL.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+        <Content Include="Assets\Fonts\OFL.txt;Assets\Fonts\Teko-Bold-OFL.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+		<Resource Include="Assets\Speaker\*.png" />
+		<Resource Include="Assets\Mascot\*.png" />
+		<Resource Include="Assets\Mascot\DJ\*.png" />
+		
+	</ItemGroup>
+
+	<Target Name="VerifyNoManualTextOffsets" BeforeTargets="BeforeBuild">
+		<Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\..\eng\verify-no-manual-text-offsets.ps1&quot;" />
+	</Target>
+
+    <!-- Retired modules retained as editable legacy sources, excluded from the product. -->
+    <ItemGroup>
+        <Compile Remove="VisualizerWidget.xaml.cs;DjMascotControl.xaml.cs;SpeakerCard.cs;SpeakerBassFilter.cs;SpeakerMechanics.cs;SpeakerPhysicsProbe.cs;MainWindow.Speakers.cs;MainWindow.SpeakerPreview.cs;MainWindow.SpeakerLiveProbe.cs" />
+        <Page Remove="VisualizerWidget.xaml;DjMascotControl.xaml" />
+        <Resource Remove="Assets\Speaker\*.png;Assets\Mascot\*.png;Assets\Mascot\DJ\*.png" />
+    </ItemGroup>
+    <!-- Explicit opt-in tools remain editable, but are not part of customer builds. -->
+    <ItemGroup Condition="'$(EnableProductDiagnostics)' != 'true'">
+        <Compile Remove="*Probe*.cs;AppearanceLab*.cs;ContourPreview.cs;MetalReliefPreview.cs;MainWindow.SingleModulePreview.cs;MainWindow.AdjustmentReview.cs;MainWindow.NativeNeedleComparison.cs;MainWindow.NeedleDisplayComparison.cs;MusicConsoleControl.MaterialPreview.cs;MusicConsoleControl.HardwareLab.cs;MusicConsolePrototype.xaml.cs;SpotifyConsolePrototype.xaml.cs" />
+        <Page Remove="MusicConsolePrototype.xaml;SpotifyConsolePrototype.xaml" />
+        <Resource Remove="Assets\MusicModuleBrushedBlackMetal.png;..\docs\design-references\music-module-mini-baseline-v1.png;..\docs\design-references\album-frame-photoreal-v1.png;..\docs\design-references\music-module-vu-appearance-reference-v1.png;..\docs\design-references\music-module-chassis-baseline-v1\music-console-chassis-textured-baseline-1900x437.png" />
+    </ItemGroup>
+  <PropertyGroup>
+    <!-- Disabled only for controlled diagnostic comparisons with the old raster path. -->
+    <EnableSharedMaterialViewbox Condition="'$(EnableSharedMaterialViewbox)' == ''">true</EnableSharedMaterialViewbox>
+    <EnableAdaptivePanel Condition="'$(EnableAdaptivePanel)' == ''">true</EnableAdaptivePanel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(EnableSharedMaterialViewbox)' == 'true'">
+    <DefineConstants>$(DefineConstants);SHARED_MATERIAL_VIEWBOX</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(EnableAdaptivePanel)' == 'true'">
+    <DefineConstants>$(DefineConstants);ADAPTIVE_PANEL</DefineConstants>
+  </PropertyGroup>
+</Project>
+

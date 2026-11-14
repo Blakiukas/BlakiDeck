@@ -1,0 +1,87 @@
+BlakiDeck pagalba
+
+Pagrindinis meniu ir langai
+
+Pagrindinį meniu atidarykite dešiniuoju pelės mygtuku spustelėję laisvą programos vietą. Kairiuoju pelės mygtuku spustelėję laisvą vietą jį uždarysite. Modulių nustatymai pasiekiami per jų dantračio mygtukus.
+Fit monitor pritaiko programos dydį prie monitoriaus. Top ir Bottom perkelia ją prie atitinkamo krašto. Restore grąžina prieš pritaikymą išsaugotą lango dydį ir padėtį. Always on top išlaiko langą virš kitų langų.
+About ir Help languose galima rinktis EN arba LT. Pasirinkimas taikomas ir kitiems atidarytiems informacijos langams bei naujai atidaromiems langams iki BlakiDeck uždarymo. Tai nekeičia visos programos sąsajos kalbos.
+
+Skirtukai ir moduliai
+
+Tab count nustato skirtukų skaičių. Modules layout parenka dabartinio skirtuko turinį: Dashboard modules arba Wide music player.
+Dashboard modules turi kairįjį, vidurinį ir dešinįjį skyrius. Nuorodoms ir System Monitor galima rinktis du arba tris skyrius užimančius išdėstymus. Platesnis kairysis modulis pakeičia modulius uždengiamuose skyriuose.
+Skirtukai išsaugo savo išdėstymus ir skinus; dalis bendrųjų nustatymų ir nuorodų išvaizdos nustatymų yra bendri. Naujai pridedami skirtukai turi tris tuščius nuorodų modulius.
+Tinkamuose nuorodų langeliuose galima laikyti nuorodas, sensorius, makrosus arba laikrodį. Perkeldami elementą į kitą skirtuką, tempdami palaikykite jį virš to skirtuko ir numeskite į tinkamą langelį. Didesniam elementui turi pakakti laisvos vietos.
+
+Muzikos grotuvas ir grojaraštis
+
+Per Sources pasirinkite vietinius failus arba palaikomą muzikos programą. Srautinei muzikai reikalinga atitinkama programa ir jos reikalaujama paskyra. Prieinamos komandos priklauso nuo šaltinio ir jo Windows pateikiamų galimybių.
+Power pristabdo pasirinktą šaltinį ir išjungia grotuvo skydelį. Įjungus Power muzika savaime nepasileidžia; naudokite Play. Neaktyvus Playlist, Shuffle arba Repeat mygtukas reiškia, kad komanda neprieinama dabartiniam šaltiniui ar jo būsenai.
+Spustelėję plataus grotuvo garsumo rankenėlę parodysite arba paslėpsite viršutinę skirtukų juostą. Player → Power on at startup įjungia šio skirtuko grotuvo skydelį paleidžiant BlakiDeck; muzikos savaime nepaleidžia.
+Atskiram Playlist moduliui reikalingas grotuvas tame pačiame skirtuke. Platus grotuvas taip pat turi vietinį grojaraštį: jį atidaro Playlist mygtukas virš dainos ekrano; paspaudus dar kartą grįžtama prie VU indikatorių.
+Į vietinį grojaraštį galima nutempti failus arba aplankus. Pridedami tik tiesiogiai nutemptame aplanke esantys failai, ne jo poaplankių turinys. Playlist nustatymuose galima rinktis Modern arba Winamp style išdėstymą, teksto dydį, tarpus ir spalvas.
+Albumo viršelis gaunamas iš pasirinktos muzikos programos per Windows arba iš vietinių failų. Jei šaltinis jo nepateikia, BlakiDeck neieško pakaitinio viršelio kitoje paslaugoje.
+
+VU indikatoriai ir Game mode
+
+Sukite pelės ratuką virš VU reguliavimo varžto, kad pakeistumėte abiejų indikatorių jautrumą. Dukart spustelėjus varžtą atkuriamas numatytasis jautrumas. Vietinio ir srautinio atkūrimo jautrumo nustatymai saugomi atskirai.
+Settings → Resource mode → Game mode įjungia automatinį persijungimą, kai BlakiDeck aptinka žaidimą. Varnelė įjungia aptikimą; ji nereiškia, kad žaidimo režimas tuo metu jau veikia.
+Game mode metu nereikalingos vizualizacijos sustabdomos arba sumažinamas jų aktyvumas. Plačiame grotuve VU rodyklės lėtai nusileidžia, apšvietimas prigęsta, o tarp dainos laikų pulsuoja GAME MODE. Muzika ir grotuvo komandos lieka prieinamos. Aptiktam žaidimui pasibaigus grįžtama prie įprasto veikimo.
+
+Web ir nuorodos
+
+Web shortcuts leidžia pridėti svetaines, keisti jų eiliškumą, užrašus ir ikonas. Naršyklės mygtukas šalia sąrašo ir dantračio parodo arba paslepia naršyklę.
+Naršyklės juostos nustatymuose Show telemetry rodo vietinius išteklių rodmenis. Zoom enabled valdo svetainių mastelio keitimą; All websites arba This website only parenka jo taikymo sritį. Hide top bar ir Auto-hide all bars valdo naršyklės juostų rodymą. Clear Web cache išvalo podėlį, bet neištrina visų slapukų, prisijungimų ar kitų naršyklės duomenų.
+Nuorodos Edit lange View pasirinkimai yra Text, Icon ir Icon + text. Choose file parenka jūsų paveikslėlį; Built-in icons atveria integruotą biblioteką; Reset icon atkuria automatinę ikoną. Default atkuria nuorodos išvaizdą, nekeisdamas vardo ar paskirties. Save išsaugo, Cancel grąžina ankstesnę išvaizdą.
+
+System Monitor
+
+Dešiniuoju pelės mygtuku spustelėkite sensoriaus langelį. Sensor parenka rodmenį, Edit keičia jo išvaizdą, Layout atidaro langelių išdėstymo redaktorių. Priklausomai nuo rodmens, galima rinktis skaitinę reikšmę, procentus arba linijinį grafiką. Model prieinamas palaikomose CPU/GPU grafikų antraštėse. Colors parenka pastovią spalvą; Adaptive colors naudoja ribas ir mirgėjimo slopinimą. Default atkuria atitinkamus numatytuosius nustatymus.
+Langelius galima pertempti, o per Layout – keisti jų dydį, pridėti arba pašalinti. Kiekvienas modulio dydis turi keturis išsaugotus išdėstymus. Vieno pakeitimas nepakeičia kitų dydžių išdėstymų.
+Mygtukas i prie dantračio atidaro PC specifikaciją. Pasirinkite įrenginį, kad pamatytumėte jo detales. Pasirinktos eilutės Copy kopijuoja tik ją, detalių srities Copy – tik tos srities turinį, Copy all – visą aprašymą. Rodoma tik Windows, tvarkyklių arba įrangos pateikiama informacija.
+N/A arba brūkšneliai reiškia neprieinamą rodmenį, ne nulį. Hardware sensor leidžia pasirinkti papildomus palaikomos įrangos pateikiamus rodmenis.
+Kur prieinama, Units → 1 decimal rodo GB reikšmes su vienu skaitmeniu po kablelio. KB/MB/GB ir greičiai skaičiuojami 1024 pagrindu, kaip Windows. RAM USED rodo naudojamą atmintį ir visą Windows prieinamą talpą.
+Pasirenkamam Codex rodmeniui reikalinga kompiuteryje įdiegta Codex programa, prisijungta paskyra ir prieinami jos limitų duomenys. Tai atskiras rodmuo nuo BlakiDeck Program usage.
+
+Philips Hue
+
+Modules layout pasirinkite Philips Hue. Reikalingas Hue Bridge; vien Bluetooth šviestuvai tiesiogiai neprijungiami. Bridge ir kompiuterį prijunkite prie to paties vietinio tinklo, tada rinkitės FIND HUE BRIDGE. Jei rastas daugiau nei vienas Bridge, pasirinkite savąjį.
+Prasidėjus susiejimui, per ekrane rodomą laukimo laiką paspauskite fizinį Bridge mygtuką. Jei laikas baigėsi, rinkitės RETRY PAIRING ir bandykite dar kartą. Pasirinkite rodomus kambarius ir spauskite Save. Išsaugotas Bridge raktas apsaugomas jūsų Windows paskyrai.
+Spustelėję plačią kambario eilutę kartu įjungsite arba išjungsite jo šviesas. Palaikę ir tempdami horizontaliai reguliuosite ryškumą. Dešinėje esantys įjungimo mygtukai valdo atskirai valdomas šviesas; ryškumas arba ryšio būsena rodoma jų kairėje. Kelios vieno šviestuvo spalvų zonos nebūtinai turi atskirą įjungimą. Nepasiekiamos šviesos nevaldomos.
+All lights off/on taikomas pasirinktiems pasiekiamiems kambariams. Spalvų nustatymuose rodomos Bridge pateikiamos spalvos ir naudojamas bendras BlakiDeck spalvų pasirinkimo langas.
+
+Airthings
+
+Reikalingas palaikomas Airthings įrenginys, jo rodmenis gaunanti paskyra ir interneto ryšys. Prieinami rodmenys priklauso nuo įrenginio.
+Modulio nustatymuose atidarykite Setup. Puslapyje consumer-api-doc.airthings.com → My Applications sukurkite Client Credentials programą su read:device:current_values teise. Įrašykite jos Client ID ir Client secret ir rinkitės Save and connect. Šių duomenų neskelbkite. Išsaugoti prisijungimo duomenys apsaugomi jūsų Windows paskyrai.
+Pasirinkite kambarį arba įrenginį. Atnaujinimo mygtukas užklausia debesį, bet nepriverčia įrenginio atlikti naujo matavimo. SAMPLE rodo matavimo laiką, Cloud checked – debesies patikros laiką. Trūkstamas rodmuo nėra nulis. Istorija priklauso nuo BlakiDeck sukauptų duomenų.
+Didinimo ir grafiko mygtukais keiskite rodinį. Nustatymuose parenkami rodmenys, teksto dydžiai ir spalvos. Automatinės kokybės spalvos turi pirmenybę prieš išsaugotus rankinius pasirinkimus. Jei ryšys neveikia, tikrinkite Setup ir Retry connection; prisijungimo duomenis keiskite per Change connection.
+Airthings mini prieinamas makrosų bibliotekoje tinkamiems nuorodų langeliams. Pasirinkite iki keturių rodmenų. Icon rows rodo ikonas ir reikšmes; Text skiltyje keičiami kambario pavadinimo, ikonų ir reikšmių dydžiai.
+
+Makrosai, OBS ir orai
+
+Makrosai vienu spustelėjimu vykdo veiksmą arba jų seką. Prieš paleisdami patikrinkite žingsnius, ypač išjungimo ar perkrovimo komandas. Dukart spustelėję žingsnį makroso redaktoriaus Actions sąraše jį redaguosite, nepaleisdami makroso. Makrosų teksto nustatymai atskiri nuo paprastų nuorodų nustatymų.
+OBS valdymui reikalinga OBS Studio. Ryšį ir valdymą nustatykite modulio nustatymuose; valdymui per WebSocket turi būti įjungtas OBS WebSocket serveris. Prieinamos komandos priklauso nuo dabartinės OBS būsenos.
+Orams reikalingas interneto ryšys ir pasirinkta vietovė. Jei vietovė dar nenustatyta, Select place atidaro jos nustatymus. Prognozės priklauso nuo duomenų teikėjo ir nėra garantijos.
+
+Išvaizda, išsaugojimas ir atkūrimas
+
+Menu size keičia bendrą meniu mastelį (70–150%). Menu text size ir Usage text size atskirai keičia meniu užrašus ir išteklių rodmenis. Default atkuria jų atskaitos dydžius. Šliaužikliai reaguoja į ratuką užvedus pelę. Tooltips galima pasirinkti 3 arba 5 sekundžių delsą arba išjungti.
+Jei lange yra Save arba Apply, juo patvirtinkite pakeitimus; Cancel atšaukia tą redagavimą. Kiti valdikliai pakeitimus pritaiko iš karto. Default mygtukas veikia jam priklausantį nustatymą arba redaktorių, ne visą programą.
+Settings → Start with Windows valdo automatinį BlakiDeck paleidimą. Tai atskiras nustatymas nuo grotuvo Power on at startup.
+Reset layout išvalo skirtukų išdėstymus ir priskirtas nuorodas, išlaikydamas ryšius bei bendruosius nustatymus. Full factory reset pašalina išsaugotą konfigūraciją, ryšius ir naršyklės prisijungimus, tada paleidžia programą su gamykliniais nustatymais. Prieš abu veiksmus perskaitykite patvirtinimo langą.
+Uninstall atidaro darbalaukio pašalinimo programą. Pagal nutylėjimą naudotojo duomenys paliekami. Pažymėkite Also delete my BlakiDeck Release user data, jei norite pašalinti ir šio diegimo nustatymus, ryšius, istoriją bei naršyklės duomenis. Originalūs muzikos, dokumentų ar kiti nuorodomis nurodyti failai netrinami.
+
+Jei kas nors neveikia
+
+Nėra garso: patikrinkite pasirinktą šaltinį, garsumą, nutildymą ir ar muzikos programa atkuria garsą.
+Neprieinamas mygtukas arba rodmuo: šaltinis, įrenginys ar tvarkyklė gali jo nepalaikyti arba jis gali būti neprieinamas dabartinėje būsenoje.
+Trūksta viršelio arba atlikėjo: vietinis failas arba muzikos programa gali jų nepateikti.
+Ryšio problema: patikrinkite atitinkamo modulio nustatymus, tinklą ir paslaugos būseną.
+About pateikia versiją, licenciją, privatumo informaciją ir komponentų licencijas. Dėl pagalbos rašykite blaki.support@gmail.com, nurodydami versiją ir problemos atkūrimo veiksmus. Prieš siųsdami ekrano nuotraukas ar žurnalus pašalinkite prisijungimo duomenis bei nesusijusią asmeninę informaciją.
+
+Licencija ir duomenų šaltiniai
+
+BlakiDeck yra nemokama asmeniniam naudojimui, mokymuisi ir verslui; jos kodas atviras pagal MIT licenciją. Savanoriška parama neatrakina funkcijų. MIT licencija leidžia naudoti, keisti ir platinti programą, įskaitant komercinį naudojimą, išsaugant autorystės ir licencijos tekstą. Išorinėms paslaugoms taikomos jų pačių sąlygos, gali reikėti paskyros, įrangos arba prenumeratos.
+Program usage ir Show telemetry rodo vietinius išteklių rodmenis, o ne autoriui siunčiamą analitiką. Internetiniai moduliai, svetainių ikonų gavimas ir atvertos svetainės jungiasi prie atitinkamų paslaugų; išsamiau – Privatumas.
+Orų duomenys: Open-Meteo (https://open-meteo.com/), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). BlakiDeck formatuoja ir apvalina rodmenis. Vietovių paieškai naudojama GeoNames per Open-Meteo, atvirkštinei koordinačių paieškai – komoot Photon ir OpenStreetMap bendradarbių duomenys. Nemokamai orų API taikomos atskiros nekomercinio naudojimo ir užklausų dažnio sąlygos: https://open-meteo.com/en/terms . BlakiDeck licencija nepakeičia paslaugų sąlygų.

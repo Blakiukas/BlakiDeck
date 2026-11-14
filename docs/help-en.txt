@@ -1,0 +1,87 @@
+BlakiDeck Help
+
+Main menu and windows
+
+Right-click an empty area of the application to open the main menu. Left-click an empty area to close it. Module settings are available through each module's gear button.
+Fit monitor fits the dashboard to the monitor. Top and Bottom move it to the corresponding edge. Restore returns to the window size and position saved before fitting. Always on top keeps the window above other windows.
+About and Help offer EN and LT. Changing this choice also changes other open information windows and is used by newly opened ones until BlakiDeck closes. It does not change the language of the entire application.
+
+Tabs and modules
+
+Tab count sets the number of tabs. Modules layout selects the content of the current tab: Dashboard modules or Wide music player.
+Dashboard modules has left, center and right sections. Shortcuts and System Monitor offer layouts spanning two or three sections. A wider left-hand module replaces the modules in the sections it covers.
+Tabs keep their own layouts and skins; some general settings and shortcut appearances are shared. Newly added tabs start with three empty shortcut modules.
+Compatible shortcut cells can contain shortcuts, sensors, macros or a clock. To move an item to another tab, hold it over that tab while dragging, then drop it in a suitable cell. Larger items need enough free space.
+
+Music player and playlist
+
+Use Sources to select local files or a supported music application. Streaming playback requires that application and any account it requires. Available commands depend on the source and what it exposes to Windows.
+Power pauses the selected source and switches off the player panel. Switching Power back on does not start music automatically; use Play. A disabled Playlist, Shuffle or Repeat button means that command is unavailable for the current source or state.
+Click the wide player's volume knob to show or hide the top tab bar. Player → Power on at startup enables this tab's player panel when BlakiDeck starts; it does not start playback.
+The separate Playlist module requires a player in the same tab. The wide player also has a local playlist view, selected with the Playlist button above the song display; pressing it again returns to the VU meters.
+Drop files or folders into the local playlist. Only files directly inside a dropped folder are added, not its subfolders. Playlist settings offer Modern and Winamp style layouts, text size, spacing and colors.
+Album art comes from the selected music application through Windows or from local files. If the source supplies no artwork, BlakiDeck does not search another service for a replacement.
+
+VU meters and Game mode
+
+Turn the mouse wheel over a VU adjustment screw to change sensitivity for both meters. Double-click the screw to restore the default. Local and streaming sensitivity settings are stored separately.
+Settings → Resource mode → Game mode enables automatic switching when BlakiDeck detects a game. The check mark enables detection; it does not mean a game is currently active.
+During Game mode, unnecessary visualizations stop or reduce their activity. In the wide player, VU needles settle slowly, meter lighting dims and GAME MODE pulses between the song times. Music playback and player commands remain available. Normal behavior returns when the detected game ends.
+
+Web and shortcuts
+
+Web shortcuts lets you add and reorder websites and edit their labels and icons. The browser button beside the list and gear buttons shows or hides the browser.
+In the browser toolbar settings, Show telemetry displays local resource readings. Zoom enabled controls website zoom; All websites or This website only selects its scope. Hide top bar and Auto-hide all bars control the browser bars. Clear Web cache clears cached content; it is not a complete deletion of cookies, sign-ins or other browser data.
+In shortcut Edit, View selects Text, Icon or Icon + text. Choose file selects your image; Built-in icons opens the included library; Reset icon restores the automatic icon. Default restores the shortcut's appearance without changing its name or destination. Save keeps changes; Cancel restores the previous appearance.
+
+System Monitor
+
+Right-click a sensor cell. Sensor selects the reading; Edit changes its appearance; Layout opens the cell layout editor. Depending on the reading, choose a numeric value, percentage or line graph. Model is available on supported CPU/GPU graph headers. Colors selects a fixed color; Adaptive colors uses thresholds and flicker suppression. Default restores the relevant defaults.
+Drag cells to rearrange them, or use Layout to resize, add or remove them. Each module size has four saved layouts. Changing one does not replace the other sizes' layouts.
+The i button beside the gear opens PC specifications. Select a device to see its details. The selected row's Copy button copies that row, the details Copy button copies that panel, and Copy all copies the full report. Only information available from Windows, drivers or the hardware can be shown.
+N/A or dashes mean a reading is unavailable, not zero. Hardware sensor offers additional readings reported by supported hardware.
+Where available, Units → 1 decimal displays GB values with one decimal place. KB/MB/GB and transfer rates use powers of 1024, as in Windows. RAM USED shows used memory against the total available to Windows.
+The optional Codex reading requires a locally installed, signed-in Codex application and available account-limit data. It is separate from BlakiDeck's Program usage readings.
+
+Philips Hue
+
+Select Philips Hue in Modules layout. A Hue Bridge is required; Bluetooth-only bulbs cannot connect directly. Connect the Bridge and PC to the same local network, then choose FIND HUE BRIDGE. Select your Bridge if more than one is found.
+When pairing starts, press the Bridge's physical button within the displayed waiting period. If it times out, choose RETRY PAIRING and try again. Select the rooms to display and choose Save. BlakiDeck protects the saved Bridge key for your Windows account.
+Click a wide room row to switch its lights together. Hold and drag horizontally to adjust brightness. The power buttons at the right switch separately controllable lights; brightness or connection status appears to their left. Several color zones on one light do not necessarily support separate power controls. Unreachable lights cannot be controlled.
+All lights off/on applies to the selected reachable rooms. Color settings show the colors reported by the Bridge and use the same color picker as elsewhere in BlakiDeck.
+
+Airthings
+
+A supported Airthings device, an account receiving its readings and an internet connection are required. The available measurements depend on the device.
+Open Setup from the module settings. At consumer-api-doc.airthings.com → My Applications, create a Client Credentials application with read:device:current_values access. Enter its Client ID and Client secret and choose Save and connect. Do not share these credentials. Stored credentials are protected for your Windows account.
+Choose a room/device. Refresh checks the cloud; it does not force a new physical measurement. SAMPLE shows when the measurement was taken; Cloud checked shows when BlakiDeck checked the cloud. Missing data is not zero. History depends on data collected by BlakiDeck.
+Zoom and graph buttons change the view. Settings control readings, text sizes and colors. Automatic quality colors take precedence over retained manual choices. For connection problems, check Setup and Retry connection; use Change connection to replace credentials.
+Airthings mini is available in the macro library for compatible shortcut cells. Select up to four readings. Icon rows shows icons and values; Text controls room-name, icon and value sizes.
+
+Macros, OBS and weather
+
+Macros run an action or a sequence of actions with one click. Review the steps before running them, especially shutdown or restart commands. Double-click a step in the macro editor's Actions list to edit it without running it. Macro text settings are separate from ordinary shortcut settings.
+OBS controls require OBS Studio. Configure the connection and controls in the module settings; WebSocket control requires OBS's WebSocket server to be enabled. Commands depend on the current OBS state.
+Weather requires an internet connection and a selected location. With no location configured, Select place opens its settings. Forecasts depend on the provider and are not guarantees.
+
+Appearance, saving and resets
+
+Menu size changes the overall menu scale (70–150%). Menu text size and Usage text size adjust menu labels and resource readings separately. Default restores their reference values. Sliders respond to the mouse wheel while hovered. Tooltips can be delayed by 3 or 5 seconds, or disabled.
+Where a window offers Save or Apply, use it to keep changes; Cancel discards that edit. Other controls apply immediately. A Default button affects the setting or editor it belongs to, not the whole application.
+Settings → Start with Windows controls automatic startup of BlakiDeck. It is separate from the player's Power on at startup.
+Reset layout clears tab arrangements and assigned shortcuts while keeping connections and general settings. Full factory reset removes saved configuration, connections and browser sign-ins and restarts with factory defaults. Read the confirmation before either action.
+Uninstall opens the desktop uninstaller. It keeps user data by default. Select Also delete my BlakiDeck Release user data to remove this installation's settings, connections, histories and browser data as well. Original music, documents and other files referenced by shortcuts are not deleted.
+
+Troubleshooting and support
+
+No sound: check the selected source, volume, mute state and whether the music application is playing.
+Unavailable button or reading: the source, device or driver may not support it, or it may be unavailable in its current state.
+Missing artwork or artist: the local file or music application may not provide it.
+Connection problem: check the relevant module's settings, network access and service status.
+About contains the version, License, Privacy and Third-party notices. For help, write to blaki.support@gmail.com with the version and steps that reproduce the problem. Remove credentials and unrelated personal information from screenshots or logs before sending them.
+
+License and data sources
+
+BlakiDeck is free for personal, educational and business use, with open source code under the MIT License. Optional donations do not unlock features. The MIT License permits use, modification and redistribution, including commercial use, while retaining its copyright and license notice. External services have their own terms and may require accounts, hardware or subscriptions.
+Program usage and Show telemetry display local resource readings, not analytics sent to the author. Online modules, website-icon retrieval and visited websites contact their respective services; see Privacy.
+Weather data: Open-Meteo (https://open-meteo.com/), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). BlakiDeck formats and rounds the readings. Place search uses GeoNames through Open-Meteo; reverse lookup uses Photon by komoot and OpenStreetMap contributors. The free weather API has separate non-commercial-use and rate-limit conditions: https://open-meteo.com/en/terms . BlakiDeck's license does not override service terms.
