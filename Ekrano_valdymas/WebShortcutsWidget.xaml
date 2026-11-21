@@ -1,7 +1,8 @@
-<UserControl x:Class="Ekrano_valdymas.WebShortcutsWidget"
+﻿<UserControl x:Class="Ekrano_valdymas.WebShortcutsWidget"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:local="clr-namespace:Ekrano_valdymas">
+ <UserControl.Resources><local:WebThumbnailRowHeight x:Key="ThumbnailRowHeight"/></UserControl.Resources>
  <Border local:CommonMetal.Surface="True" Background="{DynamicResource PanelMetalBrush}" BorderBrush="#35FFFFFF" BorderThickness="1.5" CornerRadius="18" Padding="22">
   <Grid>
    <Grid.RowDefinitions><RowDefinition Height="45"/><RowDefinition Height="1"/><RowDefinition Height="*"/></Grid.RowDefinitions>
@@ -28,12 +29,19 @@
       </Style.Triggers>
      </Style>
     </ItemsControl.Style>
+    <ItemsControl.ItemContainerStyle>
+     <Style TargetType="ContentPresenter"><Style.Triggers>
+      <DataTrigger Binding="{Binding ImagesOnly, RelativeSource={RelativeSource AncestorType={x:Type local:WebShortcutsWidget}}}" Value="True">
+       <Setter Property="Height" Value="{Binding ViewportHeight, RelativeSource={RelativeSource AncestorType=ScrollViewer}, Converter={StaticResource ThumbnailRowHeight}}"/>
+      </DataTrigger>
+     </Style.Triggers></Style>
+    </ItemsControl.ItemContainerStyle>
     <ItemsControl.ItemTemplate><DataTemplate>
      <Border x:Name="shortcutCard" Height="76" Margin="6,4" CornerRadius="13" Background="{DynamicResource ModuleCardSurfaceBrush}"
              ToolTip="{Binding DisplayName}" AutomationProperties.Name="{Binding DisplayName}"
              BorderBrush="#48FFFFFF" BorderThickness="1.3" Cursor="Hand" ClipToBounds="True"
              AllowDrop="True" Tag="NoWindowDrag"
-             PreviewMouseLeftButtonDown="Tile_PreviewMouseLeftButtonDown"
+             local:InteractionFeedback.Enabled="True" PreviewMouseLeftButtonDown="Tile_PreviewMouseLeftButtonDown"
              PreviewMouseMove="Tile_PreviewMouseMove" PreviewMouseLeftButtonUp="Tile_PreviewMouseLeftButtonUp"
              PreviewTouchDown="Tile_PreviewTouchDown" PreviewTouchMove="Tile_PreviewTouchMove"
              PreviewTouchUp="Tile_PreviewTouchUp" DragEnter="Tile_DragEnter" ContextMenuOpening="Tile_ContextMenuOpening"
@@ -90,8 +98,7 @@
        <Setter TargetName="shortcutBothText" Property="TextFontSize" Value="12"/>
       </DataTrigger>
       <DataTrigger Binding="{Binding ImagesOnly, RelativeSource={RelativeSource AncestorType={x:Type local:WebShortcutsWidget}}}" Value="True">
-       <!-- One pair occupies the same height as two original 76+8 rows. -->
-       <Setter TargetName="shortcutCard" Property="Height" Value="160"/>
+       <Setter TargetName="shortcutCard" Property="Height" Value="Auto"/>
        <Setter TargetName="shortcutName" Property="Visibility" Value="Collapsed"/>
        <Setter TargetName="shortcutPreview" Property="Grid.Column" Value="0"/>
        <Setter TargetName="shortcutPreview" Property="Grid.ColumnSpan" Value="2"/>

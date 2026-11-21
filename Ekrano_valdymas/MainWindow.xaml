@@ -242,7 +242,15 @@
             <MenuItem x:Name="applicationSettingsMenuItem" Header="Settings">
                 <Separator/>
                 <MenuItem Header="Reset layout…" Click="ResetLayout_Click"/>
-                <MenuItem Header="Full factory reset…" Click="FactoryReset_Click"/>
+                <MenuItem StaysOpenOnClick="True"><MenuItem.Header>
+                    <WrapPanel Orientation="Horizontal">
+                        <Button Content="Full factory reset…" Style="{StaticResource PositionActionButton}" Click="FactoryReset_Click" Margin="0,0,10,0"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Import" ToolTip="Restore settings from a backup" Style="{StaticResource PositionActionButton}" Click="ImportSettings_Click" Margin="0,0,4,0"/>
+                            <Button Content="Export" ToolTip="Back up settings" Style="{StaticResource PositionActionButton}" Click="ExportSettings_Click"/>
+                        </StackPanel>
+                    </WrapPanel>
+                </MenuItem.Header></MenuItem>
             </MenuItem>
             <MenuItem Header="Modules &amp; tabs">
                 <MenuItem x:Name="layoutTabCountMenuItem" Header="Tab count" SubmenuOpened="LayoutTabCountMenu_SubmenuOpened">

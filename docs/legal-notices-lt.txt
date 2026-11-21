@@ -71,6 +71,11 @@ Orų duomenys: Open-Meteo, https://open-meteo.com/ — CC BY 4.0, https://creati
 Nemokamai Open-Meteo API taikomos atskiros nekomercinio naudojimo ir užklausų dažnio sąlygos: https://open-meteo.com/en/terms . BlakiDeck licencija nesuteikia teisių į trečiųjų šalių paslaugas. Teikėjas leidžia savanorišką paramą; komerciniam API naudojimui reikia atitinkamo susitarimo su teikėju.
 
 Skinų paveikslėliai yra galutiniai atvaizdai, o ne platinama redaguojama BlenderKit medžiagų biblioteka. BlenderKit / Blendkit CC0 ir Royalty Free sąlygos: https://www.blenderkit.com/docs/licenses/ . Užfiksuotos medžiagos: Carbon Fiber Shader, autorius Heydar Moheiseni (244f5609-0b92-4992-8099-aaa47181c837), Dirty glass, autorius ydd 3D (f12184d0-483a-4dd3-8415-d862a4cc3552), Metal Engraved Dark Demon Skull (5066d87e-f914-4e83-8e1b-8444512d3436) ir Scratched glass (43667c25-d111-4c24-94b9-86cda4094af1).
-Įtrauktas numatytąsias ikonas Blakiukas sukūrė paveikslėlių generatoriumi. Produktų bei paslaugų pavadinimai ir logotipai priklauso atitinkamiems savininkams ir nurodo integracijas; jie nereiškia rėmimo. Šis pranešimas nesuteikia teisių į trečiųjų šalių prekių ženklus.
+Originalų apskritų integruotų ikonų rinkinį Blakiukas sukūrė paveikslėlių generatoriumi. Produktų bei paslaugų pavadinimai ir logotipai priklauso atitinkamiems savininkams ir nurodo integracijas; jie nereiškia rėmimo. Šis pranešimas nesuteikia teisių į trečiųjų šalių prekių ženklus.
 
 Windows Desktop pranešimai WPF ir Windows Forms 10.0.10 pateikti atskirai aplanke Licenses. Pirminis kodas: https://github.com/dotnet/wpf/tree/v10.0.10 ir https://github.com/dotnet/winforms/tree/v10.0.10 .
+
+Flat rinkinio OpenAI, Discord, Tidal ir OBS kontūrų šaltinis – Simple Icons 11.0.0, CC0 1.0 Universal: https://github.com/simple-icons/simple-icons/tree/11.0.0 . Licencija: Licenses/simple-icons-CC0.txt. Prekių ženklai priklauso jų savininkams.
+
+
+

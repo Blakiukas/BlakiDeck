@@ -614,10 +614,58 @@ internal sealed class HistoryPlot : FrameworkElement
 
 internal sealed class CoreLoadPlot : FrameworkElement
 {
-    private double[] heights=[];private Brush brush=Brushes.LimeGreen;
+    private double[] heights = [], from = [], target = [];
+    private Brush brush = Brushes.LimeGreen;
+    private long started, nextFrame;
+    private bool animating;
+    private const double TransitionSeconds = .16;
+
+    internal CoreLoadPlot()
+    {
+        Unloaded += (_, _) => Finish();
+        IsVisibleChanged += (_, _) => { if (!IsVisible) Finish(); };
+    }
+
+    private void Finish()
+    {
+        if (animating) CompositionTarget.Rendering -= RenderFrame;
+        animating = false;
+        heights = target;
+        InvalidateVisual();
+    }
+
+    private void RenderFrame(object? sender, EventArgs args)
+    {
+        long now = System.Diagnostics.Stopwatch.GetTimestamp();
+        if (now < nextFrame) return;
+        long period = System.Diagnostics.Stopwatch.Frequency / 60;
+        nextFrame = Math.Max(nextFrame + period, now);
+        double progress = System.Diagnostics.Stopwatch.GetElapsedTime(started, now).TotalSeconds / TransitionSeconds;
+        if (progress >= 1 || ResourcePolicy.IsGame) { Finish(); return; }
+        for (int i = 0; i < heights.Length; i++)
+            heights[i] = from[i] + (target[i] - from[i]) * progress;
+        InvalidateVisual();
+    }
     private static readonly Pen outline=CreateOutline();
     private static Pen CreateOutline(){var pen=new Pen(new SolidColorBrush(Color.FromArgb(90,220,220,220)),.5);pen.Freeze();return pen;}
-    internal void Set(double[] values,Brush color){heights=values;brush=color;InvalidateVisual();}
+    internal void Set(double[] values, Brush color)
+    {
+        if (brush != color) { brush = color; InvalidateVisual(); }
+        if (target.AsSpan().SequenceEqual(values)) return;
+        target = values;
+        if (!IsVisible || !IsLoaded || ResourcePolicy.IsGame || heights.Length != target.Length)
+        {
+            Finish();
+            return;
+        }
+        from = heights;
+        heights = (double[])from.Clone();
+        started = System.Diagnostics.Stopwatch.GetTimestamp();
+        if (animating) return;
+        nextFrame = started;
+        CompositionTarget.Rendering += RenderFrame;
+        animating = true;
+    }
     protected override void OnRender(DrawingContext dc){base.OnRender(dc);if(heights.Length==0)return;double step=ActualWidth/heights.Length;for(int i=0;i<heights.Length;i++){double height=Math.Clamp(heights[i]/36,0,1)*ActualHeight;dc.DrawRectangle(null,outline,new Rect(i*step+1,.25,Math.Max(0,step-2),Math.Max(0,ActualHeight-.5)));dc.DrawRectangle(brush,null,new Rect(i*step+1,ActualHeight-height,Math.Max(0,step-2),height));}}
 }
 

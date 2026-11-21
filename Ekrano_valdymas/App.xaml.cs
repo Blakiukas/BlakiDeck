@@ -617,7 +617,7 @@ namespace Ekrano_valdymas
             if(resetToken!=null)
             {
                 try { ApplicationProfileReset.WaitForPreviousProcess(resetToken); }
-                catch(Exception error) { MessageBox.Show(error.Message,"Reset could not finish",MessageBoxButton.OK,MessageBoxImage.Error);Shutdown(1);return; }
+                catch(Exception error) { MessageBox.Show(error.Message,"Settings operation failed",MessageBoxButton.OK,MessageBoxImage.Error);Shutdown(1);return; }
             }
             singleInstanceMutex = new Mutex(
                 initiallyOwned: true,
@@ -635,7 +635,7 @@ namespace Ekrano_valdymas
             if(resetToken!=null)
             {
                 try { ApplicationProfileReset.ApplyPending(resetToken); }
-                catch(Exception error) { MessageBox.Show(error.Message,"Reset could not finish",MessageBoxButton.OK,MessageBoxImage.Error);Shutdown(1);return; }
+                catch(Exception error) { MessageBox.Show(error.Message,"Settings operation failed",MessageBoxButton.OK,MessageBoxImage.Error); }
             }
 
             base.OnStartup(e);

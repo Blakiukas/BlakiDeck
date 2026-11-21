@@ -73,7 +73,7 @@ namespace Ekrano_valdymas
         private readonly string dashboardLayoutsFile;
         private double moduleOpacity = 0.69;
         private double uiOpacity = 1.0;
-        private double backgroundTransparency;
+        private double backgroundTransparency = 45;
         private double fontScale = 1.15;
         private string accentColor = "#1ED760";
         private string clockColor = ProductColorDefaults.Clock;
@@ -324,6 +324,9 @@ namespace Ekrano_valdymas
             monitorSettingsFile = Path.Combine(settingsFolder, "monitor-controls.json");
             dashboardLayoutsFile = Path.Combine(settingsFolder, "dashboard-layout-tabs.json");
             InitializeResourceModes();
+            InitializeMediaFeatures();
+            ContentRendered += (_, _) => StartTabAssetPreparation();
+            Closed += (_, _) => tabAssetPreparation.Cancel();
             activeDashboardLayoutTab = ClampDashboardLayoutTab(quickLaunchBar.ActiveLayoutTab);
             quickLaunchBar.LayoutTabChanged += QuickLaunchBar_LayoutTabChanged;
             LoadMonitorSettings();
@@ -1007,7 +1010,7 @@ namespace Ekrano_valdymas
                     System.Windows.Controls.Primitives.ButtonBase or TextBox or ComboBox or
                     QuickLaunchBar)
                     return true;
-                if (current is MusicConsoleControl or MusicPlayerCard or AnalogVuCard or AnalogVuControl or PlaylistCard) return false;
+                if (current is MusicConsoleControl or MusicPlayerCard or AnalogVuCard or AnalogVuControl or PlaylistCard or MediaWidget) return false;
                 if (current is UserControl module)
                 {
                     // Use the module's actual first row, including its upper padding.
@@ -1369,7 +1372,7 @@ namespace Ekrano_valdymas
             bool canIdle = openModuleOptions?.IsOpen != true && ContextMenu?.IsOpen != true && activeBrowser?.InteractionInProgress != true;
             long idleMilliseconds = Environment.TickCount64 - lastLocalActivityTick;
             bool inactive = canIdle && idleMilliseconds >= 10000;
-            webPageIdle = canIdle && idleMilliseconds >= 3000;
+            webPageIdle = canIdle && idleMilliseconds >= InteractionFeedback.ControlsIdleMilliseconds;
             UpdateWebPageLayout();
             SetElementsAutoDimmed(autoDimElements && inactive);
             SetAutoDashHidden(autoDashHideEnabled && webPageIdle && activeBrowser != null && isCompact);
@@ -1815,6 +1818,7 @@ namespace Ekrano_valdymas
             object sender,
             RoutedEventArgs e)
         {
+            if (ContextMenu != null) ContextMenu.IsOpen = false;
             CaptureFitRestoreBounds();
             if (FitCapturedLinkedCompositeToCurrentMonitorPixels()) return;
             NativeRect area=CurrentWorkPixels();
@@ -2333,6 +2337,7 @@ namespace Ekrano_valdymas
                 if (ModuleLayoutPlanner.IsBlockedByWide(i, systemWide?systemSpan:wideShortcutsSpan)) continue;
                 hosts[i].Content = selectedModules[i] switch
                 {
+                    ModuleKind.Media => GetMediaWidget(),
                     ModuleKind.Obs => obsWidget,
                     ModuleKind.Weather => weatherWidget,
                     ModuleKind.System => EnsureSystemMonitor(),
@@ -2710,13 +2715,16 @@ namespace Ekrano_valdymas
         private void SetCompactMode(bool compact, Action? completed = null)
         {
             long version=++compactTransitionVersion;
+            StopDashboardReveal();
             widgetsGrid.BeginAnimation(OpacityProperty,null);
             if(compact==isCompact) { completed?.Invoke(); return; }
+            if(!compact && IsLoaded && SystemParameters.ClientAreaAnimation) PreserveCompactFrame();
             if(compact) { expandedWidth=ActualWidth; expandedHeight=ActualHeight; }
             isCompact=compact;
             void Commit()
             {
                 if(version!=compactTransitionVersion) return;
+                bool reveal=!compact && IsLoaded && SystemParameters.ClientAreaAnimation;
                 using (Dispatcher.DisableProcessing())
                 {
                     // Capture the native anchor before changing WPF layout. A
@@ -2732,13 +2740,16 @@ namespace Ekrano_valdymas
                     moduleGapRow.Height=new GridLength(compact||hiddenMusicBar?0:9);
                     dashboardCanvas.Height=compact?CompactCanvasHeight:ExpandedDashboardCanvasHeight;
                     UpdateBackgroundModuleActivity();
+                    // Install the initial clipped frame before exposing the
+                    // expanded native window to layout/composition callbacks.
+                    if(reveal) { UpdateWebPageLayout(); RevealDashboard(version,completed,targetBounds); }
                     ApplyGeometry(targetBounds);
                 }
                 // UpdateLayout also raises UI Automation events. Their COM
                 // callbacks need dispatcher processing, especially on first use.
                 UpdateLayout();
                 ApplyAutoDimOpacity();
-                completed?.Invoke();
+                if(!reveal) completed?.Invoke();
             }
             quickLaunchBar.SetCompactMode(compact);
             // A single layout/placement transaction avoids a faded full-size
@@ -3367,7 +3378,7 @@ namespace Ekrano_valdymas
                 }
                 uiOpacity = settings.UiOpacity is >= 0.60 and <= 1.0
                     ? settings.UiOpacity : 1.0;
-                backgroundTransparency=double.IsFinite(settings.BackgroundTransparency)?Math.Clamp(settings.BackgroundTransparency,0,100):0;
+                backgroundTransparency=double.IsFinite(settings.BackgroundTransparency)?Math.Clamp(settings.BackgroundTransparency,0,100):45;
                 ApplyUiOpacityImmediate();
                 ApplyAutoDimOpacity();
                 ApplyAccentColor(
@@ -3573,6 +3584,7 @@ namespace Ekrano_valdymas
             object? sender,
             System.ComponentModel.CancelEventArgs e)
         {
+            StopDashboardReveal();
             pendingTabPersistence?.Abort();
             pendingTabPersistence = null;
             telemetryTimer.Stop();
@@ -4047,7 +4059,7 @@ namespace Ekrano_valdymas
             public double Height { get; set; }
             public double ModuleOpacity { get; set; } = 0.7;
             public double UiOpacity { get; set; } = 1.0;
-            public double BackgroundTransparency { get; set; }
+            public double BackgroundTransparency { get; set; } = 45;
             public double FontScale { get; set; } = 1.15;
             public string? Coordinates { get; set; }
             public string? City { get; set; }
@@ -4140,6 +4152,7 @@ namespace Ekrano_valdymas
             ,SystemWide, SystemFull
             ,Airthings
             ,Shortcuts3
+            ,Media
         }
 
         private enum DockEdge
@@ -4250,6 +4263,7 @@ namespace Ekrano_valdymas
         }
     }
 }
+
 
 
 

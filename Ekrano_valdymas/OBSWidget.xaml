@@ -110,7 +110,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="54"/>
                         </Grid.RowDefinitions>
                         <Grid Width="40" Height="40"
                               HorizontalAlignment="Center" VerticalAlignment="Top">
@@ -129,6 +129,9 @@
                                   HorizontalAlignment="Center"
                                   VerticalAlignment="Center"/>
                         </Grid>
+                        <local:OpticallyCenteredText Grid.Row="2" x:Name="txtReplayDuration"
+                             Height="22" VerticalAlignment="Top" HorizontalAlignment="Center"
+                             TextFontFamily="Segoe UI" TextFontSize="16" TextBrush="{DynamicResource PanelTextBrush}"/>
                         <Border Grid.Row="2" Background="#24FFFFFF" CornerRadius="5"
                                 Padding="6,2" HorizontalAlignment="Center"
                                 VerticalAlignment="Bottom">
@@ -267,16 +270,43 @@
 
             <Border Grid.Row="3" Background="{DynamicResource PanelDividerBrush}"/>
 
-            <StackPanel Grid.Row="4" Orientation="Horizontal"
-                        VerticalAlignment="Center" Margin="4,0,0,0">
-                <StackPanel.RenderTransform>
+            <Grid Grid.Row="4" Margin="-6,0,-6,0" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="3*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                <Grid.RenderTransform>
                     <TranslateTransform Y="6"/>
-                </StackPanel.RenderTransform>
+                </Grid.RenderTransform>
+                <DockPanel Margin="10,0,4,0" VerticalAlignment="Center">
                 <TextBlock x:Name="txtStatusLabel" Text="Status:"
                            Foreground="{DynamicResource PanelTextBrush}" FontSize="23"/>
                 <TextBlock x:Name="txtStatus" Text="Connecting..." Foreground="{DynamicResource PanelTextBrush}"
-                           FontSize="23" FontWeight="SemiBold" Margin="8,0,0,0"/>
-            </StackPanel>
+                           FontSize="23" FontWeight="SemiBold" Margin="8,0,0,0"
+                           TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+                </DockPanel>
+                <Button Grid.Column="1" x:Name="btnReplayFolder" Margin="6,0" Height="48"
+                        HorizontalAlignment="Stretch"
+                        Style="{StaticResource ModuleOptionsButtonStyle}" Tag="NoWindowDrag"
+                        Background="{DynamicResource ModuleCardSurfaceBrush}" BorderBrush="#27FFFFFF" BorderThickness="1.5"
+                        AutomationProperties.Name="{Binding ToolTip, RelativeSource={RelativeSource Self}}"
+                        Click="OpenReplayFolder_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="surface" CornerRadius="14" Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="surface" Property="Background" Value="#28FFFFFF"/></Trigger>
+                                <Trigger Property="IsPressed" Value="True"><Setter TargetName="surface" Property="Background" Value="#48000000"/></Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Canvas Width="40" Height="32" IsHitTestVisible="False">
+                        <Path Stroke="{DynamicResource PanelTextBrush}" StrokeThickness="2.5" StrokeLineJoin="Round"
+                              Data="M1.5,8 V4 Q1.5,1.5 4,1.5 H12 Q13.5,1.5 14.2,2.5 L17.5,6.5 M1.5,9 Q1.5,6.5 4,6.5 H36 Q38.5,6.5 38.5,9 V28 Q38.5,30.5 36,30.5 H4 Q1.5,30.5 1.5,28 Z"/>
+                        <Path Fill="{DynamicResource PanelTextBrush}" Data="M16,12.5 L26.5,18.5 L16,24.5 Z"/>
+                    </Canvas>
+                </Button>
+            </Grid>
         </Grid>
     </Border>
 </UserControl>

@@ -15,6 +15,7 @@ internal sealed class OriginalVuCardMeter : UserControl
     private readonly Image housing=new(){Stretch=Stretch.Fill};
     private readonly List<(Image Image,string File)> parts=new();
     private string finish="";
+    private readonly Image[] dialFaces = new Image[2];
     private readonly System.Windows.Shapes.Ellipse[] peakLights=new System.Windows.Shapes.Ellipse[2];
     private readonly long[] peakUntil=new long[2];
     private double sensitivity=MusicConsoleControl.DefaultVuSensitivity;
@@ -35,6 +36,9 @@ internal sealed class OriginalVuCardMeter : UserControl
         {
             double x=47+i*399;
             var layer=new Canvas{Clip=new RectangleGeometry(new Rect(0,0,342,207),4,4)};Put(layer,x,63,342,207);
+            var dial = MusicConsoleControl.CreateVuDial(i, MusicFinish.Name);
+            dialFaces[i] = (Image)dial.Child;
+            layer.Children.Add(dial);
             var needle=new Image{Width=8,Height=218,Stretch=Stretch.Fill,RenderTransform=needles[i]};
             parts.Add((needle,$"vu-{i+1}-needle.png"));Canvas.SetLeft(needle,167);Canvas.SetTop(needle,40);layer.Children.Add(needle);
             var cover=new Image{Stretch=Stretch.Fill};parts.Add((cover,$"vu-{i+1}-cover.png"));Put(cover,x,63,342,207);
@@ -74,6 +78,7 @@ internal sealed class OriginalVuCardMeter : UserControl
     internal void RefreshFinish()
     {
         if(finish==MusicFinish.Name)return;finish=MusicFinish.Name;
+        foreach (var dial in dialFaces) dial.Opacity = MusicConsoleControl.VuDialTransmission(finish);
         var panel=MusicConsoleControl.Bitmap("panel-static.png",finish:finish);double scale=panel.PixelWidth/1900d;
         var crop=new CroppedBitmap(panel,new Int32Rect((int)Math.Round(854*scale),(int)Math.Round(47*scale),(int)Math.Round(835*scale),(int)Math.Round(335*scale)));crop.Freeze();housing.Source=finish=="militarity"?MusicConsoleControl.Bitmap("vu-card-housing.png",finish:finish):crop;
         foreach(var part in parts)part.Image.Source=MusicConsoleControl.Bitmap(part.File,finish:finish);

@@ -162,6 +162,7 @@ internal sealed partial class MusicConsoleControl : UserControl
         {
             double x = 923 + i * 399;
             Canvas layer = new() { Clip = new RectangleGeometry(new Rect(0, 0, 342, 207), 4, 4), IsHitTestVisible = false };Put(layer, x, 115, 342, 207);
+            layer.Children.Add(CreateVuDial(i, instanceFinish));
             Image needle = Image($"vu-{i + 1}-needle.png"); needle.Width = 8; needle.Height = 218;
             Canvas.SetLeft(needle, 167); Canvas.SetTop(needle, 40); needle.RenderTransform = needles[i];
             // One moving silhouette. A displaced effect reads as a second needle
@@ -275,7 +276,7 @@ internal sealed partial class MusicConsoleControl : UserControl
                 !directionalLamps.Contains(element)?strength*illumination*(playing?1:.18):
                 // Display-space fit to the approved Blender .035-emission render.
                 // Blender emission is linear radiance, not an overlay opacity.
-                instanceFinish=="light"&&symbol?strength*illumination*.176580765:0;
+                (instanceFinish is "light" or "brushed-light")&&symbol?strength*illumination*.176580765:0;
             SetLampOpacity(element,level);
         }
     }
@@ -524,6 +525,37 @@ internal sealed partial class MusicConsoleControl : UserControl
             (!vu&&!wide&&(key=="panel-static.png"||key.EndsWith("/panel-static.png",StringComparison.Ordinal)))).ToArray())
             CacheImage(key,images[key],null);
     }
+    // The approved Powder black Blender render supplies the dial illumination.
+    // Decode only its two dial apertures; the surrounding hardware belongs to the skin.
+    private static readonly Lazy<BitmapSource>[] vuDialFaces =
+        [new(() => LoadVuDial(0)), new(() => LoadVuDial(1))];
+
+    private static BitmapSource LoadVuDial(int channel)
+    {
+        var image = new BitmapImage();
+        image.BeginInit();
+        image.CacheOption = BitmapCacheOption.OnLoad;
+        image.UriSource = new Uri("pack://application:,,,/Assets/MusicConsole/Wide/powder-black/panel-static.png");
+        const int renderScale = 3;
+        image.SourceRect = new Int32Rect((901 + channel * 399) * renderScale, 110 * renderScale,
+            342 * renderScale, 207 * renderScale);
+        image.EndInit();
+        image.Freeze();
+        // Preserve the player's existing red-zone calibration, which starts at row 115.
+        return CalibrateRedZone(image, 0, 5 * renderScale, image.PixelWidth, image.PixelHeight);
+    }
+
+    internal static double VuDialTransmission(string finish) => finish == "militarity" ? .76 : .96;
+
+    internal static Border CreateVuDial(int channel, string finish)
+    {
+        var dial = new Image { Width = 342, Height = 207, Stretch = Stretch.Fill,
+            Source = vuDialFaces[channel].Value, IsHitTestVisible = false };
+        RenderOptions.SetBitmapScalingMode(dial, BitmapScalingMode.HighQuality);
+        dial.Opacity = VuDialTransmission(finish);
+        return new Border { Background = Brushes.Black, Child = dial, IsHitTestVisible = false };
+    }
+
     private static BitmapSource WideBitmap(string file,string finish)=>Bitmap($"Wide/{MusicFinish.Normalize(finish)}/{file}",legacy:true,finish:finish);
     internal static BitmapSource Bitmap(string file,bool legacy=false,string? finish=null)=>BitmapDecoded(file,legacy,finish,0);
     private static BitmapSource BitmapDecoded(string file,bool legacy,string? finish,int decodeWidth)
@@ -544,15 +576,56 @@ internal sealed partial class MusicConsoleControl : UserControl
         string resourceKey=key;
         if(decodeWidth>0)key+="@"+decodeWidth;
         if(TryCachedImage(key,out var image))return image;
-        var original=new BitmapImage();original.BeginInit();if(decodeWidth>0)original.CacheOption=BitmapCacheOption.OnLoad;original.UriSource=new Uri("pack://application:,,,/Assets/MusicConsole/"+resourceKey);if(decodeWidth>0)original.DecodePixelWidth=decodeWidth;original.EndInit();original.Freeze();image=original;
+        image=DecodeImage(resourceKey,file,decodeWidth);
+        CacheImage(key,image,ownerFinish);return image;
+    }
+    // No cache or controls touched here: frozen pixels may be prepared off-thread.
+    private static BitmapSource DecodeImage(string resourceKey,string file,int decodeWidth)
+    {
+        var original=new BitmapImage();original.BeginInit();original.CacheOption=BitmapCacheOption.OnLoad;original.UriSource=new Uri("pack://application:,,,/Assets/MusicConsole/"+resourceKey);if(decodeWidth>0)original.DecodePixelWidth=decodeWidth;original.EndInit();original.Freeze();BitmapSource image=original;
         if(file.EndsWith("panel-static.png",StringComparison.Ordinal))
         {
-            var b=new FormatConvertedBitmap(original,PixelFormats.Bgra32,null,0);int stride=b.PixelWidth*4;byte[] pixels=new byte[stride*b.PixelHeight];b.CopyPixels(pixels,stride,0);
-            double scale=b.PixelWidth/1900d;
-            for(int y=(int)(115*scale);y<(int)(322*scale);y++)for(int x=(int)((923+ContentOffsetX)*scale);x<(int)((1664+ContentOffsetX)*scale);x++){int p=y*stride+x*4;if(pixels[p+2]>pixels[p+1]*1.7&&pixels[p+1]>pixels[p]*1.3&&pixels[p+2]>65){pixels[p+2]=(byte)Math.Min(245,pixels[p+2]*1.55);pixels[p+1]=(byte)Math.Min(110,pixels[p+1]*1.55);pixels[p]=(byte)Math.Min(55,pixels[p]*1.25);}}
-            image=BitmapSource.Create(b.PixelWidth,b.PixelHeight,96,96,PixelFormats.Bgra32,null,pixels,stride);image.Freeze();
+            double scale=original.PixelWidth/1900d;
+            image = CalibrateRedZone(original, (int)((923+ContentOffsetX)*scale), (int)(115*scale),
+                (int)((1664+ContentOffsetX)*scale), (int)(322*scale));
         }
-        CacheImage(key,image,ownerFinish);return image;
+        return image;
+    }
+
+    private static BitmapSource CalibrateRedZone(BitmapSource source, int left, int top, int right, int bottom)
+    {
+        var b = new FormatConvertedBitmap(source, PixelFormats.Bgra32, null, 0);
+        int stride = b.PixelWidth * 4;
+        var pixels = new byte[stride * b.PixelHeight];
+        b.CopyPixels(pixels, stride, 0);
+        for (int y = top; y < bottom; y++)
+        for (int x = left; x < right; x++)
+        {
+            int p = y * stride + x * 4;
+            if (pixels[p+2] <= pixels[p+1]*1.7 || pixels[p+1] <= pixels[p]*1.3 || pixels[p+2] <= 65) continue;
+            pixels[p+2]=(byte)Math.Min(245,pixels[p+2]*1.55);
+            pixels[p+1]=(byte)Math.Min(110,pixels[p+1]*1.55);
+            pixels[p]=(byte)Math.Min(55,pixels[p]*1.25);
+        }
+        var result = BitmapSource.Create(b.PixelWidth, b.PixelHeight, 96, 96, PixelFormats.Bgra32, null, pixels, stride);
+        result.Freeze();
+        return result;
+    }
+
+    internal static async System.Threading.Tasks.Task PreparePanelAsync(string finish,System.Threading.CancellationToken cancellation)
+    {
+        finish=MusicFinish.Normalize(finish);
+        string file=$"Wide/{finish}/panel-static.png";
+#if ADAPTIVE_PANEL
+        const int width=3072;
+#else
+        const int width=0;
+#endif
+        string key=file+(width>0?"@"+width:"");
+        if(TryCachedImage(key,out _))return;
+        var image=await System.Threading.Tasks.Task.Run(()=>DecodeImage(file,file,width),cancellation);
+        // Continuation returns to the UI dispatcher, the sole owner of this cache.
+        if(!cancellation.IsCancellationRequested&&!TryCachedImage(key,out _))CacheImage(key,image,finish);
     }
     internal static (BitmapSource,BitmapSource) SymbolLayers(BitmapSource image,bool neutral=false)
     {

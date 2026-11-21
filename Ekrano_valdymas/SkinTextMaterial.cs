@@ -16,6 +16,16 @@ internal static class SkinTextMaterial
         string shape=PathGeometry.CreateFromGeometry(glyph).ToString(System.Globalization.CultureInfo.InvariantCulture);
         string key=$"{style}|{CommonMetal.FinishName}|{CommonMetal.NoSkin}|{CommonMetal.Viewport(owner)}|{sampling}|{shape}";
         bool relief=style is "metal" or "inlay";
+        // Relief is computed from neighbouring mask pixels. Leave a clear border
+        // around the ink so the outermost digits have the same lighting as inner ones.
+        if (relief)
+        {
+            double kernelScale = Math.Max(1, Math.Round(Math.Max(bounds.Width, bounds.Height) * sampling / 128));
+            double margin = Math.Ceiling(4 * kernelScale + 2) / sampling;
+            bounds.Inflate(margin, margin);
+            bounds = new Rect(bounds.X, bounds.Y, Math.Ceiling(bounds.Width * sampling) / sampling,
+                Math.Ceiling(bounds.Height * sampling) / sampling);
+        }
         double side=Math.Max(bounds.Width,bounds.Height);
         if(!materials.TryGetValue(key,out var result))
         {
@@ -25,7 +35,7 @@ internal static class SkinTextMaterial
             }
             var mask=new RenderTargetBitmap(Math.Max(1,(int)Math.Ceiling(bounds.Width*sampling)),Math.Max(1,(int)Math.Ceiling(bounds.Height*sampling)),96*sampling,96*sampling,PixelFormats.Pbgra32);mask.Render(visual);mask.Freeze();
             if(relief){
-                // Proxy has the exact ink rectangle; the square renderer's unused area stays transparent.
+                // Sample the skin and draw back into the same padded coordinate system.
                 var proxy=new FrameworkElement{Width=bounds.Width,Height=bounds.Height};proxy.Measure(new Size(bounds.Width,bounds.Height));proxy.Arrange(new Rect(0,0,bounds.Width,bounds.Height));
                 var material=CommonMetal.ForBevel(owner).Clone();material.Transform=new TranslateTransform(-bounds.X,-bounds.Y);
                 result=InstalledIconMaterials.Render(proxy,mask,false,style,sampling,material,glyph:true);

@@ -219,6 +219,12 @@ namespace Ekrano_valdymas
         {
             bool obsRunning = IsObsRunning();
 
+            if (DateTime.UtcNow >= _nextHotkeyCheck)
+            {
+                _nextHotkeyCheck = DateTime.UtcNow.AddSeconds(2);
+                UpdateObsHotkeys();
+            }
+
             if (!obsRunning)
             {
                 if (_obsClient.IsConnected || _recording || _replayBufferActive)
@@ -249,12 +255,6 @@ namespace Ekrano_valdymas
             }
 
             UpdateConnectionButton();
-
-            if (DateTime.UtcNow >= _nextHotkeyCheck)
-            {
-                _nextHotkeyCheck = DateTime.UtcNow.AddSeconds(2);
-                UpdateObsHotkeys();
-            }
 
             if (IsObsRunning() &&
                 !_obsClient.IsConnected &&
@@ -550,6 +550,47 @@ namespace Ekrano_valdymas
             });
         }
 
+        private async void OpenReplayFolder_Click(object sender, RoutedEventArgs e)
+        {
+            btnReplayFolder.IsEnabled = false;
+            try
+            {
+                string? replay = _obsClient.LastSavedReplayPath;
+                if (_obsClient.IsConnected)
+                {
+                    try
+                    {
+                        var last = await _obsClient.SendRequestAsync("GetLastReplayBufferReplay");
+                        if (last.TryGetProperty("savedReplayPath", out var path) && !string.IsNullOrWhiteSpace(path.GetString()))
+                            replay = path.GetString();
+                    }
+                    catch (InvalidOperationException) when (_obsClient.IsConnected)
+                    {
+                        // OBS can have no saved replay in the current session.
+                    }
+                }
+                string? folder = Path.GetDirectoryName(replay);
+                if (string.IsNullOrEmpty(folder) && _obsClient.IsConnected)
+                {
+                    var output = await _obsClient.SendRequestAsync("GetRecordDirectory");
+                    folder = output.GetProperty("recordDirectory").GetString();
+                }
+                if (folder == null || !Path.IsPathFullyQualified(folder) || !Directory.Exists(folder))
+                {
+                    SetStatus("Replay folder unavailable", "Nepavyko rasti pakartojimų aplanko", ActiveRed);
+                    return;
+                }
+                var explorer = new ProcessStartInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe"));
+                explorer.ArgumentList.Add(Path.GetFullPath(folder));
+                Process.Start(explorer)?.Dispose();
+            }
+            catch (Exception ex)
+            {
+                SetStatus(GetFriendlyError(ex, false), GetFriendlyError(ex, true), ActiveRed);
+            }
+            finally { btnReplayFolder.IsEnabled = true; }
+        }
+
         private void ApplyLanguage()
         {
             txtObsHeading.Text = LanguageManager.Text("OBS CONTROLS", "OBS VALDYMAS");
@@ -557,6 +598,7 @@ namespace Ekrano_valdymas
                 "SAVE REPLAY",
                 "IŠSAUGOTI REPLAY");
             txtStatusLabel.Text = LanguageManager.Text("Status:", "Būsena:");
+            btnReplayFolder.ToolTip = LanguageManager.Text("Open replay folder", "Atidaryti pakartojimų aplanką");
             UpdateConnectionButton();
         }
 
@@ -672,6 +714,9 @@ namespace Ekrano_valdymas
                     return;
 
                 string[] lines = File.ReadAllLines(hotkeyFile);
+                bool advanced = string.Equals(ReadIniValue(lines, "Output", "Mode"), "Advanced", StringComparison.OrdinalIgnoreCase);
+                string? duration = ReadIniValue(lines, advanced ? "AdvOut" : "SimpleOutput", "RecRBTime");
+                txtReplayDuration.Text = int.TryParse(duration, out int seconds) && seconds > 0 ? $"{seconds} s" : "";
 
                 _startRecordHotkey = ReadHotkey(lines, "OBSBasic.StartRecording");
                 _stopRecordHotkey = ReadHotkey(lines, "OBSBasic.StopRecording");
@@ -694,6 +739,7 @@ namespace Ekrano_valdymas
 
         private void ClearObsHotkeys()
         {
+            txtReplayDuration.Text = "";
             bool changed = _startRecordHotkey != "NO HOTKEY" || _stopRecordHotkey != "NO HOTKEY" ||
                 _startReplayHotkey != "NO HOTKEY" || _stopReplayHotkey != "NO HOTKEY" || _saveReplayHotkey != "NO HOTKEY";
             _hotkeyFileState = "";
@@ -709,9 +755,14 @@ namespace Ekrano_valdymas
             if (!File.Exists(filePath))
                 return null;
 
+            return ReadIniValue(File.ReadLines(filePath), section, key);
+        }
+
+        private static string? ReadIniValue(System.Collections.Generic.IEnumerable<string> lines, string section, string key)
+        {
             bool inSection = false;
 
-            foreach (string rawLine in File.ReadLines(filePath))
+            foreach (string rawLine in lines)
             {
                 string line = rawLine.Trim();
 

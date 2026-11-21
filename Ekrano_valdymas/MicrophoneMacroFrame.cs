@@ -57,9 +57,9 @@ public sealed class MicrophoneMacroFrame : Grid
     internal void Tick()
     {
         var reading=DiagnosticReading??lease?.Read()??MicrophoneLevels.Reading.Missing;
-        caption.Text=!reading.Available?"—":reading.Channels==1?"MONO":"STEREO";
+        caption.Text=!reading.Available?"—":$"{reading.Channels} CH";
         caption.TextBrush=reading.Muted?Brushes.Orange:Brushes.LightGray;
-        ToolTip=!reading.Available?"Microphone unavailable":(reading.Channels==1?"Mono input — both meters show the same signal":"Stereo input — left / right channels")+(reading.Muted?" · muted":"");
+        ToolTip=!reading.Available?"Microphone unavailable":$"Windows input: {reading.Channels} channel(s). "+(reading.Channels==1?"Both meters show channel 1.":"Meters show channels 1 and 2.")+(reading.Muted?" · muted":"");
         double l=reading.Available&&!reading.Muted?reading.Left:0,r=reading.Available&&!reading.Muted?(reading.Channels==1?reading.Left:reading.Right):0;
         left.Level=Math.Max(l,left.Level*.78);right.Level=reading.Channels==1?left.Level:Math.Max(r,right.Level*.78);
         if(reading.Muted||!reading.Available)left.Level=right.Level=0;

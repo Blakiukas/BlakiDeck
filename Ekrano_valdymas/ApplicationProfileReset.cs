@@ -5,22 +5,22 @@ using System.Text.Json.Nodes;
 
 namespace Ekrano_valdymas;
 
-internal enum ProfileResetScope { Layout, Full }
+internal enum ProfileResetScope { Layout, Full, Import }
 
 // A reset is applied by the replacement process after the old process has exited,
 // before any settings, services or WebView controls are constructed.
 internal static class ApplicationProfileReset
 {
-    private sealed record Request(string Token, ProfileResetScope Scope, int ProcessId, long StartTicks);
+    private sealed record Request(string Token, ProfileResetScope Scope, int ProcessId, long StartTicks, string? Archive=null);
     private static string Folder => Path.GetFullPath(Path.Combine(DiagnosticState.LocalApplicationData,"Ekrano_valdymas"));
     private static string RequestPath => Path.Combine(Folder,"pending-profile-reset.json");
 
-    internal static ProcessStartInfo CreateRestart(ProfileResetScope scope)
+    internal static ProcessStartInfo CreateRestart(ProfileResetScope scope,string? archive=null)
     {
         if(DiagnosticState.Root != null) throw new InvalidOperationException("Diagnostic windows cannot restart the real application.");
         using var process=Process.GetCurrentProcess();
         string token=Guid.NewGuid().ToString("N");
-        AtomicJson.Write(RequestPath,new Request(token,scope,process.Id,process.StartTime.ToUniversalTime().Ticks));
+        AtomicJson.Write(RequestPath,new Request(token,scope,process.Id,process.StartTime.ToUniversalTime().Ticks,archive));
         var start=new ProcessStartInfo(Environment.ProcessPath ?? throw new IOException("The application path is unavailable."))
         { UseShellExecute=false,WorkingDirectory=AppContext.BaseDirectory,WindowStyle=ProcessWindowStyle.Hidden };
         start.ArgumentList.Add("--apply-profile-reset");start.ArgumentList.Add(token);
@@ -44,7 +44,9 @@ internal static class ApplicationProfileReset
     internal static void ApplyPending(string token)
     {
         var request=ReadRequest(token);
-        Apply(request.Scope);
+        if(request.Scope==ProfileResetScope.Import)
+            SettingsBackup.Restore(Folder,request.Archive ?? throw new IOException("Missing settings backup."));
+        else Apply(request.Scope);
         if(File.Exists(RequestPath))File.Delete(RequestPath);
         if(File.Exists(RequestPath+".previous"))File.Delete(RequestPath+".previous");
     }

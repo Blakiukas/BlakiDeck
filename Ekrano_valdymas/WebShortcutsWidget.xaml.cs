@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -197,7 +197,16 @@ namespace Ekrano_valdymas
         private void RefreshTiles()
         {
             tiles.ItemsSource = BuildVisibleTiles(items);
+            UpdateScrollPolicy();
             QueuePreviewDemand();
+        }
+
+        private void UpdateScrollPolicy()
+        {
+            if (webScroll == null || tiles == null) return;
+            webScroll.VerticalScrollBarVisibility = ViewMode == "Thumbs"
+                ? (tiles.Items.Count > 4 ? ScrollBarVisibility.Visible : ScrollBarVisibility.Disabled)
+                : ScrollBarVisibility.Auto;
         }
 
         internal static List<WebShortcut> BuildVisibleTiles(IEnumerable<WebShortcut> source)

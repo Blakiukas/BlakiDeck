@@ -32,9 +32,9 @@ internal static class MacroEditor
         var error=new TextBlock{TextWrapping=TextWrapping.Wrap,Foreground=System.Windows.Media.Brushes.OrangeRed,Margin=new Thickness(4)};DockPanel.SetDock(error,Dock.Bottom);root.Children.Add(error);
         var body=new Grid();body.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(3,GridUnitType.Star)});body.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(2,GridUnitType.Star)});body.RowDefinitions.Add(new RowDefinition());body.RowDefinitions.Add(new RowDefinition{Height=GridLength.Auto});root.Children.Add(body);
         var right=new StackPanel{Margin=new Thickness(16,0,0,0)};var rightViewport=MacroUi.Scroll(right);Grid.SetColumn(rightViewport,1);body.Children.Add(rightViewport);
-        var fields=new StackPanel();var settingsTabs=new TabControl{VerticalAlignment=VerticalAlignment.Top,Margin=new Thickness(0,0,0,8)};settingsTabs.Items.Add(new TabItem{Header="General",Content=MacroUi.Scroll(fields)});body.Children.Add(settingsTabs);
-        var name=new TextBox{Name="macroName",Text=draft.Name,MaxLength=80,FontWeight=FontWeights.SemiBold,Foreground=new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(244,205,142))};var icon=new TextBox{Text=draft.Icon};
-        EditorUi.Field(fields,"Macro name",name);EditorUi.Field(fields,"Icon symbol or image path",icon);
+        var iconFields=new StackPanel{Name="MacroIconFields"};var fields=new StackPanel();var settingsTabs=new TabControl{VerticalAlignment=VerticalAlignment.Top,Margin=new Thickness(0,0,0,8)};settingsTabs.Items.Add(new TabItem{Header="General",Content=MacroUi.Scroll(fields)});body.Children.Add(settingsTabs);
+        var name=new TextBox{Name="macroName",Text=draft.Name,MaxLength=80,FontWeight=FontWeights.SemiBold,Foreground=new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(244,205,142))};var icon=new TextBox{Name="MacroIconPath",Text=draft.Icon};
+        EditorUi.Field(fields,"Macro name",name);EditorUi.Field(iconFields,"Icon symbol or image path",icon);
         var hotkey=new TextBox{Name="macroHotkey",Text=draft.Hotkey,IsReadOnly=true,ToolTip="Click here and press the keys to assign."};
         EditorUi.Field(fields,"Trigger keys (global shortcut)",hotkey);
         hotkey.PreviewKeyDown+=(_,e)=>{
@@ -48,15 +48,15 @@ internal static class MacroEditor
         AppearanceEditorUi.Help(fields,"Click the field and press a combination. Works while BlakiDeck is running, even in another app. Paused while editing settings.");
         error.Text=MacroHotkeys.Current?.Error(draft.Id)??"";
         var presentation=AppearanceEditorUi.Presentation(draft.Presentation??"IconText");
-        EditorUi.Field(fields,"Show macro: text / icon / icon and text",presentation);
-        AppearanceEditorUi.Help(fields,"This choice applies to this macro in the library and on its shortcuts.");
+        EditorUi.Field(iconFields,"Show macro: text / icon / icon and text",presentation);
+        AppearanceEditorUi.Help(iconFields,"This choice applies to this macro in the library and on its shortcuts.");
         var iconButtons=new WrapPanel();
         iconButtons.Children.Add(MacroUi.Button("Choose file…",(_,_)=>{if(DefaultIconCatalog.ChooseImage(dialog) is string path)icon.Text=MacroDefaultIcons.Portable(path);}));
-        var defaults=MacroUi.Button("Built-in icons…",(_,_)=>{if(BuiltInIconGallery.Choose(dialog,"Macros") is string path)icon.Text=MacroDefaultIcons.Portable(path);});iconButtons.Children.Add(defaults);fields.Children.Add(iconButtons);
-        foreach(FrameworkElement field in fields.Children)
+        var defaults=MacroUi.Button("Built-in icons…",(_,_)=>{if(BuiltInIconGallery.Choose(dialog,"Macros") is string path)icon.Text=MacroDefaultIcons.Portable(path);});iconButtons.Children.Add(defaults);iconFields.Children.Add(iconButtons);
+        foreach(FrameworkElement field in fields.Children.Cast<FrameworkElement>().Concat(iconFields.Children.Cast<FrameworkElement>()))
             field.Margin=field is TextBlock?new Thickness(4,4,4,2):new Thickness(4,2,4,2);
         string effectTarget=MacroLibrary.Prefix+draft.Id;
-        var iconEffect=ShortcutIconEffect.Editor(fields,effectTarget);
+        var iconEffect=ShortcutIconEffect.Editor(iconFields,effectTarget);
         iconEffect.SelectionChanged+=(_,_)=>ShortcutIconEffect.Preview(effectTarget,AppearanceEditorUi.Selected(iconEffect));
         var branch=AppearanceEditorUi.Choice("A",("A","Action A — steps"),("B","Action B — steps"));branch.Name="actionBranch";
         right.Children.Add(new TextBlock{Text="Actions",FontSize=20,Foreground=System.Windows.Media.Brushes.White,Margin=new Thickness(4,8,4,8)});right.Children.Add(branch);
@@ -64,7 +64,7 @@ internal static class MacroEditor
         void ModeChanged(){branch.Visibility=draft.IconMode=="Alternate"?Visibility.Visible:Visibility.Collapsed;if(draft.IconMode!="Alternate")branch.SelectedIndex=0;}
         Action? refreshTextPreview=null;
         var states=MacroStateEditorUi.Create(dialog,draft,steps,ModeChanged,()=>refreshTextPreview?.Invoke());
-        settingsTabs.Items.Add(new TabItem{Header="States & icons",Content=MacroUi.Scroll(states)});ModeChanged();
+        iconFields.Children.Add(states);settingsTabs.Items.Add(new TabItem{Header="States & icons",Content=MacroUi.Scroll(iconFields)});ModeChanged();
         var textFields=new StackPanel();
         LabelTypography.Editor(textFields,draft.Typography??new(){Size=16},value=>{draft.Typography=value;refreshTextPreview?.Invoke();},"MacroTextSize",includeEffect:true,defaults:new(){Size=16});
         AppearanceEditorUi.Help(textFields,"Text settings follow this macro in the library and on its shortcuts. Changes are saved only with Save.");
@@ -139,7 +139,7 @@ internal static class MacroEditor
             if(rightViewport.ActualHeight>0)
                 list.MaxHeight=Math.Max(list.MinHeight,rightViewport.ActualHeight-right.Margin.Top-otherHeight-4);
         }
-        body.SizeChanged+=(_,_)=>{bool narrow=body.ActualWidth<760;Grid.SetColumn(rightViewport,narrow?0:1);Grid.SetRow(rightViewport,narrow?1:0);body.RowDefinitions[1].Height=narrow?new GridLength(1,GridUnitType.Star):GridLength.Auto;Grid.SetColumnSpan(settingsTabs,narrow?2:1);Grid.SetColumnSpan(rightViewport,narrow?2:1);settingsTabs.Height=narrow?280:double.NaN;settingsTabs.MaxHeight=Math.Max(100,body.ActualHeight);AlignActions();};
+        body.SizeChanged+=(_,_)=>{bool narrow=body.ActualWidth<760;Grid.SetColumn(rightViewport,narrow?0:1);Grid.SetRow(rightViewport,narrow?1:0);body.RowDefinitions[1].Height=GridLength.Auto;Grid.SetColumnSpan(settingsTabs,narrow?2:1);Grid.SetColumnSpan(rightViewport,narrow?2:1);settingsTabs.Height=double.NaN;settingsTabs.MaxHeight=Math.Max(100,body.ActualHeight);AlignActions();};
         rightViewport.SizeChanged+=(_,_)=>AlignActions();
         actions.SizeChanged+=(_,_)=>AlignActions();
         microphoneFields.SizeChanged+=(_,_)=>AlignActions();
@@ -224,6 +224,8 @@ internal static class MacroEditor
         actions.Children.Add(MacroUi.Button("Cancel",(_,_)=>dialog.DialogResult=false));AppearanceEditorUi.Frame(dialog);kind.SelectionChanged+=(_,_)=>dialog.RequestContentFit();return dialog;
     }
 }
+
+
 
 
 

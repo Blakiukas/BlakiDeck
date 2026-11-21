@@ -14,6 +14,13 @@ internal static class PackagedIconPath
     internal static string? Resolve(string? path)
     {
         if(string.IsNullOrWhiteSpace(path))return path;
+        try
+        {
+            if(Path.IsPathFullyQualified(path)&&string.Equals(Path.GetDirectoryName(path),DefaultIconCatalog.PackagedDirectory,StringComparison.OrdinalIgnoreCase))
+                return DefaultIconCatalog.GetPath(Path.GetFileName(path))??path;
+        }
+        catch(ArgumentException){}
+        catch(NotSupportedException){}
         var context=current.Value;
         return context==null?path:ResolveForPackage(path,context.Root,context.Icons,context.Family);
     }
@@ -26,7 +33,11 @@ internal static class PackagedIconPath
             string root=Path.TrimEndingDirectorySeparator(Path.GetFullPath(packageRoot));
             string icons=Path.GetFullPath(iconDirectory);
             string candidate=Path.GetFullPath(path);
-            if(string.Equals(Path.GetDirectoryName(candidate),icons,StringComparison.OrdinalIgnoreCase))return path;
+            if(string.Equals(Path.GetDirectoryName(candidate),icons,StringComparison.OrdinalIgnoreCase))
+            {
+                string renamed=Path.Combine(icons,DefaultIconCatalog.CanonicalFileName(Path.GetFileName(candidate)));
+                return File.Exists(renamed)&&!HasLink(renamed,root)?renamed:path;
+            }
             string? store=Path.GetDirectoryName(root);
             if(store==null||!Inside(candidate,store)||!Inside(icons,root))return path;
             string relative=Path.GetRelativePath(store,candidate);
@@ -37,7 +48,7 @@ internal static class PackagedIconPath
             if(!string.Equals(Path.GetDirectoryName(candidate),expectedDirectory,StringComparison.OrdinalIgnoreCase))return path;
             // This resolver is deliberately limited to the shipped icon folder.
             if(!icons.EndsWith(Path.DirectorySeparatorChar+Path.Combine("Assets","DefaultIcons"),StringComparison.OrdinalIgnoreCase))return path;
-            string replacement=Path.Combine(icons,Path.GetFileName(candidate));
+            string replacement=Path.Combine(icons,DefaultIconCatalog.CanonicalFileName(Path.GetFileName(candidate)));
             if(!File.Exists(replacement)||HasLink(candidate,store)||HasLink(replacement,store))return path;
             return replacement;
         }

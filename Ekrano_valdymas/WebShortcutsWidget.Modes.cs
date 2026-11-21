@@ -2,6 +2,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 namespace Ekrano_valdymas;
+public sealed class WebThumbnailRowHeight : System.Windows.Data.IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        => value is double height && height > 0 ? Math.Floor(height / 2) : 0d;
+    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        => throw new NotSupportedException();
+}
+
 public partial class WebShortcutsWidget
 {
     private bool synchronizingView,suppressViewEvents;
@@ -25,6 +33,7 @@ public partial class WebShortcutsWidget
     private void ModeChanged()
     {
         synchronizingView=true;try{SetCurrentValue(ImagesOnlyProperty,ViewMode=="Thumbs");}finally{synchronizingView=false;}
+        UpdateScrollPolicy();
         if(webModeButton!=null){webModeButton.ToolTip="View: "+ViewMode+" · switch List / Thumbs / Icons";System.Windows.Automation.AutomationProperties.SetName(webModeButton,(string)webModeButton.ToolTip);}
         QueuePreviewDemand();if(!suppressViewEvents){ViewChanged?.Invoke(ImagesOnly);ViewModeChanged?.Invoke(ViewMode);}
     }

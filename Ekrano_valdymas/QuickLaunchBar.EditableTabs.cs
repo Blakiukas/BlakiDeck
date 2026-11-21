@@ -134,6 +134,7 @@ public partial class QuickLaunchBar
             var b=new Border{Tag=i.ToString(),Margin=new Thickness(3,8,3,8),CornerRadius=new CornerRadius(15),Cursor=Cursors.Hand};
             b.Name=$"tab{i+1}Button";RegisterName(b.Name,b);
             b.SetResourceReference(Border.BackgroundProperty,"ModuleCardSurfaceBrush");Grid.SetColumn(b,i);tabRailGrid.Children.Add(b);
+            InteractionFeedback.SetEnabled(b,true);
             b.PreviewMouseLeftButtonDown+=TopBarTab_PreviewMouseLeftButtonDown;b.PreviewMouseMove+=TopBarTab_PreviewMouseMove;b.PreviewMouseLeftButtonUp+=TopBarTab_PreviewMouseLeftButtonUp;
             b.PreviewTouchDown+=(s,e)=>TopBarTab_PreviewTouchDown(s!,e);b.PreviewTouchMove+=(s,e)=>TopBarTab_PreviewTouchMove(s!,e);b.PreviewTouchUp+=(s,e)=>TopBarTab_PreviewTouchUp(s!,e);
             borders.Add(b);labels.Add(new OpticallyCenteredText());
@@ -281,7 +282,7 @@ public partial class QuickLaunchBar
         double height=Math.Min(image.ActualHeight,image.ActualWidth*source.Height/source.Width);
         double rendered=height*ink.Height;
         if(rendered<=0)return false;
-        double top=image.TranslatePoint(new Point(0,(image.ActualHeight-height)/2+height*ink.Top),topBarGrid).Y;
+        double top=InteractionFeedback.RestingPoint(image,new Point(0,(image.ActualHeight-height)/2+height*ink.Top),topBarGrid).Y;
         if(shortcutInkTop is double previous&&Math.Abs(previous-top)<.01&&Math.Abs(shortcutInkHeight-rendered)<.01)return true;
         shortcutInkTop=top;shortcutInkHeight=rendered;
         foreach(var border in editableTabBorders)if(border.Child is TabInkLayout layout)layout.InvalidateMeasure();

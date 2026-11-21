@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Input;
@@ -11,19 +11,29 @@ internal sealed class AboutWindow:SettingsWindow
  public AboutWindow(string? language=null)
  {
   DisplayLanguage=language??LanguageSwitch.CurrentLanguage;
+  bool showingChanges=false;double aboutScrollOffset=0;
+  var history=new ChangesView(DisplayLanguage){Name="AboutChangesView"};
   Title="About BlakiDeck";Width=740;Height=700;ResizeMode=ResizeMode.CanResize;WindowStartupLocation=WindowStartupLocation.CenterOwner;ShowInTaskbar=false;
   WindowStyle=WindowStyle.None;AllowsTransparency=true;Background=Brushes.Transparent;Foreground=Brushes.White;FontFamily=new FontFamily("Segoe UI");FontSize=16;
   var panel=new DockPanel();
   System.Windows.Shell.WindowChrome.SetWindowChrome(this,new System.Windows.Shell.WindowChrome{CaptionHeight=0,ResizeBorderThickness=new Thickness(6),GlassFrameThickness=new Thickness(0),CornerRadius=new CornerRadius(14),UseAeroCaptionButtons=false});
   DialogWorkArea.Attach(this,540,360,deferDuringNativeMoveResize:true);
   Content=new Border{CornerRadius=new CornerRadius(14),Background=DocumentAppearance.Background,BorderBrush=DocumentAppearance.Border,BorderThickness=new Thickness(1),Child=panel};
-  var header=new Border{Background=Brushes.Transparent,Height=78,Padding=new Thickness(24,18,24,12)};
-  var headerContent=new DockPanel();header.Child=headerContent;DockPanel.SetDock(header,Dock.Top);panel.Children.Add(header);
+  var header=new Border{Background=Brushes.Transparent,MinHeight=78,Padding=new Thickness(24,18,24,12)};
+  var headerGrid=new Grid();headerGrid.RowDefinitions.Add(new RowDefinition{Height=GridLength.Auto});headerGrid.RowDefinitions.Add(new RowDefinition{Height=GridLength.Auto});
+  var headerContent=new DockPanel();headerGrid.Children.Add(headerContent);header.Child=headerGrid;DockPanel.SetDock(header,Dock.Top);panel.Children.Add(header);
   var close=MacroUi.Button("Close",(_,_)=>Close());close.Width=100;close.Height=44;close.Margin=new Thickness(16,0,0,0);close.IsCancel=true;DockPanel.SetDock(close,Dock.Right);headerContent.Children.Add(close);
   var choice=new LanguageSwitch(DisplayLanguage){VerticalAlignment=VerticalAlignment.Center};DockPanel.SetDock(choice,Dock.Right);headerContent.Children.Add(choice);
-  var title=new OpticallyCenteredText{Text="BlakiDeck",TextFontFamily=new FontFamily("Segoe UI"),TextFontSize=28,TextFontWeight=FontWeights.SemiBold,TextBrush=Brushes.White,Height=42,InkAlignment=HorizontalAlignment.Left};headerContent.Children.Add(title);
+  var changes=MacroUi.Button("Changes",(_,_)=>{});changes.Name="AboutChanges";changes.MinWidth=108;changes.Height=44;changes.Margin=new Thickness(12,0,16,0);DockPanel.SetDock(changes,Dock.Right);headerContent.Children.Add(changes);
+  var titleHost=new DockPanel();headerContent.Children.Add(titleHost);
+  var back=MacroUi.Button("",(_,_)=>{});back.Name="AboutBack";back.Width=44;back.Height=44;back.Margin=new Thickness(0,0,12,0);back.Visibility=Visibility.Collapsed;
+  back.Content=new System.Windows.Shapes.Path{Data=Geometry.Parse("M 12,1 L 3,10 L 12,19 M 3,10 L 23,10"),Stroke=Brushes.White,StrokeThickness=2,Width=24,Height=20,Stretch=Stretch.Uniform};
+  DockPanel.SetDock(back,Dock.Left);titleHost.Children.Add(back);
+  var title=new OpticallyCenteredText{Text="BlakiDeck",TextFontFamily=new FontFamily("Segoe UI"),TextFontSize=28,TextFontWeight=FontWeights.SemiBold,TextBrush=Brushes.White,Height=42,InkAlignment=HorizontalAlignment.Left};titleHost.Children.Add(title);
+  header.SizeChanged+=(_,_)=>{bool narrow=header.ActualWidth<720;if(narrow&&headerContent.Children.Contains(titleHost)){headerContent.Children.Remove(titleHost);headerGrid.Children.Add(titleHost);Grid.SetRow(headerContent,1);}else if(!narrow&&headerGrid.Children.Contains(titleHost)){headerGrid.Children.Remove(titleHost);headerContent.Children.Add(titleHost);Grid.SetRow(headerContent,0);}};
   var body=new StackPanel();
   var version=new TextBlock{Name="AboutVersion",FontSize=14,Foreground=Brushes.LightGray,Margin=new Thickness(0,0,0,16)};body.Children.Add(version);
+  var updates=MacroUi.Button("Check for updates…",async (_,_)=>await ApplicationUpdates.CheckAsync(this,true));updates.HorizontalAlignment=HorizontalAlignment.Left;body.Children.Add(updates);
   var legalSummary=new TextBlock{TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,16,0,8)};
   var legalLinks=new WrapPanel{Margin=new Thickness(0,0,0,8)};
   var license=MacroUi.Button("License",(_,_)=>new HelpWindow("License"){Owner=this}.ShowDialog());
@@ -55,10 +65,20 @@ internal sealed class AboutWindow:SettingsWindow
   body.Children.Add(supportFrame);
   body.Children.Add(legalSummary);
   body.Children.Add(legalLinks);
+  var scroll=new ScrollViewer{Name="AboutScroll",Content=body,Margin=new Thickness(24,0,24,24),VerticalScrollBarVisibility=ScrollBarVisibility.Auto,HorizontalScrollBarVisibility=ScrollBarVisibility.Disabled,PanningMode=PanningMode.VerticalOnly};
+  void SwitchView(bool show)
+  {
+   if(show)aboutScrollOffset=scroll.VerticalOffset;
+   showingChanges=show;scroll.Content=show?history:body;
+   back.Visibility=show?Visibility.Visible:Visibility.Collapsed;changes.Visibility=show?Visibility.Collapsed:Visibility.Visible;
+   Translate();scroll.ScrollToVerticalOffset(show?0:aboutScrollOffset);
+  }
   void Translate()
   {
    DisplayLanguage=choice.SelectedLanguage;bool lt=DisplayLanguage=="lt";
-   Title=lt?"Apie BlakiDeck":"About BlakiDeck";title.Text=Title;close.Content=lt?"Uždaryti":"Close";
+   changes.Content=lt?"Pakeitimai":"Changes";updates.Content=ApplicationUpdates.AvailableVersion is {} available ? (lt?$"Atnaujinti į {available}…":$"Update to {available}…") : (lt?"Tikrinti atnaujinimus…":"Check for updates…");
+   Title=showingChanges?(lt?"Pakeitimai":"Changes"):(lt?"Apie BlakiDeck":"About BlakiDeck");title.Text=Title;close.Content=lt?"Uždaryti":"Close";
+   back.ToolTip=lt?"Atgal į Apie":"Back to About";System.Windows.Automation.AutomationProperties.SetName(back,back.ToolTip.ToString());history.SetLanguage(DisplayLanguage);
    version.Text=(lt?"Versija ":"Version ")+typeof(AboutWindow).Assembly.GetName().Version?.ToString(3);
    legalSummary.Text=lt?"Nemokama asmeniniam naudojimui ir verslui. Atviro kodo programa pagal MIT licenciją. Parama savanoriška; visos funkcijos prieinamos nemokamai.":"Free for personal and business use. Open-source application under the MIT License. Donations are optional; all features are available free of charge.";
    license.Content=lt?"Licencija":"License";privacy.Content=lt?"Privatumas":"Privacy";notices.Content=lt?"Komponentų licencijos":"Third-party notices";
@@ -68,8 +88,11 @@ internal sealed class AboutWindow:SettingsWindow
    copy.Content=lt?"Kopijuoti":"Copy";
    if(IsLoaded)Dispatcher.BeginInvoke(new Action(FitContent),System.Windows.Threading.DispatcherPriority.Loaded);
   }
+  changes.Click+=(_,_)=>SwitchView(true);back.Click+=(_,_)=>SwitchView(false);
   choice.SelectionChanged+=(_,_)=>Translate();Translate();
-  panel.Children.Add(new ScrollViewer{Content=body,Margin=new Thickness(24,0,24,24),VerticalScrollBarVisibility=ScrollBarVisibility.Auto,HorizontalScrollBarVisibility=ScrollBarVisibility.Disabled,PanningMode=PanningMode.VerticalOnly});
+  panel.Children.Add(scroll);
+  history.AddHandler(Expander.ExpandedEvent,new RoutedEventHandler((_,_)=>Dispatcher.BeginInvoke(new Action(FitContent))));
+  history.AddHandler(Expander.CollapsedEvent,new RoutedEventHandler((_,_)=>Dispatcher.BeginInvoke(new Action(FitContent))));
   bool OnClose(DependencyObject? source)
   {
    for(var node=source;node!=null&&node!=header;node=VisualTreeHelper.GetParent(node))
@@ -95,11 +118,13 @@ internal sealed class AboutWindow:SettingsWindow
   void FitContent(){
    // Open tall enough for the actual wrapped text, bounded by this monitor's work area.
    // Keep subsequent manual resizing independent of content size.
-   body.Measure(new Size(Math.Max(1,ActualWidth-50),double.PositiveInfinity));
+   var active=(FrameworkElement)scroll.Content;
+   active.Measure(new Size(Math.Max(1,ActualWidth-50),double.PositiveInfinity));
    double bottom=Top+ActualHeight;
-   Height=Math.Clamp(Math.Ceiling(body.DesiredSize.Height)+108,MinHeight,MaxHeight);
+   Height=Math.Clamp(Math.Ceiling(active.DesiredSize.Height)+header.ActualHeight+30,MinHeight,MaxHeight);
    Top=bottom-Height;
   }
   ContentRendered+=(_,_)=>Dispatcher.BeginInvoke(new Action(FitContent),System.Windows.Threading.DispatcherPriority.Loaded);
  }
 }
+

@@ -1,4 +1,4 @@
-{
+﻿{
   "dashboard-layout-tabs.json": [
     {
       "DefaultsVersion": 1,
@@ -3195,7 +3195,7 @@
   "window-settings.json": {
     "ModuleOpacity": 0.7,
     "UiOpacity": 1,
-    "BackgroundTransparency": 40,
+    "BackgroundTransparency": 45,
     "FontScale": 1.15,
     "WeatherLanguage": "en",
     "SpeakerSignalGain": 4,

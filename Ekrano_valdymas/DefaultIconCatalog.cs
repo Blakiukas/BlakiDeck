@@ -45,9 +45,12 @@ internal static class DefaultIconCatalog
     internal static string? GetPath(string fileName)
     {
         if(string.IsNullOrWhiteSpace(fileName)||fileName!=Path.GetFileName(fileName))return null;
-        string path=Path.Combine(PackagedDirectory,fileName);
+        string path=Path.Combine(PackagedDirectory,CanonicalFileName(fileName));
         return File.Exists(path)?path:null;
     }
+
+    // The former emission-only Flat set was retired. Keep saved identities usable.
+    internal static string CanonicalFileName(string fileName)=>fileName.StartsWith("Flat--",StringComparison.Ordinal)?"3D--"+fileName[6..]:fileName;
 
     // Reuse the existing bounded, display-sized decoder rather than loading all
     // supplied 1254px images when a tab or picker is created.

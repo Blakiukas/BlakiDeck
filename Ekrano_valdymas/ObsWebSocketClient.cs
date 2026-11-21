@@ -21,6 +21,7 @@ namespace Ekrano_valdymas
 
         public bool IsConnected => _socket?.State == WebSocketState.Open;
         public TimeSpan? RecordTimecode { get; private set; }
+        public string? LastSavedReplayPath { get; private set; }
 
         public async Task ConnectAsync()
         {
@@ -162,7 +163,9 @@ namespace Ekrano_valdymas
             string eventType = data.GetProperty("eventType").GetString() ?? "";
             JsonElement eventData = data.GetProperty("eventData");
 
-            if (eventType == "RecordStateChanged")
+            if (eventType == "ReplayBufferSaved")
+                LastSavedReplayPath = eventData.GetProperty("savedReplayPath").GetString();
+            else if (eventType == "RecordStateChanged")
             {
                 bool active = eventData.GetProperty("outputActive").GetBoolean();
                 RecordTimecode = ParseTimecode(eventData);

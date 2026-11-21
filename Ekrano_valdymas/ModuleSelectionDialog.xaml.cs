@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -14,7 +14,7 @@ namespace Ekrano_valdymas
         private static readonly (string Key, string Label)[] Modules =
         {
             ("MusicPlayerCard", "Player"), ("Playlist", "Playlist — requires Player"), ("HudVisualizer", "BlakiHUD music visualizer"),
-            ("Obs", "OBS Controls"), ("Weather", "Weather"),
+            ("Media", "Media — image / video"), ("Obs", "OBS Controls"), ("Weather", "Weather"),
             ("Airthings", "Airthings"), ("System", "System Monitor"), ("Shortcuts", "Shortcuts 1×1"),
             ("Hue", "Philips Hue — requires Hue Bridge"),
             ("WebShortcuts", "Web shortcuts"), ("AnalogVuCard", "VU — full card"), ("MacroLibrary", "Macro library")

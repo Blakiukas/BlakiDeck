@@ -70,6 +70,11 @@ Weather data: Open-Meteo, https://open-meteo.com/ — CC BY 4.0, https://creativ
 The Open-Meteo free API has separate non-commercial-use and rate-limit conditions: https://open-meteo.com/en/terms . A BlakiDeck license does not grant rights to third-party services. Voluntary donations are permitted by the provider; commercial API use requires an appropriate provider arrangement.
 
 Skin images are finished renders, not a redistribution of the editable BlenderKit material library. BlenderKit / Blendkit CC0 and Royalty Free terms: https://www.blenderkit.com/docs/licenses/ . Recorded materials include Carbon Fiber Shader by Heydar Moheiseni (244f5609-0b92-4992-8099-aaa47181c837), Dirty glass by ydd 3D (f12184d0-483a-4dd3-8415-d862a4cc3552), Metal Engraved Dark Demon Skull (5066d87e-f914-4e83-8e1b-8444512d3436), and Scratched glass (43667c25-d111-4c24-94b9-86cda4094af1).
-The bundled default icons were created by Blakiukas with an image generator. Product and service names and logos belong to their respective owners and identify integrations; they do not imply sponsorship. This statement does not grant rights to third-party marks.
+The original circular built-in icon set was created by Blakiukas with an image generator. Product and service names and logos belong to their respective owners and identify integrations; they do not imply sponsorship. This statement does not grant rights to third-party marks.
 
 Windows Desktop notices are included separately for WPF and Windows Forms 10.0.10 in Licenses. Source: https://github.com/dotnet/wpf/tree/v10.0.10 and https://github.com/dotnet/winforms/tree/v10.0.10 .
+
+Flat icons include OpenAI, Discord, Tidal and OBS symbol paths from Simple Icons 11.0.0, licensed under CC0 1.0 Universal: https://github.com/simple-icons/simple-icons/tree/11.0.0 . License text: Licenses/simple-icons-CC0.txt. Brand marks belong to their respective owners.
+
+
+

@@ -5,6 +5,7 @@ BlakiDeck brings everyday PC controls into a customizable Windows desktop dashbo
 ## Features
 
 - Arrange Windows and web shortcuts, configurable macros and clocks.
+- Export a settings backup from Settings and import it after reinstalling, including dashboard layouts, macros and linked artwork.
 - Build a three-section dashboard, combine modules across sections, or use a wide music player.
 - Monitor available CPU, GPU, RAM, storage and network readings with configurable cells, graphs, adaptive colors and saved layouts. View and copy PC specifications.
 - Play local music or control supported music applications, including Spotify through Windows media sessions. Streaming artwork comes from the selected player.

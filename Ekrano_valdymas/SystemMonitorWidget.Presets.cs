@@ -31,6 +31,7 @@ public partial class SystemMonitorWidget
         catch(Exception ex){InteractionDiagnostics.RecordFailure("Monitor presets",ex);}
         // The existing working files are authoritative for edits made since the
         // last switch; never overwrite them with an older preset snapshot here.
+        RemoveGeneratedPresets();
         BuildPresetButtons();
     }
     private SavedPreset CapturePreset()=>new(CaptureGridLayout(),Slots.Select(s=>new PresetCell(s.TransferTarget,s.Shortcut?.CustomName,s.Shortcut?.Presentation,s.Shortcut?.IconPath,s.IsActive,SensorCellPreferences.Capture(CellLocation(s),s.TransferTarget))).ToArray());
@@ -64,6 +65,48 @@ public partial class SystemMonitorWidget
         {
             var captured=CurrentMonitorDefaults.For(ViewKey);var fullCells=captured.Cells;return new(captured.Grid,Enumerable.Range(0,fullCells.Max(c=>c.Index)+1).Select(i=>fullCells.FirstOrDefault(c=>c.Index==i) is {} c?new PresetCell(c.Target,null,null,null,true,c.Presentation):new PresetCell(null,null,null,null,true,null)).ToArray());
         }
+        return new SavedPreset(new MonitorGridLayout(GridColumns, 12, []), []);
+    }
+
+    // Older releases filled additional layouts the first time they were opened.
+    // Compare placement and all saved properties before discarding such a layout.
+    private void RemoveGeneratedPresets()
+    {
+        bool changed = false;
+        foreach (string name in PresetNames.Skip(1))
+        {
+            if (!savedPresets.TryGetValue(name, out var saved)) continue;
+            var generated = LegacyGeneratedPreset(name);
+            if (!MatchesGenerated(saved, generated)) continue;
+            if (name == selectedPreset)
+            {
+                if (!MatchesGenerated(CapturePreset(), generated)) continue;
+                RestorePreset(FactoryPreset(name));
+            }
+            savedPresets.Remove(name);
+            changed = true;
+        }
+        if (changed) AtomicJson.Write(PresetsPath, new PresetFile(selectedPreset, savedPresets));
+    }
+
+    private static bool MatchesGenerated(SavedPreset saved, SavedPreset generated)
+    {
+        if (saved.Grid.Columns != generated.Grid.Columns || saved.Grid.Rows != generated.Grid.Rows ||
+            !saved.Grid.Cells.SequenceEqual(generated.Grid.Cells) || saved.Cells.Length < generated.Cells.Length)
+            return false;
+
+        var empty = new PresetCell(null, null, null, null, true, null);
+        for (int i = 0; i < saved.Cells.Length; i++)
+        {
+            var expected = i < generated.Cells.Length ? generated.Cells[i] : empty;
+            if (JsonSerializer.Serialize(saved.Cells[i]) != JsonSerializer.Serialize(expected))
+                return false;
+        }
+        return true;
+    }
+
+    private SavedPreset LegacyGeneratedPreset(string name)
+    {
         if(name=="GPU")
         {
             var metrics=SelectableMetrics.Where(k=>MetricGroup(k)=="GPU"&&k!=MetricKind.GpuStatus).ToArray();

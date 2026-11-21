@@ -43,6 +43,15 @@ internal sealed class TabInkLayout:Panel
             double iconBottom=Math.Max(0,Children.Contains(Label)?bottom-labelHeight-4:bottom);
             double iconTop=Math.Clamp(IconTop(),0,iconBottom);
             double height=Math.Max(0,iconBottom-iconTop);
+            if (!Children.Contains(Label))
+            {
+                // A shortcut's visible pixels depend on its artwork. Keep the tab's
+                // own image box independent, centred on the existing face centre.
+                double center = (iconTop + iconBottom) / 2;
+                double availableHeight = 2 * Math.Min(center, size.Height - center);
+                height = Math.Clamp(availableHeight - 8, 0, 62);
+                iconTop = center - height / 2;
+            }
             if(Icon is OpticallyCenteredText glyph)
             {
                 // A temporary zero-height slot must not pass an invalid font

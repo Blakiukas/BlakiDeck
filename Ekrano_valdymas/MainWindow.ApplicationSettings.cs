@@ -7,6 +7,37 @@ namespace Ekrano_valdymas;
 
 public partial class MainWindow
 {
+    private bool exportingSettings;
+    private async void ExportSettings_Click(object sender,RoutedEventArgs e)
+    {
+        ContextMenu.IsOpen=false;
+        if(exportingSettings)return;
+        var dialog=new Microsoft.Win32.SaveFileDialog {Filter="BlakiDeck backup (*.bdbackup)|*.bdbackup",FileName=$"BlakiDeck-{DateTime.Today:yyyy-MM-dd}.bdbackup"};
+        if(dialog.ShowDialog(this)!=true)return;
+        exportingSettings=true;
+        try
+        {
+            SaveWindowSettings();
+            await Task.Run(()=>SettingsBackup.Export(settingsFolder,dialog.FileName));
+            AppMessage.Show(this,"Settings backup saved.","Export",MessageBoxButton.OK,MessageBoxImage.Information);
+        }
+        catch(Exception ex){AppMessage.Show(this,ex.Message,"Export",MessageBoxButton.OK,MessageBoxImage.Error);}
+        finally{exportingSettings=false;}
+    }
+    private void ImportSettings_Click(object sender,RoutedEventArgs e)
+    {
+        ContextMenu.IsOpen=false;
+        if(exportingSettings)return;
+        var dialog=new Microsoft.Win32.OpenFileDialog {Filter="BlakiDeck backup (*.bdbackup)|*.bdbackup"};
+        if(dialog.ShowDialog(this)!=true)return;
+        if(AppMessage.Show(this,"Replace the current settings and restart BlakiDeck? Only import backups you trust. They can include macros, shortcuts and their trigger keys.","Import settings",MessageBoxButton.YesNo,MessageBoxImage.Warning)!=MessageBoxResult.Yes)return;
+        try
+        {
+            using var replacement=Process.Start(ApplicationProfileReset.CreateRestart(ProfileResetScope.Import,dialog.FileName)) ?? throw new InvalidOperationException("Could not restart BlakiDeck.");
+            Application.Current.Shutdown();
+        }
+        catch(Exception ex){AppMessage.Show(this,ex.Message,"Import",MessageBoxButton.OK,MessageBoxImage.Error);}
+    }
     private void ResetLayout_Click(object sender,RoutedEventArgs e)=>ConfirmProfileReset(ProfileResetScope.Layout);
     private void FactoryReset_Click(object sender,RoutedEventArgs e)=>ConfirmProfileReset(ProfileResetScope.Full);
 

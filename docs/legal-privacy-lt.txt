@@ -1,5 +1,5 @@
-BlakiDeck privatumo informacija
-Atnaujinta: 2026 m. lapkričio 6 d.
+﻿BlakiDeck privatumo informacija
+Atnaujinta: 2026 m. lapkričio 16 d.
 
 BlakiDeck yra nemokama Blakiuko darbalaukio programa. BlakiDeck paskyros nereikia. Programos kode nėra reklamos, autoriaus vykdomos naudojimo analitikos, automatinio jūsų nustatymų ir diagnostikos žurnalų siuntimo autoriui. „Program usage“ ir „Show telemetry“ reiškia vietinius išteklių rodmenis, o ne duomenų teikimą autoriui.
 
@@ -15,6 +15,7 @@ Jūsų naudojami ryšiai
 - OBS: programa jungiasi prie jūsų sukonfigūruoto OBS WebSocket adreso, kad gautų būseną ir siųstų komandas. Neatidarykite neapsaugotos OBS prieigos internetui.
 - Muzika: kūrinio informaciją pateikia Windows medijos seansai ir vietiniai failai. Srautinės muzikos viršelis gaunamas iš pasirinktos muzikos programos per Windows medijos seansus; vietinių failų viršeliai skaitomi vietoje. BlakiDeck nesiunčia kūrinių pavadinimų ar atlikėjų į išorinę viršelių paieškos paslaugą. Atkūrimui per kitas paslaugas taikomos jų paskyrų ir privatumo taisyklės. Garso vizualizacija apdoroja garsą vietoje.
 - Naršyklė: įterptoje Microsoft WebView2 naršyklėje atvertos svetainės gauna įprastas naršyklės užklausas ir gali saugoti slapukus, prisijungimo seansus bei kitus svetainių duomenis vietiniame naršyklės profilyje. Microsoft WebView2, Windows ir lankomoms svetainėms taikomos jų pačių taisyklės. BlakiDeck negali garantuoti, kad trečiųjų šalių puslapiuose nėra analitikos.
+- Atnaujinimai: tiesiogiai įdiegta versija paleidžiant ir kartą per parą tikrina GitHub paskelbtą BlakiDeck leidimą. GitHub gauna įprastus ryšio duomenis, įskaitant IP adresą. Diegiklis siunčiamas tik pasirinkus atsisiuntimą. Profilio failai nesiunčiami.
 - Svetainių ikonos: gaudama išsaugotos web nuorodos ikoną, BlakiDeck gali užklausti svetainę ir jos ikonų failus, įskaitant kito teikėjo saugomus failus. Šios užklausos gali vykti neatidarius įterptos naršyklės; jos pateikia įprastą ryšio informaciją, pvz., jūsų IP adresą. Atsisiųstos ikonos saugomos vietiniame podėlyje.
 - Codex rodmuo: jei naudojate šį pasirenkamą rodmenį, BlakiDeck užklausia paskyros limitų informaciją per kompiuteryje įdiegtą Codex programą su prisijungta paskyra. Ši programa gali kreiptis į savo paslaugų teikėją naudodama savo paskyros ryšį. BlakiDeck nereikalauja įrašyti Codex prisijungimo duomenų į savo nustatymus.
 - Nuorodos ir parama: išorinės nuorodos atidaro pasirinktą paskirties vietą. Platinimo platformos (Microsoft Store, itch.io ir GitHub), el. pašto ir paramos paslaugų teikėjai duomenis tvarko pagal savo taisykles. Parama savanoriška ir neatrakina funkcijų.
